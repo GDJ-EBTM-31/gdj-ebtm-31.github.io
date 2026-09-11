@@ -23,7 +23,10 @@ import { fileURLToPath } from "node:url";
 export const racine = join(dirname(fileURLToPath(import.meta.url)), "..");
 const contenu = join(racine, "app", "contenu");
 
+// Un dossier vide n'existe pas pour git : sans défi publié, contenu/defis/ manque dans le
+// dépôt, et la liste est simplement vide.
 function lireDossier(nom) {
+  if (!existsSync(join(contenu, nom))) return [];
   return readdirSync(join(contenu, nom))
     .filter((fichier) => fichier.endsWith(".json"))
     .sort()

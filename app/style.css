@@ -1765,17 +1765,29 @@ body[data-ecran="sujet-notes"] main {
   color: var(--texte-doux);
 }
 
+/* Archiver l'étude : un petit lien discret tout en bas, ni cadre ni trait. Le bouton encadré
+   et ceux des cartes de la liste étaient trop voyants pour Sébastien (11 septembre 2026). */
 .sujet__archive {
-  margin-top: 1.75rem;
-  padding-top: 1.25rem;
-  border-top: 1px solid var(--bord);
+  margin-top: 2.5rem;
+  text-align: center;
 }
 
 .sujet__archive-aide {
-  margin: 0 0.25rem 0.6rem;
+  margin: 0 0.25rem 0.1rem;
   font-size: 0.92rem;
   line-height: 1.5;
   color: var(--texte-doux);
+}
+
+.sujet__archive-lien {
+  min-height: 44px;
+  padding: 0 1rem;
+  background: none;
+  border: 0;
+  color: var(--texte-doux);
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* Un texte court au-dessus d'une liste de liens : moins d'air qu'une page à lire. */
@@ -1788,55 +1800,6 @@ body[data-ecran="sujet-notes"] main {
 
 
 
-/* ------------------------------------------------------ Glisser pour archiver
-
-   Une carte de sujet se glisse vers la droite. Derrière elle, le mot qui dit ce qui va se
-   passer — « Archiver » ou « Remettre » — sur le dégradé. Passé le seuil, le mot se
-   renforce ; lâcher fait filer la carte. */
-
-.glissable {
-  position: relative;
-  margin-bottom: 0.65rem;
-  border-radius: 18px;
-  touch-action: pan-y;
-}
-
-.glissable .fiche {
-  position: relative;
-  margin-bottom: 0;
-  will-change: transform;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .glissable .fiche {
-    transition: transform 0.18s ease, opacity 0.18s ease;
-  }
-}
-
-.glissable::before {
-  content: attr(data-etiquette);
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  padding-left: 1.1rem;
-  border-radius: 18px;
-  background: var(--degrade);
-  color: #ffffff;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  font-size: 0.85rem;
-  opacity: 0;
-}
-
-.glissable[data-actif]::before {
-  opacity: 0.7;
-}
-
-.glissable[data-pret]::before {
-  opacity: 1;
-}
 
 
 

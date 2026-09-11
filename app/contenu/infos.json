@@ -1,20 +1,13 @@
 {
   "aLaUne": {
     "titre": "Bienvenue",
-    "texte": "Les études à préparer, les rencontres à venir, des lectures et des défis pour avancer dans ta foi. Reviens-y souvent : Nicolas et Claire l’alimentent au fil de l’année."
+    "texte": "Les études à préparer, les rencontres à venir, des lectures et des défis pour avancer dans ta foi."
   },
   "_note": "Tout ce qui est écrit ici s’adresse aux jeunes (15-25 ans) : une info de l’église n’entre dans l’application que tournée vers eux. « aLaUne » : la carte en couleur de l’accueil (titre, texte). « formations » : la carte Formations, « Inscription obligatoire » en tête, une entrée par formation : « titre », « quand » (jours et horaires en toutes lettres), « texte » (une ou deux phrases pour les jeunes), « url » (la page d’inscription, obligatoire), « dates » (jours AAAA-MM-JJ) ; une formation disparaît le lendemain de sa première date, ou de « jusquAu » s’il est donné. « annonces » : la carte « À venir », une ligne par annonce, dans l’ordre du fichier : « titre », « texte » (deux lignes au plus, la date écrite en toutes lettres : le pavé de date n’est pas lu par les lecteurs d’écran), « dates » facultatives (le pavé montre la prochaine), et, facultatifs, « aller » vers un écran ou « url » vers l’extérieur ; une annonce disparaît le lendemain de son dernier jour : « jusquAu » s’il est donné, sinon la dernière de ses « dates ». « raccourcis » : les liens rapides du bas de l’accueil (« titre », « description », « url » ou « aller »). Écrans possibles pour « aller » : agenda, pratique, sujets, defis, sauvegarde, reglages, a-propos, sujet/<id>, defi/<id>.",
   "formations": [
     {
-      "titre": "Les lettres de Paul",
-      "quand": "Trois samedis, de 10 h à 12 h : le 19 septembre, le 3 et le 17 octobre.",
-      "texte": "Redécouvre la richesse des lettres de Paul, pour être enraciné et fondé dans l’amour du Christ.",
-      "dates": ["2026-09-19", "2026-10-03", "2026-10-17"],
-      "url": "https://ebtm.fr/formations/"
-    },
-    {
       "titre": "Cours découvertes",
-      "quand": "Douze leçons, à partir du 19 septembre.",
+      "quand": "Dix leçons, à partir du 19 septembre.",
       "texte": "Pour comprendre les bases de la foi chrétienne. Ils sont ouverts à tous, et préparent aussi au baptême, si tu y penses.",
       "dates": ["2026-09-19"],
       "url": "https://ebtm.fr/formations/"
@@ -33,11 +26,5 @@
       "aller": "agenda"
     }
   ],
-  "raccourcis": [
-    {
-      "titre": "Le feuillet de la cellule",
-      "description": "La fiche de la semaine : prière, texte, questions",
-      "url": "https://docs.google.com/document/d/10hcY6usoWrW7YnwzSrWjnNIFwhESGseSjyMftdbBAh4/mobilebasic"
-    }
-  ]
+  "raccourcis": []
 }

@@ -99,8 +99,10 @@ for (const fichier of readdirSync(join(contenu, "sujets")).filter((f) => f.endsW
   }
 }
 
+// Sans défi publié, le dossier n'existe pas (git ne garde pas les dossiers vides).
 const defis = [];
-for (const fichier of readdirSync(join(contenu, "defis")).filter((f) => f.endsWith(".json")).sort()) {
+const dossierDefis = join(contenu, "defis");
+for (const fichier of (existsSync(dossierDefis) ? readdirSync(dossierDefis) : []).filter((f) => f.endsWith(".json")).sort()) {
   const defi = lireJson("defis/" + fichier);
   defis.push({ fichier, defi });
   if (defi.id !== fichier.replace(/\.json$/, "")) signaler(`defis/${fichier} : l'identifiant « ${defi.id} » doit être le nom du fichier.`);

@@ -644,12 +644,9 @@
   // Morceaux d'écran réutilisés
   // ---------------------------------------------------------------------------
 
-  function carte({ aller, classe = "", pastille, titre, sous = "", etiquette = "", glissable = null }) {
-    const attributs = glissable
-      ? html` class="glissable" data-sujet="${echapper(glissable.sujet)}" data-etiquette="${echapper(glissable.etiquette)}"`
-      : "";
+  function carte({ aller, classe = "", pastille, titre, sous = "", etiquette = "" }) {
     return html`
-      <li${attributs}>
+      <li>
         <button type="button" class="fiche ${classe}" data-aller="${echapper(aller)}">
           ${pastille}
           <span class="fiche__texte">
@@ -925,84 +922,6 @@
     `;
   }
 
-  // Glisser une carte de sujet vers la droite : le mot derrière se découvre, et si l'on va
-  // assez loin, la carte file et le sujet change de liste. Le défilement vertical reste
-  // celui de la page (touch-action: pan-y) : on ne prend la main que sur un geste
-  // franchement horizontal.
-  function brancherGlissements() {
-    const SEUIL = 96; // en pixels : au-delà, lâcher archive ; en deçà, la carte revient
-    principal.querySelectorAll(".glissable").forEach((ligne) => {
-      const carte = ligne.querySelector(".fiche");
-      let depart = null;
-      let horizontal = null;
-      let dx = 0;
-
-      const suivre = (evenement) => {
-        if (!depart) return;
-        const ddx = evenement.clientX - depart.x;
-        const ddy = evenement.clientY - depart.y;
-        if (horizontal === null) {
-          if (Math.abs(ddx) < 8 && Math.abs(ddy) < 8) return;
-          horizontal = Math.abs(ddx) > Math.abs(ddy);
-          if (!horizontal) return terminer(false);
-          ligne.setPointerCapture(evenement.pointerId);
-          ligne.dataset.actif = "";
-        }
-        dx = Math.max(0, ddx);
-        carte.style.transform = `translateX(${dx}px)`;
-        if (dx >= SEUIL) ligne.dataset.pret = "";
-        else delete ligne.dataset.pret;
-      };
-
-      const terminer = (valide) => {
-        if (!depart) return;
-        const fini = valide && horizontal && dx >= SEUIL;
-        depart = null;
-        horizontal = null;
-        if (fini) {
-          // La carte s'en va, puis la liste se refait.
-          ligne.dataset.glisse = "";
-          carte.style.transform = "translateX(110%)";
-          carte.style.opacity = "0";
-          const cle = "archive:sujet:" + ligne.dataset.sujet;
-          setTimeout(() => {
-            if (lire(cle)) effacer(cle);
-            else ecrire(cle, new Date().toISOString().slice(0, 10));
-            afficher();
-          }, 180);
-        } else {
-          carte.style.transform = "";
-          delete ligne.dataset.actif;
-          delete ligne.dataset.pret;
-          // Un simple toucher n'est pas un glissement : le clic passe. Un glissement avorté
-          // ne doit pas ouvrir le sujet.
-          if (dx > 8) {
-            ligne.dataset.glisse = "";
-            setTimeout(() => delete ligne.dataset.glisse, 300);
-          }
-        }
-        dx = 0;
-      };
-
-      ligne.addEventListener("pointerdown", (evenement) => {
-        if (evenement.pointerType === "mouse" && evenement.button !== 0) return;
-        depart = { x: evenement.clientX, y: evenement.clientY };
-        horizontal = null;
-        dx = 0;
-        carte.style.transition = "none";
-      });
-      ligne.addEventListener("pointermove", suivre);
-      ligne.addEventListener("pointerup", () => {
-        carte.style.transition = "";
-        terminer(true);
-      });
-      ligne.addEventListener("pointercancel", () => {
-        carte.style.transition = "";
-        terminer(false);
-      });
-    });
-  }
-
   // Les cartes des sujets et des défis servent à l'accueil (un aperçu) et à leur onglet
   // (la liste entière).
   function carteSujet(s, archive) {
@@ -1014,7 +933,6 @@
       titre: s.titre,
       sous: [s.sousTitre, s.questions ? s.questions + " questions" : ""].filter(Boolean).join(" · "),
       etiquette: archive || lire("vu:sujet:" + s.id) ? "" : a.nouveau,
-      glissable: { sujet: s.id, etiquette: archive ? a.glisserRemettre : a.glisserArchiver },
     });
   }
 
@@ -1229,8 +1147,8 @@
         </ul>
 
         <div class="sujet__archive">
-          <p class="sujet__archive-aide">${echapper(archive ? s.desarchiverAide : s.archiverAide)}</p>
-          <button type="button" class="bouton-secondaire" data-archiver="${echapper(sujet.id)}">${echapper(archive ? s.desarchiver : s.archiver)}</button>
+          ${archive ? html`<p class="sujet__archive-aide">${echapper(s.desarchiverAide)}</p>` : ""}
+          <button type="button" class="sujet__archive-lien" data-archiver="${echapper(sujet.id)}">${echapper(archive ? s.desarchiver : s.archiver)}</button>
         </div>
       </section>
     `;
@@ -1698,7 +1616,6 @@
       remplirVersion();
       const zone = principal.querySelector(".question__reponse");
       if (zone) ajusterHauteur(zone);
-      brancherGlissements();
     });
     // Après le rendu, et non pendant : Safari remet parfois la page à sa position précédente
     // au changement d'adresse, ce qui ouvrait une question déjà défilée, son titre sous la
@@ -1871,9 +1788,6 @@
   // ---------------------------------------------------------------------------
 
   document.addEventListener("click", async (evenement) => {
-    // Le clic qui suit un glissement de carte n'en est pas un.
-    if (evenement.target.closest(".glissable[data-glisse]")) return;
-
     const destination = evenement.target.closest("[data-aller]");
     if (destination) {
       aller(destination.dataset.aller);
@@ -1897,13 +1811,31 @@
       return;
     }
 
-    // Archiver un sujet, ou le ressortir. Rien n'est effacé : seule la place change.
+    // Archiver une étude, ou la ressortir, depuis le bas de l'étude. Rien n'est effacé : seule
+    // la place change. L'écran se refait sur place, sans l'animation ni le retour en haut
+    // d'afficher() : le jeune voit le lien devenir « Remettre dans mes études » là où il vient
+    // de toucher. (Ni glissement ni bouton sur les cartes de la liste : retirés le
+    // 11 septembre 2026, l'un « bugait » sur iPhone, l'autre n'était « pas esthétique ».)
     const archiver = evenement.target.closest("[data-archiver]");
     if (archiver) {
       const cle = "archive:sujet:" + archiver.dataset.archiver;
       if (lire(cle)) effacer(cle);
       else ecrire(cle, new Date().toISOString().slice(0, 10));
-      afficher();
+      if (sujetCourant && sujetCourant.id === archiver.dataset.archiver) {
+        principal.innerHTML = ecranSujet(sujetCourant);
+        const lien = principal.querySelector("[data-archiver]");
+        if (lien) {
+          lien.focus({ preventScroll: true });
+          // La phrase « Cette étude est archivée » allonge la page : le lien passait sous la
+          // barre d'onglets (vu sur le simulateur). On remonte juste ce qu'il faut.
+          const barre = document.getElementById("onglets");
+          const limite = barre && !barre.hidden ? barre.getBoundingClientRect().top : window.innerHeight;
+          const depasse = lien.getBoundingClientRect().bottom + 16 - limite;
+          if (depasse > 0) window.scrollBy(0, depasse);
+        }
+      } else {
+        afficher();
+      }
       return;
     }
 
