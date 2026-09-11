@@ -15,7 +15,7 @@
  *     la deuxième ouverture ; une modification du contenu, à la première.
  */
 
-const VERSION = "2026-09-11-2";
+const VERSION = "2026-09-11-3";
 const CACHE = `gdj-${VERSION}`;
 
 const FICHIERS = [
@@ -45,7 +45,11 @@ self.addEventListener("install", (evenement) => {
   evenement.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE);
-      await cache.addAll(FICHIERS);
+      // « reload » : chaque fichier est redemandé au serveur, sans passer par la mémoire du
+      // navigateur. Sinon, un téléphone qui a ouvert l'application dans les dix minutes
+      // précédant une mise en ligne (GitHub Pages fait garder les fichiers dix minutes)
+      // remplirait la nouvelle version avec les anciens fichiers. Vu le 11 septembre 2026.
+      await cache.addAll(FICHIERS.map((fichier) => new Request(fichier, { cache: "reload" })));
       await self.skipWaiting();
     })()
   );
