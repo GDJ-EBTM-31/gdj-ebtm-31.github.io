@@ -2040,7 +2040,11 @@
     caches
       .keys()
       .then((noms) => {
-        const versions = noms.filter((nom) => nom.startsWith("gdj-")).map((nom) => nom.slice("gdj-".length));
+        const toutes = noms.filter((nom) => nom.startsWith("gdj-")).map((nom) => nom.slice("gdj-".length));
+        // Numérotation 1.0.0 depuis le 11 septembre 2026. Pendant la seconde où l'ancienne
+        // copie (numérotée par date, 2026-09-11-5) existe encore, c'est la nouvelle qui compte.
+        const troisChiffres = toutes.filter((v) => /^\d+\.\d+\.\d+$/.test(v));
+        const versions = troisChiffres.length ? troisChiffres : toutes;
         versions.sort((a, b) => b.localeCompare(a, "fr", { numeric: true }));
         versionInstallee = versions[0] || "";
         remplirVersion();

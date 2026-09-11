@@ -15,7 +15,7 @@
  *     la deuxième ouverture ; une modification du contenu, à la première.
  */
 
-const VERSION = "2026-09-11-5";
+const VERSION = "1.0.0";
 const CACHE = `gdj-${VERSION}`;
 
 const FICHIERS = [

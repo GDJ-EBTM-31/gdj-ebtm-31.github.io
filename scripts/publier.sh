@@ -5,6 +5,12 @@
 # public, lui, ne reçoit que l'application, ses contrôles et le fichier de mise en ligne.
 # Passer par ce script plutôt que par un « git push » direct est ce qui garantit cette
 # séparation.
+#
+# Usage : sh scripts/publier.sh [--mineure | --majeure] "ce qui a changé"
+#   sans option : le dernier chiffre de la version monte (1.0.0 → 1.0.1) : corrections, contenu ;
+#   --mineure   : nouvelle fonctionnalité (1.0.3 → 1.1.0) ;
+#   --majeure   : refonte (1.4.2 → 2.0.0).
+# La version s'affiche dans les réglages de l'application (« Version 1.0.0 »).
 set -e
 
 # Organisation GitHub GDJ-EBTM-31, créée le 11 septembre 2026 ; le dépôt est en minuscules,
@@ -12,6 +18,12 @@ set -e
 depot="${DEPOT_PUBLIC:-https://github.com/GDJ-EBTM-31/gdj-ebtm-31.github.io.git}"
 racine=$(cd "$(dirname "$0")/.." && pwd)
 travail="$racine/.publication"
+
+niveau="correctif"
+case "${1:-}" in
+  --mineure) niveau="mineure"; shift ;;
+  --majeure) niveau="majeure"; shift ;;
+esac
 
 # Apostrophe typographique (’) et non droite ('), exprès : dans "${1:-…}", le sh de macOS
 # prend une apostrophe droite pour une citation jamais fermée, et le script entier est
@@ -27,21 +39,32 @@ node "$racine/scripts/verifier-contrastes.mjs" > /dev/null
 # Le numéro de version du service worker est ce qui dit aux téléphones déjà équipés de tout
 # recharger. L'oublier, c'est publier dans le vide : ils garderaient l'ancienne version sans
 # que personne s'en aperçoive. Il est donc avancé ici, jamais à la main.
-python3 - "$racine/app/service-worker.js" <<'PYTHON'
-import datetime, re, sys
+# Numérotation à trois chiffres depuis le 11 septembre 2026, à la demande de Sébastien ; la
+# précédente, par date (2026-09-11-5), est convertie une fois en 1.0.0.
+python3 - "$racine/app/service-worker.js" "$niveau" <<'PYTHON'
+import re, sys
 
-chemin = sys.argv[1]
+chemin, niveau = sys.argv[1], sys.argv[2]
 source = open(chemin, encoding="utf-8").read()
-motif = re.compile(r'const VERSION = "(\d{4}-\d{2}-\d{2})-(\d+)";')
+motif = re.compile(r'const VERSION = "([^"]+)";')
 trouve = motif.search(source)
 if not trouve:
     sys.exit("VERSION introuvable dans le service worker.")
 
-aujourdhui = datetime.date.today().isoformat()
-rang = int(trouve.group(2)) + 1 if trouve.group(1) == aujourdhui else 1
-nouvelle = f"{aujourdhui}-{rang}"
+ancienne = trouve.group(1)
+trois = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", ancienne)
+if not trois:
+    nouvelle = "1.0.0"
+else:
+    majeure, mineure, correctif = (int(n) for n in trois.groups())
+    if niveau == "majeure":
+        nouvelle = f"{majeure + 1}.0.0"
+    elif niveau == "mineure":
+        nouvelle = f"{majeure}.{mineure + 1}.0"
+    else:
+        nouvelle = f"{majeure}.{mineure}.{correctif + 1}"
 open(chemin, "w", encoding="utf-8").write(motif.sub(f'const VERSION = "{nouvelle}";', source, count=1))
-print(f"  version du service worker : {trouve.group(1)}-{trouve.group(2)} → {nouvelle}")
+print(f"  version : {ancienne} → {nouvelle}")
 PYTHON
 
 if [ ! -d "$travail/.git" ]; then
