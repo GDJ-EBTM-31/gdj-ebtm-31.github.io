@@ -1932,6 +1932,20 @@ body[data-entete="non"] main {
   padding-top: calc(0.9rem + env(safe-area-inset-top));
 }
 
+/* Sans barre du haut, ce qui défile ne doit pas passer sous l'heure et l'encoche : une bande
+   de la couleur du fond couvre la zone du haut du téléphone. Elle ne mesure rien là où il n'y
+   a pas d'encoche. Vu sur le simulateur iPhone le 11 septembre 2026. */
+body[data-entete="non"]::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 55;
+  height: env(safe-area-inset-top);
+  background: var(--fond);
+}
+
 /* La prochaine rencontre, en grand : le pavé de date, le titre, quand, où. */
 .rencontre {
   display: flex;
