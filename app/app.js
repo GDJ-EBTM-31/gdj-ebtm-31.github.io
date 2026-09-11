@@ -1695,6 +1695,7 @@
     transition(() => {
       regler_barre(titre, retourVers);
       principal.innerHTML = rendu;
+      remplirVersion();
       const zone = principal.querySelector(".question__reponse");
       if (zone) ajusterHauteur(zone);
       brancherGlissements();
@@ -2042,11 +2043,17 @@
         const versions = noms.filter((nom) => nom.startsWith("gdj-")).map((nom) => nom.slice("gdj-".length));
         versions.sort((a, b) => b.localeCompare(a, "fr", { numeric: true }));
         versionInstallee = versions[0] || "";
-        // L'écran des réglages est peut-être déjà affiché : on y écrit la version.
-        const ligne = document.getElementById("version-app");
-        if (ligne && versionInstallee) ligne.textContent = remplir(ui.reglages.version, { version: versionInstallee });
+        remplirVersion();
       })
       .catch(() => {});
+  }
+
+  // Écrit la version dans l'écran des réglages s'il est affiché. Appelé quand la version est
+  // connue, et à chaque affichage d'écran : l'un ou l'autre peut arriver le premier (vu le
+  // 11 septembre 2026 en ouvrant l'application directement sur les réglages).
+  function remplirVersion() {
+    const ligne = document.getElementById("version-app");
+    if (ligne && versionInstallee) ligne.textContent = remplir(ui.reglages.version, { version: versionInstallee });
   }
 
   function ecranReglages() {
