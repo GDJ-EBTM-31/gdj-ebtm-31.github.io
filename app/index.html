@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content" />
+    <title>GDJ — Groupe de jeunes</title>
+    <meta
+      name="description"
+      content="L’application du groupe de jeunes de l’Église Baptiste Toulouse Métropole : les sujets à préparer, les rencontres à venir, des lectures et des défis."
+    />
+    <!-- L'application se transmet par lien et par QR code, pas par les moteurs de recherche. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#982898" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="GDJ" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icones/icone.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" sizes="180x180" href="icones/icone-180.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-entete="non">
+    <a class="saut" href="#principal">Aller au contenu</a>
+
+    <!-- La barre du haut n'existe que sur les écrans intérieurs : cachée tant que le code n'a
+         pas dit sur quel écran on est, pour qu'elle n'apparaisse pas un instant au chargement. -->
+    <header class="entete" hidden>
+      <div class="entete__contenu">
+        <button class="bouton-retour" id="retour" type="button" aria-label="Retour" hidden>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" focusable="false">
+            <path d="M15 5 L8 12 L15 19" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <p class="entete__titre entete__titre--ecran" id="titre-ecran" hidden></p>
+      </div>
+    </header>
+
+    <main id="principal" tabindex="-1">
+      <p class="texte-doux chargement">Chargement…</p>
+    </main>
+
+    <!-- La barre des sections, en bas : remplie par le code à partir des textes de l'interface. -->
+    <nav class="onglets" id="onglets" aria-label="Sections de l’application" hidden></nav>
+
+    <noscript>
+      <p class="message message--erreur">
+        Cette application a besoin de JavaScript pour fonctionner. Active-le dans ton navigateur.
+      </p>
+    </noscript>
+
+    <script src="app.js"></script>
+  </body>
+</html>

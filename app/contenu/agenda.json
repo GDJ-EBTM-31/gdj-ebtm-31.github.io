@@ -1,0 +1,112 @@
+{
+  "_note": "Dates relevées sur l’affiche « Agenda 2026/2027 — Rencontres des jeunes de 15-25 ans » transmise par Sébastien le 11 septembre 2026. Heures et lieux non indiqués sur l’affiche : à demander à Nicolas et Claire, puis à ajouter (« heure », « fin », « lieu »). La date s’écrit AAAA-MM-JJ, l’heure HH:MM ; « fin », « lieu » et « detail » sont facultatifs.",
+  "evenements": [
+    {
+      "id": "2026-09-12-conference",
+      "titre": "Conférence sur les spiritualités",
+      "date": "2026-09-12",
+      "detail": "Avec Florent Varak. Les questions à préparer sont dans le sujet du même nom."
+    },
+    {
+      "id": "2026-09-26-integration",
+      "titre": "Rencontre d’intégration",
+      "date": "2026-09-26"
+    },
+    {
+      "id": "2026-10-03-convention-missionnaire",
+      "titre": "Convention missionnaire",
+      "date": "2026-10-03"
+    },
+    {
+      "id": "2026-10-11-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2026-10-11"
+    },
+    {
+      "id": "2026-10-25-pique-nique",
+      "titre": "Pique-nique",
+      "date": "2026-10-25"
+    },
+    {
+      "id": "2026-11-01-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2026-11-01"
+    },
+    {
+      "id": "2026-11-15-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2026-11-15"
+    },
+    {
+      "id": "2026-11-29-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2026-11-29"
+    },
+    {
+      "id": "2026-12-13-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2026-12-13"
+    },
+    {
+      "id": "2027-01-10-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-01-10"
+    },
+    {
+      "id": "2027-01-24-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-01-24"
+    },
+    {
+      "id": "2027-02-07-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-02-07"
+    },
+    {
+      "id": "2027-02-28-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-02-28"
+    },
+    {
+      "id": "2027-03-14-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-03-14"
+    },
+    {
+      "id": "2027-03-27-week-end-de-paques",
+      "titre": "Week-end de Pâques",
+      "date": "2027-03-27",
+      "detail": "Le week-end des 27 et 28 mars."
+    },
+    {
+      "id": "2027-04-11-pique-nique",
+      "titre": "Pique-nique",
+      "date": "2027-04-11"
+    },
+    {
+      "id": "2027-04-25-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-04-25"
+    },
+    {
+      "id": "2027-05-09-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-05-09"
+    },
+    {
+      "id": "2027-05-23-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-05-23"
+    },
+    {
+      "id": "2027-06-06-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-06-06"
+    },
+    {
+      "id": "2027-06-20-rencontre",
+      "titre": "Rencontre du groupe de jeunes",
+      "date": "2027-06-20"
+    }
+  ]
+}

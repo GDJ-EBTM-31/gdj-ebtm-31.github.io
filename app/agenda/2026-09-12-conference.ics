@@ -1,0 +1,14 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//GDJ EBTM//Agenda//FR
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:2026-09-12-conference@gdj-ebtm
+DTSTAMP:20260101T000000Z
+DTSTART;VALUE=DATE:20260912
+SUMMARY:Conférence sur les spiritualités
+DESCRIPTION:Avec Florent Varak. Les questions à préparer sont dans le suj
+ et du même nom.
+END:VEVENT
+END:VCALENDAR

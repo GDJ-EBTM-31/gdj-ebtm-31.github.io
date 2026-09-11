@@ -1,0 +1,215 @@
+{
+  "application": {
+    "nom": "GDJ",
+    "groupe": "Groupe de jeunes",
+    "eglise": "Église Baptiste Toulouse Métropole"
+  },
+  "installation": {
+    "sousTitre": "L’application du groupe de jeunes",
+    "presentation": "Les études à préparer, les rencontres à venir, des lectures et des défis. Installe-la sur ton téléphone : elle s’ajoute à ton écran d’accueil comme une application.",
+    "consigne": "Pour l’ajouter à ton écran d’accueil :",
+    "consigneNavigateurIntegre": "Cette page s’affiche dans la fenêtre interne d’une application, d’où on ne peut pas installer. Ouvre-la d’abord dans ton navigateur :",
+    "secours": {
+      "titre": "Tu ne trouves pas ?",
+      "texte": "Copie ce lien, ouvre ton navigateur — Chrome sur Android, Safari sur iPhone — colle-le dans la barre d’adresse en haut, puis reprends cette page.",
+      "bouton": "Copier le lien",
+      "confirmation": "Lien copié. Ouvre ton navigateur et colle-le dans la barre d’adresse.",
+      "aLaMain": "Recopie l’adresse ci-dessus dans ton navigateur."
+    }
+  },
+  "ordinateur": {
+    "texte": "Elle s’installe sur ton téléphone. Scanne ce code avec son appareil photo :",
+    "lien": "Ou ouvre ce lien sur ton téléphone :",
+    "qrAlt": "Code à scanner avec ton téléphone, menant à {adresse}"
+  },
+  "retour": "Retour",
+  "erreurChargement": "L’application n’a pas pu être chargée. Vérifie ta connexion et rouvre la page.",
+  "stockageBloque": "L’enregistrement sur cet appareil est bloqué (navigation privée, ou stockage plein). Ce que tu écris ne sera pas conservé après la fermeture de la page.",
+  "navigateurIntegre": {
+    "titre": "Ouvre cette page dans ton navigateur.",
+    "texte": "Tu l’affiches dans la fenêtre interne d’une application. Ce que tu écris ici ne s’y retrouvera pas si tu reviens par Safari ou Chrome. Touche ••• puis « Ouvrir dans le navigateur »."
+  },
+  "accueil": {
+    "bonjour": "Bonjour {prenom}",
+    "bonsoir": "Bonsoir {prenom}",
+    "aLaUne": "À la une",
+    "aVenir": "À venir",
+    "formations": "Formations à venir",
+    "inscriptionObligatoire": "Inscription obligatoire",
+    "inscrire": "M’inscrire",
+    "inscrireA": "M’inscrire à « {titre} », sur le site de l’église",
+    "prochaineRencontre": "Prochaine rencontre",
+    "aucuneRencontre": "Pas de rencontre annoncée pour l’instant.",
+    "sujets": "Les études",
+    "aucunSujet": "Aucune étude pour l’instant. Nicolas et Claire t’en proposeront bientôt.",
+    "defis": "Lectures et défis",
+    "agenda": "Agenda",
+    "toutAgenda": "Voir tout l’agenda",
+    "pratique": "Pratique",
+    "aProposApp": "À propos de l’application",
+    "sauvegarde": "Sauvegarder mes réponses",
+    "nouveau": "Nouvelle",
+    "archives": "Études archivées",
+    "nouveauSujet": "Nouvelle étude",
+    "decouvrir": "Découvrir",
+    "glisserArchiver": "Archiver",
+    "glisserRemettre": "Remettre",
+    "voirSujets": "Toutes les études",
+    "voirDefis": "Tous les défis",
+    "aucunDefi": "Aucune lecture ni défi pour l’instant.",
+    "raccourcis": "Raccourcis"
+  },
+  "sujet": {
+    "aPropos": "À propos de cette étude",
+    "questions": "Les questions",
+    "inspiration": "Pour t’inspirer",
+    "reflexions": "Mes réflexions",
+    "partager": "Partager",
+    "partagerReponses": "Partager mes réponses",
+    "question": "Question",
+    "placeholder": "Écris ici. Tu pourras revenir compléter quand tu veux.",
+    "enregistre": "Enregistré",
+    "notes": {
+      "titre": "Mes réflexions",
+      "placeholder": "Un espace libre. Ce qui t’a interpellé, ce que tu n’as pas compris, les questions que tu voudrais reprendre avec le groupe de jeunes…"
+    },
+    "partage": {
+      "titre": "Partager",
+      "texte": "Si tu le souhaites, tu peux partager tes réponses : avec d’autres jeunes du groupe, avec le responsable, avec qui tu veux.",
+      "comment": "Le bouton rassemble tout ce que tu as écrit sur cette étude en un seul message, prêt à envoyer : chaque question suivie de ta réponse, et tes réflexions. Il te reste à choisir où l’envoyer — WhatsApp, SMS, mail… Rien ne part sans toi.",
+      "prenom": "Ton prénom",
+      "prenomAide": "Pour qu’on sache de qui elles viennent",
+      "bouton": "Partager mes réponses",
+      "copie": "Ton message est prêt et copié : toutes tes réponses, mises en forme. Colle-le dans WhatsApp, un SMS ou un mail.",
+      "echec": "Le partage n’a pas abouti.",
+      "aLaMain": "Le presse-papiers n’est pas disponible ici. Ton message est ci-dessous, déjà sélectionné : copie-le."
+    },
+    "message": {
+      "reponsesDe": "Réponses de {prenom}",
+      "sansReponse": "(pas de réponse)",
+      "notes": "Mes réflexions"
+    },
+    "archiver": "Archiver cette étude",
+    "archiverAide": "Quand tu as fini avec cette étude, range-la : elle passe dans « Études archivées », sous la liste des études. Tes réponses restent, et tu peux la ressortir quand tu veux.",
+    "desarchiver": "Remettre dans mes études",
+    "desarchiverAide": "Cette étude est archivée. Tes réponses sont toujours là.",
+    "archive": "Archivé"
+  },
+  "defi": {
+    "lecture": "Lecture",
+    "defi": "Défi",
+    "progression": "{fait} sur {total}",
+    "pasCommence": "Pas encore commencé",
+    "termine": "Terminé",
+    "coche": "Fait",
+    "notePlaceholder": "Une ligne, si tu veux.",
+    "recommencer": "Recommencer",
+    "confirmerRecommencer": "Confirmer : tout décocher",
+    "recommence": "Remis à zéro."
+  },
+  "agenda": {
+    "titre": "Agenda",
+    "aVenir": "À venir",
+    "passe": "Déjà passé",
+    "rien": "Rien de prévu pour l’instant.",
+    "ajouterCalendrier": "Ajouter à mon calendrier",
+    "aujourdhui": "Aujourd’hui",
+    "demain": "Demain",
+    "de": "de {debut} à {fin}",
+    "a": "à {heure}",
+    "dansJours": "Dans {n} jours"
+  },
+  "pratique": {
+    "titre": "Pratique",
+    "liens": "Liens utiles",
+    "contact": "Une question ?",
+    "ouvrir": "Ouvrir"
+  },
+  "aPropos": {
+    "titre": "À propos",
+    "texte": [
+      "Cette application est celle du groupe de jeunes de l’Église Baptiste Toulouse Métropole. Elle rassemble les études à préparer, les rencontres à venir, des lectures et des défis.",
+      "Nicolas et Claire, responsables du groupe de jeunes, l’alimentent au fil de l’année. Quand une nouvelle étude arrive, elle apparaît ici à l’ouverture suivante de l’application."
+    ],
+    "confidentialite": "Ce que tu écris reste dans cette application, sur ton téléphone. Rien n’est envoyé à l’église ni à personne d’autre, sauf si tu utilises toi-même un bouton de partage.",
+    "attention": "Tes réponses n’existent que dans cette application. Si tu la supprimes de ton écran d’accueil, ou si tu changes de téléphone, elles disparaissent avec elle. Pense à faire une sauvegarde de temps en temps.",
+    "decouvrir": "Faire découvrir l’application",
+    "qr": {
+      "titre": "Faire découvrir l’application",
+      "texte": "Fais scanner ce code à un ami avec l’appareil photo de son téléphone : il tombe directement sur l’écran d’installation. Tu peux aussi lui envoyer le lien.",
+      "bouton": "Envoyer le lien",
+      "copie": "Lien copié. Colle-le dans un message.",
+      "aLaMain": "Le presse-papiers n’est pas disponible ici. Recopie l’adresse ci-dessus.",
+      "message": "Installe l’application du groupe de jeunes :"
+    }
+  },
+  "sauvegarde": {
+    "titre": "Sauvegarder",
+    "texte": "La sauvegarde rassemble tout ce que tu as écrit et coché dans un petit fichier. Garde-le où tu veux : dans tes fichiers, dans tes mails, envoyé à toi-même. Si tu changes de téléphone ou si l’application disparaît, tu pourras tout retrouver.",
+    "bouton": "Enregistrer une sauvegarde",
+    "derniere": "Dernière sauvegarde : {date}",
+    "jamais": "Aucune sauvegarde pour l’instant.",
+    "rien": "Il n’y a encore rien à sauvegarder.",
+    "faite": "Sauvegarde prête. Garde le fichier en lieu sûr.",
+    "echec": "La sauvegarde n’a pas abouti.",
+    "restaurerTitre": "Restaurer",
+    "restaurerTexte": "Tu as un fichier de sauvegarde ? Choisis-le : ce qu’il contient sera remis dans l’application, par-dessus ce qui s’y trouve.",
+    "restaurer": "Choisir un fichier de sauvegarde",
+    "restaure": "Sauvegarde restaurée : {n} élément(s).",
+    "invalide": "Ce fichier n’est pas une sauvegarde de cette application.",
+    "nomFichier": "sauvegarde-gdj"
+  },
+  "reglages": {
+    "titre": "Réglages",
+    "prenom": "Ton prénom",
+    "prenomAide": "L’accueil te dira bonjour, et il signera tes partages. Il reste sur ton téléphone.",
+    "taille": "Taille du texte",
+    "rappel": "Me rappeler de sauvegarder",
+    "rappelMois": "Tous les mois",
+    "rappelJamais": "Jamais",
+    "rappelAide": "Après un mois sans sauvegarde, une carte te le rappelle sur l’accueil.",
+    "effacer": "Effacer toutes mes réponses",
+    "confirmer": "Confirmer l’effacement",
+    "efface": "Tout a été effacé.",
+    "version": "Version {version}"
+  },
+  "rappel": {
+    "titre": "Pense à ta sauvegarde",
+    "jamais": "Tu n’as encore jamais sauvegardé tes réponses.",
+    "depuis": "Ta dernière sauvegarde date du {date}.",
+    "texte": "Si tu perds ton téléphone, c’est elle qui te permettra de tout retrouver.",
+    "sauvegarder": "Sauvegarder",
+    "plusTard": "Plus tard"
+  },
+  "bienvenue": {
+    "etiquette": "Bienvenue",
+    "titre": "Bienvenue dans le groupe de jeunes",
+    "texte": "Cette application est celle du groupe de jeunes de l’Église Baptiste Toulouse Métropole. Voici ce que tu y trouveras :",
+    "points": [
+      "Les études : les questions que Nicolas et Claire te proposent, à remplir quand tu veux, avant, pendant ou après une rencontre.",
+      "Les lectures et défis : des étapes à cocher, à ton rythme.",
+      "L’agenda : toutes les rencontres de l’année, à ajouter à ton calendrier.",
+      "Ce que tu écris reste sur ton téléphone. Pense à faire une sauvegarde de temps en temps."
+    ],
+    "bouton": "C’est parti"
+  },
+  "onglets": {
+    "accueil": "Accueil",
+    "sujets": "Études",
+    "defis": "Défis",
+    "agenda": "Agenda",
+    "plus": "Plus"
+  },
+  "plus": {
+    "titre": "Plus",
+    "partager": "Partage l’appli",
+    "partagerSous": "Un QR code à montrer, ou le lien à envoyer à un ami",
+    "reglages": "Réglages"
+  },
+  "sujets": {
+    "titre": "Études"
+  },
+  "defis": {
+    "titre": "Lectures et défis"
+  }
+}

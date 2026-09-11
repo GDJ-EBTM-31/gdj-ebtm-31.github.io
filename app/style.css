@@ -1,0 +1,2020 @@
+/* GDJ — feuille de style. Mobile d'abord, sans dépendance.
+   Les couleurs sont celles du logo de l'église, violet et magenta : elles se retrouvent dans
+   la barre, dans l'icône de l'application, dans le bandeau « À la une » et dans les boutons. */
+
+:root {
+  --violet: #982898;
+  --violet-fonce: #6e1c70;
+  --magenta: #c00c6c;
+  --magenta-vif: #d40775;
+  --encre: #2b1f2e;
+  --texte-doux: #5f5363;
+  --fond: #faf7fb;
+  --carte: #ffffff;
+  --bord: #ebdfec;
+  /* Bordure des éléments avec lesquels on interagit : 3 pour 1, exigé pour être repérable. */
+  --bord-actif: #8a838c;
+  --teinte: #f7edf7;
+  --attention: #8f4118;
+  --attention-fond: #fdf1e8;
+  --ok: #2b7449;
+  --ok-fond: #e6f4ec;
+  --danger: #b3261e;
+  --echelle: 1;
+  --rayon: 14px;
+  --ombre: 0 1px 2px rgba(43, 31, 46, 0.05), 0 4px 16px rgba(43, 31, 46, 0.07);
+  --ombre-portee: 0 10px 30px rgba(110, 28, 112, 0.18);
+  --degrade: linear-gradient(135deg, var(--violet), var(--magenta));
+  /* L'application reste claire quel que soit le réglage du téléphone : elle est lue en salle,
+     projetée ou montrée à côté, et doit toujours se présenter de la même façon. */
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: calc(100% * var(--echelle));
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--fond);
+  background-image: radial-gradient(60rem 28rem at 50% -6rem, var(--teinte), transparent 70%);
+  background-repeat: no-repeat;
+  color: var(--encre);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--violet);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 3px solid var(--violet);
+  outline-offset: 2px;
+}
+
+/* Lien d'évitement : invisible tant qu'on ne l'atteint pas au clavier. */
+.saut {
+  position: absolute;
+  top: -100%;
+  left: 0.5rem;
+  z-index: 200;
+  padding: 0.7rem 1rem;
+  background: var(--carte);
+  color: var(--violet);
+  font-weight: 700;
+  border-radius: 0 0 10px 10px;
+  box-shadow: var(--ombre);
+}
+
+.saut:focus {
+  top: 0;
+}
+
+/* --------------------------------------------------------------------------- En-tête */
+
+.entete {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--carte);
+  border-bottom: 1px solid var(--bord);
+  padding-top: env(safe-area-inset-top);
+}
+
+.entete__contenu {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0.55rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bouton-retour {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  margin-left: -0.5rem;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  color: var(--violet);
+}
+
+.bouton-retour[hidden] {
+  display: none;
+}
+
+/* Les effets de survol ne s'appliquent qu'aux appareils qui ont une souris : sur iPhone, un
+   premier toucher peut n'être compté que comme un survol, et le bouton demande deux touchers.
+   Vu sur le simulateur le 11 septembre 2026. */
+@media (hover: hover) {
+  .bouton-retour:hover {
+    background: var(--teinte);
+  }
+}
+
+.entete__titre--ecran {
+  color: var(--encre);
+}
+
+.entete__titre[hidden] {
+  display: none;
+}
+
+.entete__titre {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--violet);
+  /* Sur un petit écran, le titre tient sur une ligne ou se coupe proprement. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --------------------------------------------------------------------------- Structure */
+
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem 0.9rem calc(2.5rem + env(safe-area-inset-bottom));
+}
+
+.chargement {
+  text-align: center;
+  padding: 3rem 0;
+}
+
+.texte-doux {
+  color: var(--texte-doux);
+}
+
+.vide {
+  margin: 0 0 0.5rem;
+  padding: 0.9rem 1rem;
+  color: var(--texte-doux);
+  background: var(--carte);
+  border: 1px dashed var(--bord-actif);
+  border-radius: 16px;
+}
+
+.bouton-principal {
+  display: block;
+  width: 100%;
+  min-height: 52px;
+  padding: 0.8rem 1rem;
+  /* Le même dégradé que l'icône : le bouton et ce qu'il installe se répondent. */
+  background: var(--degrade);
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: var(--ombre-portee);
+}
+
+@media (hover: hover) {
+  .bouton-principal:hover {
+    filter: brightness(0.94);
+  }
+}
+
+.bouton-principal--lien {
+  margin-top: 0.8rem;
+}
+
+.bouton-secondaire {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 0.6rem;
+  padding: 0.6rem 1rem;
+  background: none;
+  color: var(--violet);
+  border: 1px solid var(--bord-actif);
+  border-radius: 12px;
+  font-weight: 600;
+  text-align: center;
+}
+
+@media (hover: hover) {
+  .bouton-secondaire:hover {
+    background: var(--teinte);
+  }
+}
+
+/* Un bouton qui ouvre le sélecteur de fichiers : le champ est dedans, invisible mais
+   atteignable au clavier. */
+.bouton-fichier {
+  position: relative;
+  cursor: pointer;
+}
+
+.bouton-fichier input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.bouton-fichier:focus-within {
+  outline: 3px solid var(--violet);
+  outline-offset: 2px;
+}
+
+.bouton-danger {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  margin-top: 0.6rem;
+  padding: 0.6rem 1rem;
+  background: none;
+  color: var(--danger);
+  border: 1px solid var(--danger);
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+@media (hover: hover) {
+  .bouton-danger:hover {
+    background: #fdf0ef;
+  }
+}
+
+/* Message de confirmation après une action : lu par les lecteurs d'écran (aria-live). */
+.confirmation {
+  min-height: 1.5rem;
+  margin: 0.6rem 0 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ok);
+  text-align: center;
+}
+
+.confirmation:empty {
+  margin: 0;
+  min-height: 0;
+}
+
+/* --------------------------------------------------------------------------- Messages */
+
+.message {
+  max-width: 720px;
+  margin: 1rem auto;
+  padding: 0.9rem;
+  border-radius: var(--rayon);
+  background: var(--teinte);
+}
+
+.message--erreur {
+  background: #fdf0ef;
+  color: var(--danger);
+}
+
+/* Bandeau du navigateur intégré à une application (WhatsApp, Instagram…) : ce que la
+   personne écrit y disparaît dès qu'elle revient par un autre chemin. Il faut le dire. */
+.bandeau-navigateur {
+  background: var(--attention-fond);
+  border: 1px solid var(--attention);
+  border-radius: var(--rayon);
+  padding: 0.9rem;
+  margin-bottom: 1rem;
+  color: var(--attention);
+}
+
+.bandeau-navigateur p {
+  margin: 0;
+}
+
+.bandeau-navigateur strong {
+  display: block;
+  margin-bottom: 0.2rem;
+}
+
+/* ------------------------------------------------------ L'écran d'installation
+
+   C'est la première chose qu'un jeune voit, et souvent la seule s'il ne va pas au bout : elle
+   doit donner envie plutôt que ressembler à une notice. D'où une carte unique posée sur un
+   fond teinté, et l'icône de l'application montrée en grand — on voit tout de suite ce qu'on
+   va obtenir sur son écran d'accueil. */
+
+.orientation {
+  max-width: 25rem;
+  margin: 0 auto;
+  padding: 0.5rem 0 2rem;
+}
+
+.carte-installation {
+  background: var(--carte);
+  border-radius: 22px;
+  padding: 1.75rem 1.25rem 1.5rem;
+  text-align: center;
+  box-shadow: var(--ombre);
+}
+
+.carte-installation__icone {
+  width: 84px;
+  height: 84px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+  box-shadow: var(--ombre-portee);
+}
+
+.carte-installation__soustitre {
+  margin: 0 0 1.1rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--magenta);
+}
+
+.carte-installation__texte {
+  margin: 0;
+  color: var(--texte-doux);
+  line-height: 1.6;
+}
+
+/* Ce qui suit est l'action : séparée du texte par un filet, pour qu'on sache où regarder. */
+.carte-installation__action {
+  margin-top: 1.4rem;
+  padding-top: 1.3rem;
+  border-top: 1px solid var(--bord);
+  text-align: left;
+}
+
+.orientation__consigne {
+  margin: 0 0 0.85rem;
+  font-weight: 700;
+  color: var(--encre);
+}
+
+/* Les gestes à faire, numérotés à la main : la pastille se voit de loin, la liste du
+   navigateur non. */
+.invite__etapes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: etape;
+}
+
+.invite__etapes li {
+  position: relative;
+  margin-bottom: 0.85rem;
+  padding-left: 2.4rem;
+  line-height: 1.5;
+}
+
+.invite__etapes li:last-child {
+  margin-bottom: 0;
+}
+
+.invite__etapes li::before {
+  counter-increment: etape;
+  content: counter(etape);
+  position: absolute;
+  left: 0;
+  top: -0.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 50%;
+  background: var(--teinte);
+  color: var(--violet-fonce);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.invite__icone {
+  display: inline-flex;
+  vertical-align: -0.3em;
+  color: var(--violet);
+}
+
+/* ------------------------------------------------------ Le filet de sécurité
+
+   Replié : trois mots qu'on ne lit que si l'on est bloqué. Déplié, il donne le lien et de
+   quoi le copier. */
+
+.secours {
+  margin: 1.25rem 0 0;
+}
+
+.secours__titre {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--violet);
+  cursor: pointer;
+  list-style: none;
+}
+
+/* Safari dessine sa propre flèche : on la retire pour poser la nôtre. */
+.secours__titre::-webkit-details-marker {
+  display: none;
+}
+
+.secours__titre::after {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-0.1em, -0.1em);
+}
+
+.secours[open] .secours__titre::after {
+  transform: rotate(-135deg) translate(-0.15em, -0.15em);
+}
+
+.secours__contenu {
+  padding: 0.4rem 0.25rem 0;
+}
+
+.secours__texte {
+  margin: 0 0 0.8rem;
+  font-size: 0.95rem;
+  color: var(--texte-doux);
+  line-height: 1.55;
+}
+
+.secours__lien {
+  margin: 0 0 0.7rem;
+  padding: 0.65rem 0.7rem;
+  background: var(--carte);
+  border: 1px solid var(--bord);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  word-break: break-all;
+  text-align: center;
+  /* Sélectionnable au doigt, pour qui préfère copier lui-même. */
+  user-select: all;
+}
+
+/* ------------------------------------------------------ À la une
+
+   La seule carte en couleur de l'accueil, posée sur le dégradé de l'icône : le mot des
+   responsables, ou l'explication de l'application aux premières ouvertures. Rien ne défile,
+   rien n'est caché derrière. */
+
+.une {
+  position: relative;
+  overflow: hidden;
+  margin: 0.2rem 0 0.75rem;
+  padding: 1.25rem 1.2rem 1.3rem;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--violet-fonce) 0%, var(--violet) 48%, var(--magenta-vif) 100%);
+  color: #ffffff;
+  box-shadow: var(--ombre-portee);
+}
+
+/* Deux disques clairs, à peine visibles, qui donnent de la profondeur au dégradé. */
+.une::before,
+.une::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+  pointer-events: none;
+}
+
+.une::before {
+  width: 18rem;
+  height: 18rem;
+  right: -7rem;
+  bottom: -9rem;
+}
+
+.une::after {
+  width: 9rem;
+  height: 9rem;
+  left: -4rem;
+  top: -4.5rem;
+}
+
+.une > * {
+  position: relative;
+}
+
+.une__etiquette {
+  margin: 0 0 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.une__titre {
+  margin: 0 0 0.45rem;
+  font-size: 1.6rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.une__texte {
+  margin: 0;
+  line-height: 1.55;
+  color: #ffffff;
+}
+
+.une__liste {
+  margin: 0.6rem 0 0;
+  padding-left: 1.1rem;
+  line-height: 1.5;
+}
+
+.une__liste li {
+  margin-bottom: 0.35rem;
+}
+
+/* Le bouton d'une carte en couleur : une pastille blanche, le seul aplat clair. */
+.une__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  min-height: 44px;
+  margin-top: 0.9rem;
+  padding: 0.45rem 0.85rem 0.45rem 1.05rem;
+  border: none;
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--violet-fonce);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ------------------------------------------------------ Bonjour, rappel, À venir
+
+   Au-dessus de la carte en couleur, « Bonjour » et le prénom. Dessous, des cartes claires :
+   le rappel de sauvegarde quand il le faut, « À venir » (une ligne par annonce, tout se lit
+   sans glisser), et un nouveau sujet. */
+
+.bonjour {
+  margin: 0 0 0.75rem 0.25rem;
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--encre);
+}
+
+.rappel {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin-bottom: 0.65rem;
+  padding: 1rem;
+  background: var(--carte);
+  border-radius: 20px;
+  box-shadow: var(--ombre);
+}
+
+.rappel__texte {
+  flex: 1;
+  min-width: 0;
+}
+
+.rappel__titre {
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+  line-height: 1.3;
+  color: var(--encre);
+}
+
+.rappel__detail {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--texte-doux);
+}
+
+.rappel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.rappel__bouton {
+  min-height: 44px;
+  padding: 0.45rem 1rem;
+  border: 1px solid var(--bord-actif);
+  border-radius: 999px;
+  background: none;
+  color: var(--violet-fonce);
+  font-weight: 700;
+}
+
+.rappel__bouton--principal {
+  border-color: transparent;
+  background: var(--teinte);
+}
+
+.a-venir {
+  margin-bottom: 0.65rem;
+  padding: 0.85rem 0.45rem 0.35rem;
+  background: var(--carte);
+  border-radius: 20px;
+  box-shadow: var(--ombre);
+}
+
+.a-venir__entete {
+  margin: 0 0 0.25rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.a-venir__liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.a-venir__liste li + li {
+  border-top: 1px solid var(--bord);
+}
+
+.a-venir__ligne {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.5rem 0.55rem;
+  border: none;
+  border-radius: 14px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+}
+
+.a-venir__ligne > svg {
+  flex: none;
+  color: var(--bord-actif);
+}
+
+.a-venir .date {
+  width: 2.9rem;
+  padding: 0.3rem 0;
+  border-radius: 12px;
+}
+
+.a-venir .date__jour {
+  font-size: 1.2rem;
+}
+
+.a-venir__texte {
+  flex: 1;
+  min-width: 0;
+}
+
+.a-venir__titre {
+  display: block;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--encre);
+}
+
+.a-venir__detail {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: var(--texte-doux);
+}
+
+@media (hover: hover) {
+  a.a-venir__ligne:hover,
+  button.a-venir__ligne:hover {
+    background: var(--teinte);
+  }
+}
+
+/* Les formations à venir : une carte claire, la mention « Inscription obligatoire » (sans
+   panneau d'avertissement), et un vrai bouton par formation. On ne doit pas croire qu'il
+   suffit de venir le jour même. */
+.formations {
+  margin-bottom: 0.65rem;
+  padding: 1rem 1rem 1.1rem;
+  background: var(--carte);
+  border-radius: 20px;
+  box-shadow: var(--ombre);
+}
+
+.formations__titre {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+.formations__mention {
+  display: inline-block;
+  margin: 0.5rem 0 0;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: var(--teinte);
+  color: var(--violet-fonce);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.formations__liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.formation {
+  padding-top: 0.9rem;
+}
+
+.formation + .formation {
+  margin-top: 1rem;
+  border-top: 1px solid var(--bord);
+}
+
+.formation__titre {
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--encre);
+}
+
+.formation__quand {
+  margin: 0.2rem 0 0;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--magenta);
+}
+
+.formation__texte {
+  margin: 0.3rem 0 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--texte-doux);
+}
+
+.formation__inscrire {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+  min-height: 48px;
+}
+
+/* Une étude jamais ouverte : une carte claire, avec son bouton. */
+
+.annonce {
+  margin-bottom: 0.65rem;
+  padding: 1rem 1rem 1.05rem;
+  background: var(--carte);
+  border-radius: 20px;
+  box-shadow: var(--ombre);
+}
+
+.annonce__etiquette {
+  display: inline-block;
+  margin: 0 0 0.45rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: var(--teinte);
+  color: var(--violet-fonce);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.annonce--nouveau .annonce__etiquette {
+  background: var(--degrade);
+  color: #ffffff;
+}
+
+.annonce__titre {
+  margin: 0 0 0.3rem;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--encre);
+}
+
+.annonce__texte {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--texte-doux);
+}
+
+.annonce .une__action {
+  margin-top: 0.75rem;
+  background: var(--teinte);
+  color: var(--violet-fonce);
+}
+
+/* ------------------------------------------------------ Les listes de fiches
+
+   Tout est là, et tout se touche. On entre dans une fiche, on revient. */
+
+.section-titre {
+  margin: 1.6rem 0 0.7rem 0.25rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--texte-doux);
+}
+
+.fiches {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.fiches:empty {
+  display: none;
+}
+
+.fiche {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  margin-bottom: 0.65rem;
+  padding: 0.9rem 0.9rem 0.9rem 1rem;
+  text-align: left;
+  color: inherit;
+  text-decoration: none;
+  background: var(--carte);
+  border: 1px solid transparent;
+  border-radius: 18px;
+  box-shadow: var(--ombre);
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+@media (hover: hover) {
+  .fiche:hover {
+    border-color: var(--bord);
+  }
+}
+
+.fiche:active {
+  transform: scale(0.985);
+}
+
+.fiche > svg {
+  flex: none;
+  color: var(--bord-actif);
+}
+
+/* Le numéro d'une question. Ni coche, ni « validé » : on n'a jamais fini. */
+.fiche__numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: var(--teinte);
+  color: var(--violet-fonce);
+  font-weight: 700;
+}
+
+.fiche__pastille {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 13px;
+  background: var(--teinte);
+  color: var(--violet);
+}
+
+.fiche__pastille--vive {
+  background: var(--degrade);
+  color: #ffffff;
+}
+
+/* Un émoticône plutôt qu'un dessin : la police du téléphone s'en charge. */
+.fiche__pastille--emoji {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.fiche__texte {
+  flex: 1;
+  min-width: 0;
+}
+
+.fiche__titre {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.fiche__sous {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--texte-doux);
+}
+
+/* Une petite étiquette : « Lecture », « Défi », « Nouveau ». */
+.etiquette {
+  display: inline-block;
+  padding: 0.18rem 0.6rem;
+  border-radius: 999px;
+  background: var(--teinte);
+  color: var(--violet-fonce);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.etiquette--vive {
+  flex: none;
+  background: var(--degrade);
+  color: #ffffff;
+}
+
+/* L'anneau d'avancement d'un défi : la part faite, en couleur, sur le tour complet. */
+.fiche__pastille--anneau {
+  position: relative;
+  background: none;
+}
+
+.anneau {
+  display: block;
+  transform: rotate(-90deg);
+}
+
+.anneau__fond {
+  fill: none;
+  stroke: var(--teinte);
+  stroke-width: 4;
+}
+
+.anneau__part {
+  fill: none;
+  stroke: var(--violet);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .anneau__part {
+    transition: stroke-dasharray 0.3s ease;
+  }
+}
+
+.fiche__pastille--termine .anneau__part {
+  stroke: var(--magenta);
+}
+
+.anneau__coche {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--magenta);
+}
+
+/* Un lien discret sous une section : « Voir tout l'agenda ». */
+.lien-section {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  min-height: 44px;
+  margin: 0 0 0 0.25rem;
+  padding: 0 0.25rem;
+  border: none;
+  background: none;
+  color: var(--violet);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------ L'agenda */
+
+.evenements {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evenement {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  margin-bottom: 0.65rem;
+  padding: 0.85rem 0.9rem 0.85rem 0.85rem;
+  background: var(--carte);
+  border-radius: 18px;
+  box-shadow: var(--ombre);
+}
+
+.evenements--passes .evenement {
+  box-shadow: none;
+  border: 1px solid var(--bord);
+  opacity: 0.85;
+}
+
+/* La date en pavé : le jour en gros, le mois dessous. On la lit avant le titre. */
+.date {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  padding: 0.4rem 0;
+  border-radius: 14px;
+  background: var(--teinte);
+  color: var(--violet-fonce);
+}
+
+.date__jour {
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.date__mois {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.evenement__texte {
+  flex: 1;
+  min-width: 0;
+}
+
+.evenement__texte p {
+  margin: 0;
+}
+
+.evenement__titre {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.evenement__quand {
+  margin-top: 0.1rem;
+  font-size: 0.92rem;
+  color: var(--violet);
+  font-weight: 600;
+}
+
+.evenement__lieu,
+.evenement__detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.3rem;
+  margin-top: 0.25rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--texte-doux);
+}
+
+.evenement__lieu svg {
+  flex: none;
+  margin-top: 0.15rem;
+}
+
+.evenement__detail {
+  display: block;
+  margin-top: 0.4rem;
+  color: var(--encre);
+}
+
+.evenement__calendrier {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  margin-top: 0.15rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--violet);
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .evenement__calendrier:hover {
+    text-decoration: underline;
+  }
+}
+
+.passes {
+  margin-top: 0.5rem;
+}
+
+.passes__titre {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  list-style: none;
+}
+
+.passes__titre::-webkit-details-marker {
+  display: none;
+}
+
+.passes__titre::after {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-left: 0.5rem;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-0.1em, -0.1em);
+}
+
+.passes[open] .passes__titre::after {
+  transform: rotate(-135deg) translate(-0.15em, -0.15em);
+}
+
+/* ------------------------------------------------------ Un défi : des étapes à cocher
+
+   Chaque étape est une ligne qu'on touche en entier. La case est dessinée à la main : un
+   cercle vide, qui se remplit du dégradé quand c'est fait. */
+
+.jauge {
+  height: 6px;
+  margin: 0.6rem 0 0;
+  border-radius: 3px;
+  background: var(--teinte);
+  overflow: hidden;
+}
+
+.jauge__part {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--violet), var(--magenta));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jauge__part {
+    transition: width 0.3s ease;
+  }
+}
+
+.etapes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.etape {
+  margin-bottom: 0.55rem;
+  background: var(--carte);
+  border-radius: 16px;
+  box-shadow: var(--ombre);
+}
+
+.etape__ligne {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  min-height: 44px;
+  padding: 0.85rem 0.9rem;
+  cursor: pointer;
+}
+
+/* La vraie case, invisible mais présente : c'est elle que le clavier et le lecteur d'écran
+   atteignent. Le dessin à côté suit son état. */
+.etape__case {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.etape__coche {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-top: 0.05rem;
+  border: 2px solid var(--bord-actif);
+  border-radius: 50%;
+  color: transparent;
+  background: var(--carte);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .etape__coche {
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+}
+
+.etape__case:checked + .etape__coche {
+  border-color: transparent;
+  background: var(--degrade);
+  color: #ffffff;
+}
+
+.etape__case:focus-visible + .etape__coche {
+  outline: 3px solid var(--violet);
+  outline-offset: 2px;
+}
+
+.etape__texte {
+  flex: 1;
+  min-width: 0;
+}
+
+.etape__titre {
+  display: block;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.etape__detail {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--texte-doux);
+}
+
+.etape--faite .etape__titre {
+  color: var(--texte-doux);
+}
+
+/* Le texte d'un verset à apprendre, sous sa ligne. */
+.etape__verset {
+  margin: 0 0.9rem 0.9rem 3.5rem;
+  padding-left: 0.75rem;
+  border-left: 3px solid var(--violet);
+  line-height: 1.55;
+}
+
+/* La ligne à écrire, sous une étape qui la demande. */
+.etape__note {
+  display: block;
+  width: calc(100% - 4.4rem);
+  min-height: 44px;
+  margin: 0 0.9rem 0.85rem 3.5rem;
+  padding: 0.55rem 0.75rem;
+  font: inherit;
+  color: inherit;
+  background: var(--fond);
+  border: 1px solid var(--bord-actif);
+  border-radius: 12px;
+}
+
+.etape__note:focus {
+  border-color: var(--violet);
+  background: var(--carte);
+}
+
+.versets__source--defi {
+  margin: 0.5rem 0.25rem 0.75rem;
+}
+
+/* ------------------------------------------------------ Une question : la place d'écrire */
+
+body[data-ecran="question"] main,
+body[data-ecran="sujet-notes"] main {
+  display: flex;
+  flex-direction: column;
+  /* dvh suit la barre d'adresse qui se rétracte, et le clavier qui s'ouvre : sans lui, le
+     bas de l'écran passe sous le pli au moment précis où l'on écrit. */
+  min-height: calc(100vh - 3.6rem);
+  min-height: calc(100dvh - 3.6rem);
+}
+
+.question {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background: var(--carte);
+  border-radius: 20px;
+  padding: 1.25rem 1.1rem 0.9rem;
+  box-shadow: var(--ombre);
+}
+
+.question__intitule {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--encre);
+}
+
+/* La zone d'écriture prend toute la place qui reste : c'est elle, l'écran. Pas de cadre
+   autour — on écrit sur la carte, comme sur une page. */
+.question__reponse {
+  /* « 1 0 auto », pas « 1 » : avec « flex: 1 », la base de calcul est zéro et la hauteur que
+     le script pose pour suivre le texte est ignorée — la zone se cale sur l'écran, et tout ce
+     qui dépasse est coupé, invisible, sans défilement possible. Ici la hauteur posée fait
+     foi : la zone grandit avec le texte, la page défile, et quand le texte est court elle
+     remplit quand même l'écran. */
+  flex: 1 0 auto;
+  width: 100%;
+  min-height: 10rem;
+  padding: 0;
+  font: inherit;
+  line-height: 1.6;
+  color: inherit;
+  background: none;
+  border: none;
+  resize: none;
+  overflow: hidden;
+}
+
+.question__reponse:focus {
+  outline: none;
+}
+
+.question__reponse::placeholder {
+  color: var(--texte-doux);
+}
+
+/* Le trait sous la zone dit où l'on écrit, et change de couleur quand on y est. */
+.question__pied {
+  display: flex;
+  justify-content: flex-end;
+  min-height: 1.5rem;
+  margin: 0.5rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--bord);
+  font-size: 0.85rem;
+}
+
+.question:focus-within .question__pied {
+  border-top-color: var(--violet);
+}
+
+.question__etat {
+  color: var(--ok);
+  font-weight: 600;
+  opacity: 0;
+}
+
+.question__etat[data-visible="oui"] {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .question__etat {
+    transition: opacity 0.2s;
+  }
+}
+
+/* ------------------------------------------------------ Les pages qu'on lit */
+
+.page {
+  padding-bottom: 2rem;
+}
+
+.page__entete {
+  margin: 0.4rem 0 1.1rem 0.25rem;
+}
+
+.page__entete .etiquette {
+  margin-bottom: 0.5rem;
+}
+
+.page__titre {
+  margin: 0 0 0.15rem;
+  font-size: 1.45rem;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--encre);
+}
+
+.page__soustitre {
+  margin: 0;
+  font-weight: 600;
+  color: var(--magenta);
+}
+
+.page__contenu {
+  background: var(--carte);
+  border-radius: 18px;
+  padding: 1.1rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--ombre);
+}
+
+.page__contenu p {
+  margin: 0 0 0.5rem;
+}
+
+.page__contenu p:last-child {
+  margin-bottom: 0;
+}
+
+.page__contenu ul {
+  margin: 0 0 1.1rem;
+  padding-left: 1.2rem;
+}
+
+.page__contenu ul:last-child {
+  margin-bottom: 0;
+}
+
+.page__contenu li {
+  margin-bottom: 0.35rem;
+}
+
+.avertissement {
+  margin: 1rem 0;
+  padding: 0.9rem;
+  background: var(--attention-fond);
+  border: 1px solid var(--attention);
+  border-radius: 14px;
+  color: var(--attention);
+  font-weight: 600;
+}
+
+/* La mise en garde : les réponses n'existent que là. Encadrée, pour qu'on la lise. */
+.a-propos__attention {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+  margin: 0 0 1.2rem;
+  padding: 0.9rem;
+  background: var(--attention-fond);
+  border: 1px solid var(--attention);
+  border-radius: 14px;
+  color: var(--attention);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.a-propos__attention svg {
+  flex: none;
+  margin-top: 0.15rem;
+}
+
+.a-propos__confidentialite {
+  margin: 0 0 1.2rem;
+  padding: 0.9rem;
+  background: var(--teinte);
+  border-radius: 14px;
+  font-size: 0.95rem;
+}
+
+/* ------------------------------------------------------ Les versets */
+
+.verset {
+  margin: 0 0 1rem;
+  padding-left: 0.85rem;
+  border-left: 3px solid var(--violet);
+}
+
+.verset__reference {
+  display: block;
+  font-weight: 700;
+  color: var(--violet);
+  font-size: 0.95rem;
+}
+
+.verset__texte {
+  margin: 0.15rem 0 0;
+  line-height: 1.6;
+}
+
+.versets__source {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--texte-doux);
+}
+
+/* ------------------------------------------------------ Faire découvrir l'application */
+
+.qr {
+  text-align: center;
+}
+
+.qr__texte {
+  margin: 0 0 1rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.qr__image {
+  display: block;
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  margin: 0 auto 0.8rem;
+  padding: 0.6rem;
+  background: #ffffff;
+  border: 1px solid var(--bord);
+  border-radius: 14px;
+}
+
+.qr__adresse {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+  word-break: break-all;
+  user-select: all;
+}
+
+/* ------------------------------------------------------ Partager, sauvegarder */
+
+.partage__texte {
+  margin: 0 0 0.7rem;
+  line-height: 1.6;
+}
+
+.partage__secours {
+  display: block;
+  width: 100%;
+  min-height: 12rem;
+  margin: 0.8rem 0 0;
+  padding: 0.7rem;
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: inherit;
+  background: var(--fond);
+  border: 1px solid var(--bord-actif);
+  border-radius: 12px;
+  resize: vertical;
+}
+
+.partage__comment {
+  margin: 0 0 1.2rem;
+  line-height: 1.6;
+  color: var(--texte-doux);
+}
+
+.sauvegarde__derniere {
+  margin: 0.7rem 0 0;
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--texte-doux);
+}
+
+.champ {
+  display: block;
+  margin-bottom: 0.9rem;
+}
+
+.champ__intitule {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.champ__saisie {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+  color: inherit;
+  background: var(--fond);
+  border: 1px solid var(--bord-actif);
+  border-radius: 12px;
+}
+
+.champ__saisie:focus {
+  border-color: var(--violet);
+  background: var(--carte);
+}
+
+/* ------------------------------------------------------ L'écran des réglages */
+
+.reglage {
+  margin-bottom: 1.3rem;
+}
+
+.reglage__intitule {
+  display: block;
+  margin-bottom: 0.45rem;
+  font-weight: 600;
+}
+
+.reglage__aide {
+  margin: 0.45rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--texte-doux);
+}
+
+.reglages__version {
+  margin: 1.2rem 0 0;
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--texte-doux);
+}
+
+.crans {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.cran {
+  flex: 1;
+  min-height: 44px;
+  border: 1px solid var(--bord-actif);
+  border-radius: 12px;
+  background: var(--carte);
+  color: var(--encre);
+}
+
+.cran[aria-pressed="true"] {
+  background: var(--violet);
+  border-color: var(--violet);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------ Le passage d'un écran à l'autre
+
+   Là où le navigateur sait le faire, l'écran glisse plutôt que de sauter : on comprend qu'on
+   avance dans une suite, et non qu'on a changé de page. Ailleurs, il n'y a rien, et c'est
+   très bien. */
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-old(root) {
+    animation: sortir 0.18s ease both;
+  }
+
+  ::view-transition-new(root) {
+    animation: entrer 0.22s ease both;
+  }
+}
+
+@keyframes sortir {
+  to {
+    opacity: 0;
+    transform: translateX(-1.5rem);
+  }
+}
+
+@keyframes entrer {
+  from {
+    opacity: 0;
+    transform: translateX(1.5rem);
+  }
+}
+
+/* ------------------------------------------------------ Les sujets archivés
+
+   Un jeune qui en a fini avec un sujet le range : il passe sous la liste, replié, avec ses
+   réponses. Rien n'est effacé, et il le ressort quand il veut. */
+
+.archives {
+  margin-top: 0.25rem;
+}
+
+.archives__titre {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 0.4rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.archives__titre::-webkit-details-marker {
+  display: none;
+}
+
+.archives__titre::after {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-left: 0.5rem;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-0.1em, -0.1em);
+}
+
+.archives[open] .archives__titre::after {
+  transform: rotate(-135deg) translate(-0.15em, -0.15em);
+}
+
+.fiche--archive .fiche__pastille {
+  background: var(--teinte);
+  color: var(--texte-doux);
+}
+
+.sujet__archive {
+  margin-top: 1.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--bord);
+}
+
+.sujet__archive-aide {
+  margin: 0 0.25rem 0.6rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--texte-doux);
+}
+
+/* Un texte court au-dessus d'une liste de liens : moins d'air qu'une page à lire. */
+.page__contenu--serre {
+  padding: 0.85rem 1rem;
+  margin-bottom: 0.65rem;
+}
+
+
+
+
+
+/* ------------------------------------------------------ Glisser pour archiver
+
+   Une carte de sujet se glisse vers la droite. Derrière elle, le mot qui dit ce qui va se
+   passer — « Archiver » ou « Remettre » — sur le dégradé. Passé le seuil, le mot se
+   renforce ; lâcher fait filer la carte. */
+
+.glissable {
+  position: relative;
+  margin-bottom: 0.65rem;
+  border-radius: 18px;
+  touch-action: pan-y;
+}
+
+.glissable .fiche {
+  position: relative;
+  margin-bottom: 0;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .glissable .fiche {
+    transition: transform 0.18s ease, opacity 0.18s ease;
+  }
+}
+
+.glissable::before {
+  content: attr(data-etiquette);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  padding-left: 1.1rem;
+  border-radius: 18px;
+  background: var(--degrade);
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  opacity: 0;
+}
+
+.glissable[data-actif]::before {
+  opacity: 0.7;
+}
+
+.glissable[data-pret]::before {
+  opacity: 1;
+}
+
+
+
+
+/* ------------------------------------------------------ La barre des sections, en bas
+
+   Cinq onglets sous le pouce, comme dans les applications que les jeunes utilisent. Fixée en
+   bas, translucide sur le contenu qui défile dessous, et respectueuse de la zone du
+   téléphone (encoche, barre de geste). Cachée quand on écrit et sur l'écran d'installation. */
+
+.onglets {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 60;
+  background: rgba(255, 255, 255, 0.94);
+  border-top: 1px solid var(--bord);
+  padding-bottom: env(safe-area-inset-bottom);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+.onglets[hidden] {
+  display: none;
+}
+
+.onglets__contenu {
+  display: flex;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0.3rem 0.25rem;
+}
+
+.onglet {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
+  min-height: 52px;
+  padding: 0.25rem 0;
+  border: none;
+  border-radius: 12px;
+  background: none;
+  color: var(--texte-doux);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+/* L'icône dans une pastille : elle se teinte pour l'onglet où l'on est. */
+.onglet__icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.4rem;
+  height: 1.9rem;
+  border-radius: 999px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .onglet__icone {
+    transition: background 0.15s ease;
+  }
+}
+
+.onglet[aria-current="page"] {
+  color: var(--violet-fonce);
+}
+
+.onglet[aria-current="page"] .onglet__icone {
+  background: var(--teinte);
+  color: var(--violet);
+}
+
+/* Sous la barre, la page garde de la place : rien ne doit finir caché dessous. */
+body:not([data-ecran="installation"]):not([data-ecran="question"]):not([data-ecran="sujet-notes"]) main {
+  padding-bottom: calc(5.75rem + env(safe-area-inset-bottom));
+}
+
+/* ------------------------------------------------------ L'accueil épuré
+
+   Pas de barre en haut : la carte « À la une », les annonces, la prochaine rencontre, les
+   raccourcis. Ce qui se trouve dans les onglets n'est pas répété ici. */
+
+/* Sans barre du haut, la page commence sous l'encoche du téléphone. */
+.entete[hidden] {
+  display: none;
+}
+
+body[data-entete="non"] main {
+  padding-top: calc(0.9rem + env(safe-area-inset-top));
+}
+
+/* La prochaine rencontre, en grand : le pavé de date, le titre, quand, où. */
+.rencontre {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  width: 100%;
+  margin: 1rem 0 0.65rem;
+  padding: 1rem 0.9rem 1rem 1rem;
+  text-align: left;
+  color: inherit;
+  background: var(--carte);
+  border: 1px solid transparent;
+  border-radius: 20px;
+  box-shadow: var(--ombre);
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.rencontre:active {
+  transform: scale(0.985);
+}
+
+.rencontre > svg {
+  flex: none;
+  color: var(--bord-actif);
+}
+
+.rencontre .date {
+  width: 3.9rem;
+  padding: 0.55rem 0;
+  border-radius: 16px;
+  background: var(--degrade);
+  color: #ffffff;
+}
+
+.rencontre .date__jour {
+  font-size: 1.75rem;
+}
+
+.rencontre__texte {
+  flex: 1;
+  min-width: 0;
+}
+
+.rencontre__etiquette {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--violet);
+}
+
+/* « Dans 13 jours » suit la date, et passe dessous d'un bloc quand la place manque : jamais
+   coupé en deux, et le libellé du haut reste sur une ligne. */
+.rencontre__delai {
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--teinte);
+  color: var(--violet-fonce);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.rencontre__titre {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--encre);
+}
+
+.rencontre__quand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 0.5rem;
+  margin-top: 0.1rem;
+  font-weight: 600;
+  color: var(--magenta);
+}
+
+.rencontre__lieu {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+}

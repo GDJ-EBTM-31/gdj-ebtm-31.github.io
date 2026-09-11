@@ -1,0 +1,60 @@
+{
+  "sujets": [
+    {
+      "id": "2026-09-conference-varak",
+      "date": "2026-09-06",
+      "titre": "Conférence sur les spiritualités",
+      "sousTitre": "avec Florent Varak",
+      "resume": "Quatre questions à lire avant la conférence, à remplir pendant et après.",
+      "questions": 4,
+      "fichier": "sujets/2026-09-conference-varak.json"
+    }
+  ],
+  "defis": [
+    {
+      "id": "jean-en-21-jours",
+      "type": "lecture",
+      "ordre": 1,
+      "titre": "L’Évangile de Jean en 21 jours",
+      "resume": "Trois semaines pour lire l’évangile écrit « afin que vous croyiez ».",
+      "etapes": 21,
+      "fichier": "defis/jean-en-21-jours.json"
+    },
+    {
+      "id": "sept-psaumes",
+      "type": "lecture",
+      "ordre": 2,
+      "titre": "Sept psaumes pour une semaine",
+      "resume": "Un psaume par jour, pour apprendre à parler à Dieu avec les mots de la Bible.",
+      "etapes": 7,
+      "fichier": "defis/sept-psaumes.json"
+    },
+    {
+      "id": "sept-jours-de-priere",
+      "type": "defi",
+      "ordre": 3,
+      "titre": "Sept jours de prière",
+      "resume": "Chaque jour, prier pour quelqu’un d’autre. Une semaine pour prendre l’habitude.",
+      "etapes": 7,
+      "fichier": "defis/sept-jours-de-priere.json"
+    },
+    {
+      "id": "une-semaine-de-gratitude",
+      "type": "defi",
+      "ordre": 4,
+      "titre": "Une semaine de gratitude",
+      "resume": "Chaque jour, noter une chose pour laquelle dire merci à Dieu. Sept jours, sept lignes.",
+      "etapes": 7,
+      "fichier": "defis/une-semaine-de-gratitude.json"
+    },
+    {
+      "id": "parle-de-ta-foi",
+      "type": "defi",
+      "ordre": 5,
+      "titre": "Parle de ta foi",
+      "resume": "Cinq pas, à ton rythme, pour partager Jésus avec un ami.",
+      "etapes": 5,
+      "fichier": "defis/parle-de-ta-foi.json"
+    }
+  ]
+}

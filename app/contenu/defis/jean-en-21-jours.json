@@ -1,0 +1,31 @@
+{
+  "id": "jean-en-21-jours",
+  "type": "lecture",
+  "ordre": 1,
+  "titre": "L’Évangile de Jean en 21 jours",
+  "resume": "Trois semaines pour lire l’évangile écrit « afin que vous croyiez ».",
+  "description": "Jean a écrit son évangile pour qu’on sache qui est Jésus. Un chapitre par jour, à ton rythme. Coche chaque chapitre une fois lu.",
+  "etapes": [
+    { "id": "1", "titre": "Jean 1", "detail": "La Parole faite chair, le témoignage de Jean-Baptiste, les premiers disciples." },
+    { "id": "2", "titre": "Jean 2", "detail": "Les noces de Cana, les marchands chassés du temple." },
+    { "id": "3", "titre": "Jean 3", "detail": "Nicodème : naître de nouveau. « Dieu a tant aimé le monde… »" },
+    { "id": "4", "titre": "Jean 4", "detail": "La Samaritaine au puits, le fils de l’officier guéri." },
+    { "id": "5", "titre": "Jean 5", "detail": "Le paralytique de Béthesda, l’autorité du Fils." },
+    { "id": "6", "titre": "Jean 6", "detail": "Les cinq pains, Jésus marche sur l’eau, le pain de vie." },
+    { "id": "7", "titre": "Jean 7", "detail": "Jésus à la fête des Tabernacles, les fleuves d’eau vive." },
+    { "id": "8", "titre": "Jean 8", "detail": "La lumière du monde. « Avant qu’Abraham fût, je suis. »" },
+    { "id": "9", "titre": "Jean 9", "detail": "L’aveugle-né guéri." },
+    { "id": "10", "titre": "Jean 10", "detail": "Le bon berger." },
+    { "id": "11", "titre": "Jean 11", "detail": "Lazare ressuscité." },
+    { "id": "12", "titre": "Jean 12", "detail": "L’onction à Béthanie, l’entrée à Jérusalem, le grain qui meurt." },
+    { "id": "13", "titre": "Jean 13", "detail": "Le lavement des pieds, le commandement nouveau." },
+    { "id": "14", "titre": "Jean 14", "detail": "« Je suis le chemin, la vérité et la vie. » La promesse de l’Esprit." },
+    { "id": "15", "titre": "Jean 15", "detail": "Le cep et les sarments." },
+    { "id": "16", "titre": "Jean 16", "detail": "L’œuvre de l’Esprit. « J’ai vaincu le monde. »" },
+    { "id": "17", "titre": "Jean 17", "detail": "La prière de Jésus pour ses disciples." },
+    { "id": "18", "titre": "Jean 18", "detail": "L’arrestation, Jésus devant Pilate, le reniement de Pierre." },
+    { "id": "19", "titre": "Jean 19", "detail": "La condamnation, la crucifixion, la mort et l’ensevelissement." },
+    { "id": "20", "titre": "Jean 20", "detail": "Le tombeau vide, Marie de Magdala, Thomas." },
+    { "id": "21", "titre": "Jean 21", "detail": "Jésus au bord du lac, Pierre rétabli." }
+  ]
+}

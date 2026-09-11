@@ -1,0 +1,4 @@
+# La fiche se transmet par lien et par QR code au groupe de jeunes,
+# pas par les moteurs de recherche.
+User-agent: *
+Disallow: /

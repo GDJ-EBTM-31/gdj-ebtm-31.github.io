@@ -1,0 +1,17 @@
+{
+  "id": "une-semaine-de-gratitude",
+  "type": "defi",
+  "ordre": 4,
+  "titre": "Une semaine de gratitude",
+  "resume": "Chaque jour, noter une chose pour laquelle dire merci à Dieu. Sept jours, sept lignes.",
+  "description": "Ce qu’on remarque, on le garde. Chaque jour, écris une ligne — une seule — pour dire merci. À la fin de la semaine, relis les sept.",
+  "etapes": [
+    { "id": "1", "titre": "Jour 1", "detail": "Quelque chose que tu as vu aujourd’hui.", "saisie": true },
+    { "id": "2", "titre": "Jour 2", "detail": "Quelqu’un.", "saisie": true },
+    { "id": "3", "titre": "Jour 3", "detail": "Quelque chose que tu as reçu sans l’avoir mérité.", "saisie": true },
+    { "id": "4", "titre": "Jour 4", "detail": "Une difficulté qui t’a fait grandir.", "saisie": true },
+    { "id": "5", "titre": "Jour 5", "detail": "Quelque chose de tout petit.", "saisie": true },
+    { "id": "6", "titre": "Jour 6", "detail": "Quelque chose que tu tiens pour acquis.", "saisie": true },
+    { "id": "7", "titre": "Jour 7", "detail": "Ce que Jésus a fait pour toi.", "saisie": true }
+  ]
+}

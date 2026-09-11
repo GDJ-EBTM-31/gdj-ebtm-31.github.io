@@ -1,0 +1,17 @@
+{
+  "id": "sept-jours-de-priere",
+  "type": "defi",
+  "ordre": 3,
+  "titre": "Sept jours de prière",
+  "resume": "Chaque jour, prier pour quelqu’un d’autre. Une semaine pour prendre l’habitude.",
+  "description": "Pas besoin de longues prières : quelques minutes, à un moment fixe de la journée. Chaque jour, un sujet. Coche une fois que tu as prié.",
+  "etapes": [
+    { "id": "1", "titre": "Jour 1 — Ta famille", "detail": "Prie pour chacun de ceux qui vivent avec toi, un par un." },
+    { "id": "2", "titre": "Jour 2 — Tes amis", "detail": "Ceux qui connaissent Jésus, et ceux qui ne le connaissent pas encore." },
+    { "id": "3", "titre": "Jour 3 — Ton groupe de jeunes", "detail": "Les jeunes, le responsable, les prochaines rencontres." },
+    { "id": "4", "titre": "Jour 4 — Ton église", "detail": "Le culte de dimanche, ceux qui la servent, ceux qui traversent une épreuve." },
+    { "id": "5", "titre": "Jour 5 — Ton lycée, tes études, ton travail", "detail": "Tes profs, tes camarades, ce qui te pèse en ce moment." },
+    { "id": "6", "titre": "Jour 6 — Les chrétiens persécutés", "detail": "Ceux qui, quelque part dans le monde, paient cher de suivre Jésus." },
+    { "id": "7", "titre": "Jour 7 — Merci", "detail": "Aujourd’hui, ne demande rien : dis seulement merci." }
+  ]
+}

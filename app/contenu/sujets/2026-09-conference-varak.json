@@ -1,0 +1,68 @@
+{
+  "id": "2026-09-conference-varak",
+  "date": "2026-09-06",
+  "titre": "Conférence sur les spiritualités",
+  "sousTitre": "avec Florent Varak",
+  "resume": "Quatre questions à lire avant la conférence, à remplir pendant et après.",
+  "source": "fiche-varak.pdf",
+  "fiche": {
+    "titre": "Fiche de suivi",
+    "sousTitre": "Conférence sur les spiritualités avec Florent Varak"
+  },
+  "intro": [
+    {
+      "texte": "Ces questions sont destinées au groupe de jeunes et poursuivent plusieurs objectifs, notamment :",
+      "points": [
+        "Nous faire réfléchir en suscitant en nous plus d’intérêt pour le sujet des spiritualités",
+        "Nous aider à nous poser de bonnes questions concernant la Bible",
+        "Nous aider à voir que le christianisme est radicalement différent et profondément meilleur"
+      ]
+    },
+    {
+      "texte": "Mais aussi à :",
+      "points": [
+        "Nous aider à découvrir en quoi consiste d’autres croyances que la nôtre",
+        "Mieux comprendre les autres spiritualités qui inspirent notre génération",
+        "Nous aider à un dialogue constructif et riche avec nos amis à ce sujet",
+        "Préparer un éventuel sondage pour connaître la diversité spirituelle de cette génération"
+      ]
+    }
+  ],
+  "avertissement": "Lisez bien les questions avant la conférence pour vous préparer à mieux y répondre pendant (ou après)",
+  "questions": [
+    {
+      "id": "q1",
+      "texte": "Lors de cette conférence, qu’as-tu appris de nouveau ?"
+    },
+    {
+      "id": "q2",
+      "texte": "As-tu déjà entendu parler des spiritualités présentées ? Si oui, lesquelles et à quelles occasions (au travail, sur les réseaux, par un ami…) ?"
+    },
+    {
+      "id": "q3",
+      "texte": "Quelle serait la première question (ou les 2 premières) que tu poserais sur le sujet des spiritualités si tu devais faire un sondage dans les rues de Toulouse ?"
+    },
+    {
+      "id": "q4",
+      "texte": "Note quelques idées pour répondre à un ami qui prétend que sa spiritualité est meilleure que le christianisme. Quels sont les aspects de la vie de Jésus et de son caractère qui t’inspire et qui t’aident à répondre ?"
+    }
+  ],
+  "versets": {
+    "titre": "Pour t’inspirer",
+    "traduction": "Bible Louis Segond 1910",
+    "textes": [
+      {
+        "reference": "Ésaïe 45.5",
+        "texte": "Je suis l’Éternel, et il n’y en a point d’autre, hors moi il n’y a point de Dieu ; je t’ai ceint, avant que tu me connusses."
+      },
+      {
+        "reference": "Jean 17.3",
+        "texte": "Or, la vie éternelle, c’est qu’ils te connaissent, toi, le seul vrai Dieu, et celui que tu as envoyé, Jésus-Christ."
+      },
+      {
+        "reference": "1 Timothée 2.5",
+        "texte": "Car il y a un seul Dieu, et aussi un seul médiateur entre Dieu et les hommes, Jésus-Christ homme,"
+      }
+    ]
+  }
+}

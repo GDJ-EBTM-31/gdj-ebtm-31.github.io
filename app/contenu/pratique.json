@@ -1,0 +1,76 @@
+{
+  "_note": "Relevé sur ebtm.fr le 11 septembre 2026. Chaque section a un titre, un texte facultatif et des liens. Le lien WhatsApp du groupe se met dans contact.whatsapp.",
+  "sections": [
+    {
+      "titre": "Le groupe de jeunes",
+      "liens": [
+        {
+          "titre": "La page du groupe",
+          "description": "Sur le site de l’église",
+          "url": "https://ebtm.fr/jeunes"
+        }
+      ],
+      "texte": "Pour les 15-25 ans. Les rencontres ont lieu environ tous les quinze jours, le dimanche le plus souvent : toutes les dates de l’année sont dans l’agenda."
+    },
+    {
+      "titre": "L’église",
+      "liens": [
+        {
+          "titre": "Le culte du dimanche",
+          "description": "10 h 30, café d’accueil dès 10 h",
+          "url": "https://ebtm.fr/dimanche-a-lebtm/"
+        },
+        {
+          "titre": "Venir à l’église",
+          "description": "195 avenue des États-Unis, 31200 Toulouse",
+          "url": "https://ebtm.fr/acces/"
+        },
+        {
+          "titre": "Le site de l’église",
+          "description": "ebtm.fr",
+          "url": "https://ebtm.fr/"
+        }
+      ]
+    },
+    {
+      "titre": "Les cellules",
+      "texte": "Des petits groupes qui se retrouvent chaque semaine dans les quartiers de Toulouse, pour partager, prier et lire la Bible ensemble. Certaines sont faites pour les jeunes, à Aucamville et à Castelginest. Chaque semaine, le feuillet donne les sujets de prière, le texte et les questions.",
+      "liens": [
+        {
+          "titre": "La fiche de la semaine",
+          "description": "Le feuillet des cellules : prière, texte, questions",
+          "url": "https://docs.google.com/document/d/10hcY6usoWrW7YnwzSrWjnNIFwhESGseSjyMftdbBAh4/mobilebasic"
+        },
+        {
+          "titre": "Les groupes de maison",
+          "description": "Trouver une cellule près de chez toi",
+          "url": "https://ebtm.fr/groupes-de-maison/"
+        }
+      ]
+    },
+    {
+      "titre": "Suivre l’église",
+      "liens": [
+        {
+          "titre": "La chaîne YouTube",
+          "description": "Les cultes et les messages en vidéo",
+          "url": "https://www.youtube.com/@eglisebaptistetoulousemetro"
+        },
+        {
+          "titre": "Instagram",
+          "description": "@eglise_ebtm",
+          "url": "https://www.instagram.com/eglise_ebtm/"
+        },
+        {
+          "titre": "Restons en contact",
+          "description": "Recevoir les informations de l’église",
+          "url": "https://ebtm.fr/rec/"
+        }
+      ]
+    }
+  ],
+  "contact": {
+    "texte": "Parles-en à Nicolas ou à Claire, les responsables du groupe de jeunes : à la prochaine rencontre, ou sur le groupe WhatsApp.",
+    "whatsapp": ""
+  }
+}
