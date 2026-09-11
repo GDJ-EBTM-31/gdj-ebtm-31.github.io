@@ -1669,6 +1669,10 @@ body[data-ecran="sujet-notes"] main {
   color: var(--texte-doux);
 }
 
+.reglages__version:empty {
+  display: none;
+}
+
 .crans {
   display: flex;
   gap: 0.5rem;

@@ -2042,6 +2042,9 @@
         const versions = noms.filter((nom) => nom.startsWith("gdj-")).map((nom) => nom.slice("gdj-".length));
         versions.sort((a, b) => b.localeCompare(a, "fr", { numeric: true }));
         versionInstallee = versions[0] || "";
+        // L'écran des réglages est peut-être déjà affiché : on y écrit la version.
+        const ligne = document.getElementById("version-app");
+        if (ligne && versionInstallee) ligne.textContent = remplir(ui.reglages.version, { version: versionInstallee });
       })
       .catch(() => {});
   }
@@ -2082,7 +2085,7 @@
           <button type="button" class="bouton-danger" data-effacer>${echapper(r.effacer)}</button>
           <p class="confirmation" id="confirmation-reglages" role="status">${echapper(message)}</p>
         </div>
-        ${versionInstallee ? html`<p class="reglages__version">${echapper(remplir(r.version, { version: versionInstallee }))}</p>` : ""}
+        <p class="reglages__version" id="version-app">${versionInstallee ? echapper(remplir(r.version, { version: versionInstallee })) : ""}</p>
       </section>
     `;
   }
@@ -2156,6 +2159,11 @@
       construireOnglets();
       if (dejaInstallee()) compterOuverture();
       lireVersionInstallee();
+      // À la toute première ouverture, le cache n'existe pas encore au démarrage : le service
+      // worker le remplit juste après. On relit la version dès qu'il est prêt. Vu sur le
+      // simulateur iPhone le 11 septembre 2026 : l'application installée a sa propre mémoire,
+      // distincte de Safari, et la ligne de version manquait à la première ouverture.
+      if ("serviceWorker" in navigator) navigator.serviceWorker.ready.then(lireVersionInstallee).catch(() => {});
       afficher();
       setTimeout(precharger, 1500);
       // Demander au navigateur de ne pas effacer les données de lui-même quand la place
