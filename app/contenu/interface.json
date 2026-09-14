@@ -52,8 +52,6 @@
     "archives": "Études archivées",
     "nouveauSujet": "Nouvelle étude",
     "decouvrir": "Découvrir",
-    "glisserArchiver": "Archiver",
-    "glisserRemettre": "Remettre",
     "voirSujets": "Toutes les études",
     "voirDefis": "Tous les défis",
     "aucunDefi": "Aucun défi pour le moment. Ils arriveront au cours de l’année.",
@@ -90,7 +88,6 @@
       "notes": "Mes réflexions"
     },
     "archiver": "Archiver cette étude",
-    "archiverAide": "Quand tu as fini avec cette étude, range-la : elle passe dans « Études archivées », sous la liste des études. Tes réponses restent, et tu peux la ressortir quand tu veux.",
     "desarchiver": "Remettre dans mes études",
     "desarchiverAide": "Cette étude est archivée. Tes réponses sont toujours là.",
     "archive": "Archivé"

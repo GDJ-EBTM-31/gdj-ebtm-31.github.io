@@ -1,5 +1,5 @@
 {
-  "_note": "Dates relevées sur l’affiche « Agenda 2026/2027 — Rencontres des jeunes de 15-25 ans » transmise par Sébastien le 11 septembre 2026. Heures et lieux non indiqués sur l’affiche : à demander à Nicolas et Claire, puis à ajouter (« heure », « fin », « lieu »). La date s’écrit AAAA-MM-JJ, l’heure HH:MM ; « fin », « lieu » et « detail » sont facultatifs.",
+  "_note": "Dates relevées sur l’affiche « Agenda 2026/2027 — Rencontres des jeunes de 15-25 ans » transmise par Sébastien le 11 septembre 2026. Ni heure ni lieu : ils varient d’une rencontre à l’autre (décidé le 14 septembre 2026). La rencontre s’affiche sans horaire et le fichier de calendrier couvre la journée. La date s’écrit AAAA-MM-JJ ; « detail » est facultatif. « heure » (HH:MM), « fin » et « lieu » restent acceptés, si l’un d’eux devait un jour être précisé.",
   "evenements": [
     {
       "id": "2026-09-12-conference",
