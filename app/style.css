@@ -1337,7 +1337,8 @@ main {
 /* ------------------------------------------------------ Une question : la place d'écrire */
 
 body[data-ecran="question"] main,
-body[data-ecran="sujet-notes"] main {
+body[data-ecran="sujet-notes"] main,
+body[data-ecran="note"] main {
   display: flex;
   flex-direction: column;
   /* dvh suit la barre d'adresse qui se rétracte, et le clavier qui s'ouvre : sans lui, le
@@ -1877,8 +1878,15 @@ body[data-ecran="sujet-notes"] main {
 }
 
 /* Sous la barre, la page garde de la place : rien ne doit finir caché dessous. */
-body:not([data-ecran="installation"]):not([data-ecran="question"]):not([data-ecran="sujet-notes"]) main {
-  padding-bottom: calc(5.75rem + env(safe-area-inset-bottom));
+body:not([data-ecran="installation"]):not([data-ecran="question"]):not([data-ecran="sujet-notes"]):not([data-ecran="note"]) main {
+  padding-bottom: calc(var(--place-en-bas, 5.75rem) + env(safe-area-inset-bottom));
+}
+
+/* Sur l'accueil, le bouton flottant s'ajoute au-dessus de la barre : la dernière carte doit
+   pouvoir remonter au-dessus de lui. Une variable plutôt qu'une seconde règle, que la
+   précédente, plus précise, emporterait. */
+body[data-ecran="accueil"] {
+  --place-en-bas: 10rem;
 }
 
 /* ------------------------------------------------------ L'accueil épuré
@@ -1998,4 +2006,72 @@ body[data-entete="non"]::before {
   margin-top: 0.1rem;
   font-size: 0.9rem;
   color: var(--texte-doux);
+}
+
+/* ------------------------------------------------------ Mes notes
+
+   Un bouton flottant sur l'accueil seulement, au-dessus de la barre d'onglets, à droite sous
+   le pouce : un rond au dégradé des boutons principaux, le crayon seul (choix de Sébastien,
+   voir boutonMesNotes dans app.js). */
+
+.bouton-flottant {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: calc(5.2rem + env(safe-area-inset-bottom));
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  background: var(--degrade);
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  box-shadow: var(--ombre-portee);
+}
+
+@media (hover: hover) {
+  .bouton-flottant:hover {
+    filter: brightness(0.94);
+  }
+}
+
+.notes__recherche {
+  margin: 1.1rem 0 0;
+}
+
+.notes__resultat {
+  margin: 0.6rem 0.25rem 0.4rem;
+  font-size: 0.9rem;
+  color: var(--texte-doux);
+}
+
+.notes__resultat:empty {
+  margin: 0.9rem 0 0;
+}
+
+/* Supprimer une note : un lien discret à gauche, sous la zone d'écriture ; au second temps,
+   il passe au rouge et dit ce qu'il va faire. */
+.note__supprimer {
+  min-height: 44px;
+  margin: -0.5rem auto -0.5rem -0.2rem;
+  padding: 0 0.2rem;
+  background: none;
+  border: 0;
+  color: var(--texte-doux);
+  font: inherit;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.note__supprimer[data-confirme="oui"] {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.question__pied:has(.note__supprimer) {
+  align-items: center;
 }

@@ -121,6 +121,17 @@
     return Boolean(sujet && sujet.onglet === "defis");
   }
 
+  // Mes notes (demandé par le responsable, septembre 2026) : une clé par note,
+  // « note:<horodatage de création> », le texte tel quel. L'horodatage donne la date et
+  // l'ordre ; une note vidée est effacée, il n'y a donc jamais de note blanche.
+  function lireNotes() {
+    return clesEnregistrees()
+      .filter((cle) => /^note:\d+$/.test(cle))
+      .map((cle) => ({ id: cle.slice("note:".length), texte: lire(cle) || "" }))
+      .filter((note) => note.texte.trim())
+      .sort((a, b) => Number(b.id) - Number(a.id));
+  }
+
   // On compte les ouvertures de l'application installée : la carte de bienvenue s'appuie
   // dessus, et disparaît d'elle-même à la quatrième, même sans avoir été fermée.
   function compterOuverture() {
@@ -144,7 +155,7 @@
   // Ce qui mérite d'être sauvegardé : une réponse écrite, une étape cochée, une ligne écrite.
   function aDesReponses() {
     return clesEnregistrees().some((cle) => {
-      if (cle.startsWith("sujet:")) return Boolean((lire(cle) || "").trim());
+      if (cle.startsWith("sujet:") || cle.startsWith("note:")) return Boolean((lire(cle) || "").trim());
       if (cle.startsWith("defi:")) {
         const etat = lireDefi(cle.slice("defi:".length));
         return Object.keys(etat.faites).length > 0 || Object.keys(etat.notes).length > 0;
@@ -523,6 +534,11 @@
       focusable="false"><path d="M6 21 V4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /><path
       d="M6 4.5 H17.5 L15 8.5 L17.5 12.5 H6" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linejoin="round" /></svg>`;
+  // Mes notes : un crayon.
+  const CRAYON = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"
+      focusable="false"><path d="M4 20 L4.8 16.2 L15.6 5.4 A2 2 0 0 1 18.4 5.4 L18.6 5.6 A2 2 0 0 1 18.6 8.4 L7.8 19.2 Z"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /><path d="M13.8 7.2 L16.8 10.2"
+      stroke="currentColor" stroke-width="2" /></svg>`;
   // Une coche.
   const COCHE = `<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"
       focusable="false"><path d="M5 12.5 L10 17.5 L19 7" fill="none" stroke="currentColor"
@@ -595,7 +611,8 @@
       return { ecran: "sujet", id };
     }
     if (tete === "defi" && id) return { ecran: "defi", id };
-    if (["sujets", "defis", "agenda", "plus", "pratique", "a-propos", "decouvrir", "sauvegarde", "reglages"].includes(tete)) return { ecran: tete };
+    if (tete === "note" && /^\d+$/.test(id || "")) return { ecran: "note", id };
+    if (["sujets", "defis", "agenda", "plus", "notes", "pratique", "a-propos", "decouvrir", "sauvegarde", "reglages"].includes(tete)) return { ecran: tete };
     return { ecran: "accueil" };
   }
 
@@ -997,7 +1014,18 @@
       ${blocNouvelleEtude()}
       ${blocRappel()}
       ${blocRaccourcis()}
+      ${boutonMesNotes()}
     `;
+  }
+
+  // Le bouton flottant de l'accueil, au-dessus de la barre d'onglets : il mène à Mes notes.
+  // Choisi par Sébastien le 25 septembre 2026 plutôt qu'un encart, pour garder l'accueil
+  // épuré ; sur l'accueil seulement, ailleurs il cacherait le bas des écrans. Le crayon seul,
+  // sans le mot : c'est l'exception à la règle « jamais d'icône seule », voulue par Sébastien
+  // le même jour après avoir vu les versions avec « Mes notes » et « Notes ». Le nom reste lu
+  // par les lecteurs d'écran, et Mes notes reste dans Plus avec son nom écrit.
+  function boutonMesNotes() {
+    return html`<button type="button" class="bouton-flottant" data-aller="notes" aria-label="${echapper(ui.notes.bouton)}">${CRAYON}</button>`;
   }
 
   // ---------------------------------------------------------------------------
@@ -1050,6 +1078,7 @@
       <section class="page">
         <header class="page__entete"><h1 class="page__titre">${echapper(ui.plus.titre)}</h1></header>
         <ul class="fiches">
+          ${carte({ aller: "notes", classe: "fiche--notes-perso", pastille: pastille(CRAYON), titre: ui.notes.titre })}
           ${carte({ aller: "pratique", classe: "fiche--pratique", pastille: pastille(BOUSSOLE), titre: ui.pratique.titre })}
           ${carte({ aller: "decouvrir", classe: "fiche--ami", pastille: pastille(QR), titre: ui.plus.partager, sous: ui.plus.partagerSous })}
           ${carte({ aller: "sauvegarde", classe: "fiche--sauvegarde", pastille: pastille(SAUVEGARDE), titre: a.sauvegarde })}
@@ -1094,7 +1123,7 @@
   // Quel onglet s'allume pour quel écran : l'intérieur d'un sujet allume « Sujets » (« Défis »
   // pour un projet), un défi « Défis », Pratique ou la sauvegarde « Plus ».
   function ongletDe(ecran, id) {
-    if (ecran === "accueil") return "accueil";
+    if (ecran === "accueil" || ecran === "notes" || ecran === "note") return "accueil";
     if (ecran === "sujet" || ecran.startsWith("sujet-") || ecran === "question") {
       return index && estProjet(index.sujets.find((s) => s.id === id)) ? "defis" : "sujets";
     }
@@ -1107,7 +1136,7 @@
   function reglerOnglets(ecran, id) {
     const nav = document.getElementById("onglets");
     if (!nav) return;
-    nav.hidden = ecran === "installation" || ecran === "question" || ecran === "sujet-notes";
+    nav.hidden = ecran === "installation" || ecran === "question" || ecran === "sujet-notes" || ecran === "note";
     const actif = ongletDe(ecran, id);
     nav.querySelectorAll(".onglet").forEach((bouton) => {
       if (bouton.dataset.onglet === actif) bouton.setAttribute("aria-current", "page");
@@ -1247,7 +1276,7 @@
 
   // Le même écran pour une question et pour les réflexions libres : un intitulé, la place
   // d'écrire, et la mention « Enregistré » qui passe à chaque frappe.
-  function ecranEcriture(cle, intitule, placeholder) {
+  function ecranEcriture(cle, intitule, placeholder, pied = "") {
     const texte = lire(cle) || "";
     return html`
       <section class="question" aria-labelledby="intitule">
@@ -1260,6 +1289,7 @@
           placeholder="${echapper(placeholder)}"
         >${echapper(texte)}</textarea>
         <p class="question__pied">
+          ${pied}
           <span class="question__etat" data-etat="${echapper(cle)}" role="status">${echapper(ui.sujet.enregistre)}</span>
         </p>
       </section>
@@ -1333,6 +1363,65 @@
     if (notes) lignes.push(m.notes, "", notes, "", ligne);
 
     return lignes.join("\n").trim();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Mes notes : la liste, la recherche, une note
+  // ---------------------------------------------------------------------------
+
+  // La recherche s'affiche à partir de cinq notes : avant, tout tient sous les yeux.
+  const NOTES_AVANT_RECHERCHE = 5;
+
+  function dateNote(id) {
+    return new Date(Number(id)).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }).replace(/^1 /, "1er ");
+  }
+
+  // Sans majuscules ni accents : « priere » retrouve « Prière ».
+  function sansAccents(texte) {
+    return texte.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
+  function lignesNotes(notes, recherche) {
+    const n = ui.notes;
+    if (!notes.length) return html`<li><p class="vide">${echapper(n.aucune)}</p></li>`;
+    const cherche = sansAccents(recherche.trim());
+    const trouvees = cherche ? notes.filter((note) => sansAccents(note.texte).includes(cherche)) : notes;
+    return trouvees
+      .map((note) => {
+        const premiere = note.texte.trim().split("\n")[0].trim();
+        return carte({
+          aller: "note/" + note.id,
+          classe: "fiche--note",
+          pastille: pastille(CRAYON),
+          titre: premiere.length > 80 ? premiere.slice(0, 79).trimEnd() + "…" : premiere,
+          sous: dateNote(note.id),
+        });
+      })
+      .join("");
+  }
+
+  function ecranMesNotes() {
+    const n = ui.notes;
+    const notes = lireNotes();
+    return html`
+      <section class="page">
+        <button type="button" class="bouton-principal" data-nouvelle-note>${echapper(n.nouvelle)}</button>
+        ${notes.length >= NOTES_AVANT_RECHERCHE
+          ? html`<label class="champ notes__recherche">
+              <span class="champ__intitule">${echapper(n.rechercher)}</span>
+              <input class="champ__saisie" type="search" id="recherche-notes" autocomplete="off" enterkeyhint="search" />
+            </label>`
+          : ""}
+        <p class="notes__resultat" id="resultat-notes" role="status"></p>
+        <ul class="fiches" id="liste-notes">${lignesNotes(notes, "")}</ul>
+      </section>
+    `;
+  }
+
+  function ecranNote(id) {
+    const n = ui.notes;
+    const supprimer = html`<button type="button" class="note__supprimer" data-supprimer-note="${echapper(id)}">${echapper(n.supprimer)}</button>`;
+    return ecranEcriture("note:" + id, remplir(n.du, { date: dateNote(id) }), n.placeholder, supprimer);
   }
 
   // ---------------------------------------------------------------------------
@@ -1746,6 +1835,9 @@
     if (route.ecran === "defis") return montrer(ecranDefis(), null, "");
     if (route.ecran === "agenda") return montrer(ecranAgenda(), null, "");
     if (route.ecran === "plus") return montrer(ecranPlus(), null, "");
+    // Mes notes dépend de l'accueil, d'où l'on y entre par le bouton flottant.
+    if (route.ecran === "notes") return montrer(ecranMesNotes(), ui.notes.titre, "");
+    if (route.ecran === "note") return montrer(ecranNote(route.id), ui.notes.note, "notes");
     // Les écrans de « Plus », avec leur flèche qui y ramène.
     if (route.ecran === "pratique") return montrer(ecranPratique(), ui.pratique.titre, "plus");
     if (route.ecran === "a-propos") return montrer(ecranAPropos(), ui.aPropos.titre, "plus");
@@ -1793,7 +1885,27 @@
     if (cible.matches(".question__reponse")) {
       ajusterHauteur(cible);
       const cle = cible.dataset.cle;
+      if (cle.startsWith("note:") && !cible.value.trim()) {
+        effacer(cle);
+        signalerEnregistrement(cle);
+        return;
+      }
       if (ecrire(cle, cible.value)) signalerEnregistrement(cle);
+      return;
+    }
+
+    // La recherche refait la liste seule : le champ garde le clavier.
+    if (cible.id === "recherche-notes") {
+      const n = ui.notes;
+      const notes = lireNotes();
+      const liste = document.getElementById("liste-notes");
+      const resultat = document.getElementById("resultat-notes");
+      const lignes = lignesNotes(notes, cible.value);
+      liste.innerHTML = lignes;
+      const trouvees = liste.querySelectorAll(".fiche--note").length;
+      if (!cible.value.trim()) resultat.textContent = "";
+      else if (!trouvees) resultat.textContent = remplir(n.aucunResultat, { recherche: cible.value.trim() });
+      else resultat.textContent = trouvees === 1 ? n.resultat : remplir(n.resultats, { n: trouvees });
       return;
     }
 
@@ -1842,6 +1954,27 @@
     const retour = evenement.target.closest("#retour");
     if (retour) {
       aller(retour.dataset.retour || "");
+      return;
+    }
+
+    // Une nouvelle note n'existe qu'à la première lettre : ouvrir puis revenir sans rien
+    // écrire ne laisse rien derrière.
+    if (evenement.target.closest("[data-nouvelle-note]")) {
+      aller("note/" + Date.now());
+      return;
+    }
+
+    // Supprimer une note : deux temps, comme l'effacement des réglages. On revient à la liste
+    // en remplaçant l'adresse, pour que le retour ne rouvre pas une note qui n'existe plus.
+    const supprimer = evenement.target.closest("[data-supprimer-note]");
+    if (supprimer) {
+      if (supprimer.dataset.confirme !== "oui") {
+        supprimer.dataset.confirme = "oui";
+        supprimer.textContent = ui.notes.confirmerSupprimer;
+        return;
+      }
+      effacer("note:" + supprimer.dataset.supprimerNote);
+      location.replace("#/notes");
       return;
     }
 

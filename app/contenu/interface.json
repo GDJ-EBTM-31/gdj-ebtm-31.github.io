@@ -143,6 +143,21 @@
       "message": "Installe l’application du groupe de jeunes :"
     }
   },
+  "notes": {
+    "titre": "Mes notes",
+    "bouton": "Mes notes",
+    "nouvelle": "Nouvelle note",
+    "note": "Note",
+    "du": "Note du {date}",
+    "placeholder": "Écris ce que tu veux garder : une idée, une prière, un verset, une question… Tout s’enregistre au fur et à mesure.",
+    "aucune": "Tu n’as encore aucune note. Tout au long de l’année, garde ici ce qui te marque : pendant une rencontre, un culte, une lecture.",
+    "rechercher": "Rechercher dans mes notes",
+    "aucunResultat": "Aucune note ne contient « {recherche} ».",
+    "resultat": "Une note trouvée.",
+    "resultats": "{n} notes trouvées.",
+    "supprimer": "Supprimer cette note",
+    "confirmerSupprimer": "Confirmer : supprimer la note"
+  },
   "sauvegarde": {
     "titre": "Sauvegarder",
     "texte": "La sauvegarde rassemble tout ce que tu as écrit et coché dans un petit fichier. Garde-le où tu veux : dans tes fichiers, dans tes mails, envoyé à toi-même. Si tu changes de téléphone ou si l’application disparaît, tu pourras tout retrouver.",
@@ -168,7 +183,7 @@
     "rappelMois": "Tous les mois",
     "rappelJamais": "Jamais",
     "rappelAide": "Après un mois sans sauvegarde, une carte te le rappelle sur l’accueil.",
-    "effacer": "Effacer toutes mes réponses",
+    "effacer": "Effacer toutes mes réponses et mes notes",
     "confirmer": "Confirmer l’effacement",
     "efface": "Tout a été effacé.",
     "version": "Version {version}"

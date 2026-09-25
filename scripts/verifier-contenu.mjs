@@ -25,7 +25,7 @@ const signaler = (message) => erreurs.push(message);
 // --- 1. Forme des fichiers -----------------------------------------------------------------
 
 const ui = lireJson("interface.json");
-for (const cle of ["application", "installation", "ordinateur", "accueil", "sujet", "defi", "agenda", "pratique", "aPropos", "sauvegarde", "reglages", "rappel"]) {
+for (const cle of ["application", "installation", "ordinateur", "accueil", "sujet", "defi", "agenda", "pratique", "aPropos", "sauvegarde", "reglages", "rappel", "notes"]) {
   if (!ui[cle]) signaler(`interface.json : la section « ${cle} » manque.`);
 }
 
