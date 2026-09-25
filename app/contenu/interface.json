@@ -75,6 +75,7 @@
       "titre": "Partager",
       "texte": "Si tu le souhaites, tu peux partager tes réponses : avec d’autres jeunes du groupe, avec le responsable, avec qui tu veux.",
       "comment": "Le bouton rassemble tout ce que tu as écrit sur cette étude en un seul message, prêt à envoyer : chaque question suivie de ta réponse, et tes réflexions. Il te reste à choisir où l’envoyer — WhatsApp, SMS, mail… Rien ne part sans toi.",
+      "commentDefi": "Le bouton rassemble tout ce que tu as écrit sur ce défi en un seul message, prêt à envoyer : chaque question suivie de ta réponse. Il te reste à choisir où l’envoyer — WhatsApp, SMS, mail… Rien ne part sans toi.",
       "prenom": "Ton prénom",
       "prenomAide": "Pour qu’on sache de qui elles viennent",
       "bouton": "Partager mes réponses",
@@ -101,6 +102,8 @@
     "coche": "Fait",
     "notePlaceholder": "Une ligne, si tu veux.",
     "recommencer": "Recommencer",
+    "nouveau": "Nouveau",
+    "nouveauDefi": "Nouveau défi",
     "confirmerRecommencer": "Confirmer : tout décocher",
     "recommence": "Remis à zéro."
   },

@@ -97,6 +97,10 @@ for (const fichier of readdirSync(join(contenu, "sujets")).filter((f) => f.endsW
   for (const v of (sujet.versets && sujet.versets.textes) || []) {
     if (!v.reference || !v.texte) signaler(`sujets/${fichier} : verset incomplet.`);
   }
+  // Un projet des responsables : des questions comme une étude, rangé sous Défis.
+  if (sujet.onglet !== undefined && sujet.onglet !== "defis") signaler(`sujets/${fichier} : onglet inconnu « ${sujet.onglet} » (seul « defis » existe).`);
+  if (sujet.ordre !== undefined && !Number.isInteger(sujet.ordre)) signaler(`sujets/${fichier} : « ordre » doit être un nombre entier.`);
+  if (sujet.reflexions !== undefined && typeof sujet.reflexions !== "boolean") signaler(`sujets/${fichier} : « reflexions » vaut true ou false.`);
 }
 
 // Sans défi publié, le dossier n'existe pas (git ne garde pas les dossiers vides).
@@ -200,6 +204,7 @@ for (const { fichier, sujet } of sujets) {
   }
   const aVerifier = [
     ...(sujet.avertissement ? [["avertissement", sujet.avertissement]] : []),
+    ...(sujet.description ? [["description", sujet.description]] : []),
     ...(sujet.intro || []).flatMap((partie, i) => [
       [`intro ${i + 1}`, partie.texte],
       ...(partie.points || []).map((point, j) => [`intro ${i + 1}, point ${j + 1}`, point]),

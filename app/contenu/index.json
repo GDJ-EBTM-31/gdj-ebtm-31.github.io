@@ -1,6 +1,17 @@
 {
   "sujets": [
     {
+      "id": "2026-09-tous-migrants",
+      "date": "2026-09-25",
+      "titre": "Projet #TousMigrants",
+      "sousTitre": "",
+      "resume": "Le projet #TousMigrants portera sur des interventions dans les centres de demandeurs d’asile toulousains.",
+      "questions": 5,
+      "onglet": "defis",
+      "ordre": 1,
+      "fichier": "sujets/2026-09-tous-migrants.json"
+    },
+    {
       "id": "2026-09-conference-varak",
       "date": "2026-09-06",
       "titre": "Conférence sur les spiritualités",

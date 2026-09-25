@@ -114,6 +114,13 @@
     return Boolean(lire("archive:sujet:" + id));
   }
 
+  // Un projet des responsables (#TousMigrants, septembre 2026) se remplit comme une étude —
+  // des questions, le partage — mais se range sous Défis. C'est un sujet pour le code et le
+  // stockage (`gdj:sujet:<id>:…`), un défi pour le jeune.
+  function estProjet(sujet) {
+    return Boolean(sujet && sujet.onglet === "defis");
+  }
+
   // On compte les ouvertures de l'application installée : la carte de bienvenue s'appuie
   // dessus, et disparaît d'elle-même à la quatrième, même sans avoir été fermée.
   function compterOuverture() {
@@ -914,7 +921,7 @@
     if (!nouveau) return "";
     return html`
       <article class="annonce annonce--nouveau">
-        <p class="annonce__etiquette">${echapper(a.nouveauSujet)}</p>
+        <p class="annonce__etiquette">${echapper(estProjet(nouveau) ? ui.defi.nouveauDefi : a.nouveauSujet)}</p>
         <h2 class="annonce__titre">${echapper(nouveau.titre)}</h2>
         ${nouveau.resume ? html`<p class="annonce__texte">${echapper(nouveau.resume)}</p>` : ""}
         ${boutonUne("sujet/" + nouveau.id, a.decouvrir)}
@@ -933,6 +940,19 @@
       titre: s.titre,
       sous: [s.sousTitre, s.questions ? s.questions + " questions" : ""].filter(Boolean).join(" · "),
       etiquette: archive || lire("vu:sujet:" + s.id) ? "" : a.nouveau,
+    });
+  }
+
+  // Un projet n'a rien à cocher : pas d'anneau, mais le drapeau de l'onglet, et « Nouveau »
+  // tant qu'il n'a pas été ouvert, comme une étude.
+  function carteProjet(s) {
+    return carte({
+      aller: "sujet/" + s.id,
+      classe: "fiche--sujet",
+      pastille: pastille(DRAPEAU, "fiche__pastille--vive"),
+      titre: s.titre,
+      sous: s.questions ? s.questions + " questions" : "",
+      etiquette: lire("vu:sujet:" + s.id) ? "" : ui.defi.nouveau,
     });
   }
 
@@ -980,8 +1000,9 @@
 
   function ecranSujets() {
     const a = ui.accueil;
-    const actifs = index.sujets.filter((s) => !sujetArchive(s.id));
-    const archives = index.sujets.filter((s) => sujetArchive(s.id));
+    const etudes = index.sujets.filter((s) => !estProjet(s));
+    const actifs = etudes.filter((s) => !sujetArchive(s.id));
+    const archives = etudes.filter((s) => sujetArchive(s.id));
     const sujets = actifs.length
       ? actifs.map((s) => carteSujet(s, false)).join("")
       : html`<li><p class="vide">${echapper(a.aucunSujet)}</p></li>`;
@@ -1001,8 +1022,13 @@
   }
 
   function ecranDefis() {
-    const defis = index.defis.length
-      ? index.defis.map(carteDefi).join("")
+    // Projets et défis à cocher mêlés, dans l'ordre voulu par les responsables (« ordre »).
+    const tous = [
+      ...index.sujets.filter(estProjet).map((s) => ({ ordre: s.ordre ?? 999, titre: s.titre, carte: () => carteProjet(s) })),
+      ...index.defis.map((d) => ({ ordre: d.ordre ?? 999, titre: d.titre, carte: () => carteDefi(d) })),
+    ].sort((a, b) => a.ordre - b.ordre || a.titre.localeCompare(b.titre, "fr"));
+    const defis = tous.length
+      ? tous.map((element) => element.carte()).join("")
       : html`<li><p class="vide">${echapper(ui.accueil.aucunDefi)}</p></li>`;
     return html`
       <section class="page">
@@ -1059,21 +1085,24 @@
     </div>`;
   }
 
-  // Quel onglet s'allume pour quel écran : l'intérieur d'un sujet allume « Sujets », un défi
-  // « Défis », Pratique ou la sauvegarde « Plus ».
-  function ongletDe(ecran) {
+  // Quel onglet s'allume pour quel écran : l'intérieur d'un sujet allume « Sujets » (« Défis »
+  // pour un projet), un défi « Défis », Pratique ou la sauvegarde « Plus ».
+  function ongletDe(ecran, id) {
     if (ecran === "accueil") return "accueil";
-    if (ecran === "sujets" || ecran === "sujet" || ecran.startsWith("sujet-") || ecran === "question") return "sujets";
+    if (ecran === "sujet" || ecran.startsWith("sujet-") || ecran === "question") {
+      return index && estProjet(index.sujets.find((s) => s.id === id)) ? "defis" : "sujets";
+    }
+    if (ecran === "sujets") return "sujets";
     if (ecran === "defis" || ecran === "defi") return "defis";
     if (ecran === "agenda") return "agenda";
     return "plus";
   }
 
-  function reglerOnglets(ecran) {
+  function reglerOnglets(ecran, id) {
     const nav = document.getElementById("onglets");
     if (!nav) return;
     nav.hidden = ecran === "installation" || ecran === "question" || ecran === "sujet-notes";
-    const actif = ongletDe(ecran);
+    const actif = ongletDe(ecran, id);
     nav.querySelectorAll(".onglet").forEach((bouton) => {
       if (bouton.dataset.onglet === actif) bouton.setAttribute("aria-current", "page");
       else bouton.removeAttribute("aria-current");
@@ -1112,44 +1141,54 @@
       ? carte({ aller: base + "versets", classe: "fiche--versets", pastille: pastille(BIBLE, "fiche__pastille--vive"), titre: sujet.versets.titre || s.inspiration })
       : "";
 
-    const archive = sujetArchive(sujet.id);
+    // Un projet se présente comme un défi : l'étiquette « Défi » et son texte en tête, sans
+    // fiche « À propos » à ouvrir. Il ne s'archive pas : l'onglet Défis n'a pas d'archives.
+    const projet = estProjet(sujet);
+    const archive = !projet && sujetArchive(sujet.id);
+    const etiquette = projet ? ui.defi.defi : archive ? s.archive : "";
 
     return html`
       <section class="page">
         <header class="page__entete">
-          ${archive ? html`<span class="etiquette">${echapper(s.archive)}</span>` : ""}
+          ${etiquette ? html`<span class="etiquette">${echapper(etiquette)}</span>` : ""}
           <h1 class="page__titre">${echapper(sujet.titre)}</h1>
           ${sujet.sousTitre ? html`<p class="page__soustitre">${echapper(sujet.sousTitre)}</p>` : ""}
         </header>
 
-        <ul class="fiches">
-          ${carte({ aller: base + "a-propos", classe: "fiche--a-propos", pastille: pastille(INFO), titre: s.aPropos })}
-        </ul>
+        ${projet
+          ? sujet.description ? html`<div class="page__contenu"><p>${echapper(sujet.description)}</p></div>` : ""
+          : html`<ul class="fiches">
+              ${carte({ aller: base + "a-propos", classe: "fiche--a-propos", pastille: pastille(INFO), titre: s.aPropos })}
+            </ul>`}
 
         <h2 class="section-titre">${echapper(s.questions)}</h2>
         <ul class="fiches">${questions}</ul>
         <ul class="fiches">${versets}</ul>
 
-        <h2 class="section-titre">${echapper(s.reflexions)}</h2>
-        <ul class="fiches">
-          <li>
-            <button type="button" class="fiche fiche--notes" data-aller="${base}notes">
-              <span class="fiche__pastille fiche__pastille--emoji" aria-hidden="true">🤔</span>
-              <span class="fiche__texte"><span class="fiche__titre">${echapper(s.reflexions)}</span></span>
-              ${CHEVRON_DROIT}
-            </button>
-          </li>
-        </ul>
+        ${sujet.reflexions === false
+          ? ""
+          : html`<h2 class="section-titre">${echapper(s.reflexions)}</h2>
+            <ul class="fiches">
+              <li>
+                <button type="button" class="fiche fiche--notes" data-aller="${base}notes">
+                  <span class="fiche__pastille fiche__pastille--emoji" aria-hidden="true">🤔</span>
+                  <span class="fiche__texte"><span class="fiche__titre">${echapper(s.reflexions)}</span></span>
+                  ${CHEVRON_DROIT}
+                </button>
+              </li>
+            </ul>`}
 
         <h2 class="section-titre">${echapper(s.partager)}</h2>
         <ul class="fiches">
           ${carte({ aller: base + "partager", classe: "fiche--partager", pastille: pastille(PARTAGE, "fiche__pastille--vive"), titre: s.partagerReponses })}
         </ul>
 
-        <div class="sujet__archive">
-          ${archive ? html`<p class="sujet__archive-aide">${echapper(s.desarchiverAide)}</p>` : ""}
-          <button type="button" class="sujet__archive-lien" data-archiver="${echapper(sujet.id)}">${echapper(archive ? s.desarchiver : s.archiver)}</button>
-        </div>
+        ${projet
+          ? ""
+          : html`<div class="sujet__archive">
+              ${archive ? html`<p class="sujet__archive-aide">${echapper(s.desarchiverAide)}</p>` : ""}
+              <button type="button" class="sujet__archive-lien" data-archiver="${echapper(sujet.id)}">${echapper(archive ? s.desarchiver : s.archiver)}</button>
+            </div>`}
       </section>
     `;
   }
@@ -1245,7 +1284,7 @@
       <section class="page">
         <div class="page__contenu">
           <p class="partage__texte">${echapper(s.texte)}</p>
-          <p class="partage__comment">${echapper(s.comment)}</p>
+          <p class="partage__comment">${echapper((estProjet(sujet) && s.commentDefi) || s.comment)}</p>
           <label class="champ">
             <span class="champ__intitule">${echapper(s.prenom)}</span>
             <input
@@ -1653,7 +1692,7 @@
 
     const route = routeCourante();
     document.body.dataset.ecran = route.ecran;
-    reglerOnglets(route.ecran);
+    reglerOnglets(route.ecran, route.id);
     sujetCourant = null;
     defiCourant = null;
 
@@ -1667,7 +1706,7 @@
         const s = ui.sujet;
         if (route.ecran === "sujet") {
           ecrire("vu:sujet:" + sujet.id, "1");
-          montrer(ecranSujet(sujet), sujet.titre, "sujets");
+          montrer(ecranSujet(sujet), sujet.titre, estProjet(sujet) ? "defis" : "sujets");
         } else if (route.ecran === "sujet-a-propos") {
           montrer(ecranSujetAPropos(sujet), s.aPropos, base);
         } else if (route.ecran === "sujet-versets") {

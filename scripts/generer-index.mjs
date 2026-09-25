@@ -48,6 +48,8 @@ export function construireIndex() {
       sousTitre: donnees.sousTitre || "",
       resume: donnees.resume || "",
       questions: donnees.questions.length,
+      // Un projet des responsables se remplit comme une étude mais se range sous Défis.
+      ...(donnees.onglet ? { onglet: donnees.onglet, ordre: donnees.ordre ?? 999 } : {}),
       fichier,
     }))
     .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));

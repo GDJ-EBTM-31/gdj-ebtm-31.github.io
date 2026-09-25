@@ -1,0 +1,32 @@
+{
+  "id": "2026-09-tous-migrants",
+  "date": "2026-09-25",
+  "onglet": "defis",
+  "ordre": 1,
+  "titre": "Projet #TousMigrants",
+  "resume": "Le projet #TousMigrants portera sur des interventions dans les centres de demandeurs d’asile toulousains.",
+  "description": "Le projet #TousMigrants portera sur des interventions dans les centres de demandeurs d’asile toulousains. Le défi est d’apporter de la vie dans des lieux marqués par la misère et l’anxiété, grâce à l’enthousiasme et au zèle du groupe de jeunes de l’EBTM.",
+  "reflexions": false,
+  "questions": [
+    {
+      "id": "q1",
+      "texte": "Comment as-tu vécu la journée de rentrée ?"
+    },
+    {
+      "id": "q2",
+      "texte": "Comment le reportage tourné en Éthiopie t’a-t-il touché ou inspiré ?"
+    },
+    {
+      "id": "q3",
+      "texte": "Dans le projet #TousMigrants (#MoinsDeBlaPlusDeCoeur), comment t’imagines-tu participer concrètement ?"
+    },
+    {
+      "id": "q4",
+      "texte": "Si tu étais toi-même seul dans un pays que tu ne connais pas, de quelle manière aimerais-tu que les personnes de l’Église locale prennent soin de toi ?"
+    },
+    {
+      "id": "q5",
+      "texte": "Concrètement, qu’aimerais-tu pouvoir apporter à une personne qui se retrouve dans cette situation ?"
+    }
+  ]
+}
