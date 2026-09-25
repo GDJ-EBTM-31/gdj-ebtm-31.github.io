@@ -9,6 +9,7 @@
       "questions": 5,
       "onglet": "defis",
       "ordre": 1,
+      "jusquAu": "2026-09-26",
       "fichier": "sujets/2026-09-tous-migrants.json"
     },
     {

@@ -100,6 +100,7 @@ for (const fichier of readdirSync(join(contenu, "sujets")).filter((f) => f.endsW
   // Un projet des responsables : des questions comme une étude, rangé sous Défis.
   if (sujet.onglet !== undefined && sujet.onglet !== "defis") signaler(`sujets/${fichier} : onglet inconnu « ${sujet.onglet} » (seul « defis » existe).`);
   if (sujet.ordre !== undefined && !Number.isInteger(sujet.ordre)) signaler(`sujets/${fichier} : « ordre » doit être un nombre entier.`);
+  if (sujet.jusquAu !== undefined && !DATE.test(sujet.jusquAu)) signaler(`sujets/${fichier} : « jusquAu » mal écrit (attendu AAAA-MM-JJ).`);
   if (sujet.reflexions !== undefined && typeof sujet.reflexions !== "boolean") signaler(`sujets/${fichier} : « reflexions » vaut true ou false.`);
 }
 
@@ -240,6 +241,11 @@ for (const annonce of infos.annonces || []) {
   const dernier = annonce.jusquAu || [...(Array.isArray(annonce.dates) ? annonce.dates : [])].sort().pop();
   if (dernier && dernier < aujourdhui) {
     console.log(`À noter : l'annonce « ${annonce.titre} » a passé son dernier jour (${dernier}) et ne s'affiche plus ; elle peut être retirée d'infos.json.`);
+  }
+}
+for (const { fichier, sujet } of sujets) {
+  if (sujet.jusquAu && DATE.test(sujet.jusquAu) && sujet.jusquAu < aujourdhui) {
+    console.log(`À noter : sujets/${fichier} a passé son « jusquAu » (${sujet.jusquAu}) ; sa carte a quitté l'accueil, le champ peut être retiré.`);
   }
 }
 for (const formation of infos.formations || []) {

@@ -915,9 +915,15 @@
   }
 
   // Une étude que le jeune n'a pas encore ouverte : sa carte, avec un bouton pour y entrer.
+  // Un sujet qui porte « jusquAu » garde sa carte jusqu'à ce jour inclus, ouvert ou non, et
+  // la perd le lendemain à minuit : le projet #TousMigrants reste annoncé jusqu'au jour de la
+  // rencontre (demandé par Sébastien le 25 septembre 2026).
   function blocNouvelleEtude() {
     const a = ui.accueil;
-    const nouveau = index.sujets.find((s) => !lire("vu:sujet:" + s.id) && !sujetArchive(s.id));
+    const aujourdhui = aujourdhuiISO();
+    const nouveau = index.sujets.find(
+      (s) => !sujetArchive(s.id) && (s.jusquAu ? s.jusquAu >= aujourdhui : !lire("vu:sujet:" + s.id))
+    );
     if (!nouveau) return "";
     return html`
       <article class="annonce annonce--nouveau">

@@ -50,6 +50,8 @@ export function construireIndex() {
       questions: donnees.questions.length,
       // Un projet des responsables se remplit comme une étude mais se range sous Défis.
       ...(donnees.onglet ? { onglet: donnees.onglet, ordre: donnees.ordre ?? 999 } : {}),
+      // La carte de l'accueil reste jusqu'à ce jour inclus, même une fois le sujet ouvert.
+      ...(donnees.jusquAu ? { jusquAu: donnees.jusquAu } : {}),
       fichier,
     }))
     .sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
