@@ -37,6 +37,10 @@ for (const raccourci of infos.raccourcis || []) {
   if (!raccourci.url && !raccourci.aller) signaler(`infos.json : le raccourci « ${raccourci.titre} » n'a ni url ni aller.`);
   if (raccourci.url && !/^https?:\/\//.test(raccourci.url)) signaler(`infos.json : adresse invalide dans le raccourci « ${raccourci.titre} ».`);
 }
+if (infos.playlist) {
+  if (!infos.playlist.titre) signaler("infos.json : la playlist n'a pas de titre.");
+  if (!/^https:\/\//.test(infos.playlist.url || "")) signaler("infos.json : adresse de la playlist manquante ou invalide.");
+}
 for (const annonce of infos.annonces || []) {
   if (!annonce.titre) signaler("infos.json : annonce sans titre.");
   if (annonce.url && !/^https?:\/\//.test(annonce.url)) signaler(`infos.json : adresse invalide dans l'annonce « ${annonce.titre} ».`);

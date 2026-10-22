@@ -558,6 +558,11 @@
   const BOUSSOLE = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"
       focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor"
       stroke-width="2" /><path d="M15.5 8.5 L13.5 13.5 L8.5 15.5 L10.5 10.5 Z" fill="currentColor" /></svg>`;
+  // La note de musique de la playlist, dans Plus.
+  const NOTE = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"
+      focusable="false"><path d="M9 17.5 V5.5 L19.5 3.5 V15.5" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /><circle cx="6.5" cy="17.5"
+      r="2.75" fill="currentColor" /><circle cx="17" cy="15.5" r="2.75" fill="currentColor" /></svg>`;
   // L'engrenage des réglages.
   const ENGRENAGE = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"
       focusable="false"><path fill="currentColor" fill-rule="evenodd"
@@ -1072,14 +1077,18 @@
     `;
   }
 
+  // La playlist des responsables (infos.json) s'ouvre sur YouTube : ils la mettent à jour
+  // de leur côté, sans republier l'application. Demandée par le responsable le 22 octobre 2026.
   function ecranPlus() {
     const a = ui.accueil;
+    const playlist = infos.playlist;
     return html`
       <section class="page">
         <header class="page__entete"><h1 class="page__titre">${echapper(ui.plus.titre)}</h1></header>
         <ul class="fiches">
           ${carte({ aller: "notes", classe: "fiche--notes-perso", pastille: pastille(CRAYON), titre: ui.notes.titre })}
           ${carte({ aller: "pratique", classe: "fiche--pratique", pastille: pastille(BOUSSOLE), titre: ui.pratique.titre })}
+          ${playlist && playlist.url ? lienExterne(playlist, NOTE) : ""}
           ${carte({ aller: "decouvrir", classe: "fiche--ami", pastille: pastille(QR), titre: ui.plus.partager, sous: ui.plus.partagerSous })}
           ${carte({ aller: "sauvegarde", classe: "fiche--sauvegarde", pastille: pastille(SAUVEGARDE), titre: a.sauvegarde })}
           ${carte({ aller: "a-propos", classe: "fiche--a-propos", pastille: pastille(INFO), titre: a.aProposApp })}
@@ -1528,11 +1537,11 @@
   // Pratique : les liens utiles
   // ---------------------------------------------------------------------------
 
-  function lienExterne(lien) {
+  function lienExterne(lien, icone = EXTERIEUR) {
     return html`
       <li>
         <a class="fiche fiche--lien" href="${echapper(lien.url)}" target="_blank" rel="noopener">
-          <span class="fiche__pastille">${EXTERIEUR}</span>
+          <span class="fiche__pastille">${icone}</span>
           <span class="fiche__texte">
             <span class="fiche__titre">${echapper(lien.titre)}</span>
             ${lien.description ? html`<span class="fiche__sous">${echapper(lien.description)}</span>` : ""}
