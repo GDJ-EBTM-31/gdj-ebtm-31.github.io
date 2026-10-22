@@ -1,0 +1,34 @@
+{
+  "id": "2026-10-qqoqcp-du-projet",
+  "date": "2026-10-22",
+  "onglet": "defis",
+  "ordre": 1,
+  "titre": "QQOQCP du projet",
+  "reflexions": false,
+  "questions": [
+    {
+      "id": "q1",
+      "texte": "(Quoi) Qu’est ce qui t’inspire comme vérité biblique ? Et à quels aspects suivants tu es le plus sensible : l’injustice, la solitude, la pauvreté, la méchanceté ou le mensonge ? (autre ?)"
+    },
+    {
+      "id": "q2",
+      "texte": "(Qui ?) Qui voudrais-tu atteindre particulièrement ? (Des croyants qui veulent grandir dans la foi ? Des migrants ayant besoin de découvrir une autre réalité ? Des jeunes en manque de sens ? Des femmes sans repères pour l’éducation de leurs enfants ? Des personnes âgées ? …)"
+    },
+    {
+      "id": "q3",
+      "texte": "(Comment ?) Par quels moyens le groupe de jeunes pourrait servir ces personnes que tu viens de mentionner ? Quel genre d’évènements (animation, soirée, atelier, repas solidaire, kermesse…) pourraient-être mis en place ?"
+    },
+    {
+      "id": "q4",
+      "texte": "(Quand ?) À quelle période de l’année pourrait-on envisager tout ça ? (Weekend ? En semaine ? Noël ? Printemps ?)"
+    },
+    {
+      "id": "q5",
+      "texte": "(Où ?) Dans quel(s) endroit(s) pourrait-on organiser ça ? (Dans l’église ? Dans les rues de Toulouse ? Dans un centre de demandeurs d’asile ? Dans une maison de retraite ? …)"
+    },
+    {
+      "id": "q6",
+      "texte": "(Pourquoi ?) Quel est le but attendu par ce projet ? Comment on mesure que c’est une réussite selon toi ?"
+    }
+  ]
+}

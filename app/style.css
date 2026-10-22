@@ -1140,6 +1140,8 @@ main {
   display: block;
   margin-top: 0.4rem;
   color: var(--encre);
+  /* Le détail garde ses paragraphes et le programme ligne par ligne (agenda.json, « \n »). */
+  white-space: pre-line;
 }
 
 .evenement__calendrier {

@@ -94,6 +94,8 @@ function replier(ligne) {
   while (Buffer.byteLength(reste, "utf8") > limite) {
     let coupe = limite;
     while (Buffer.byteLength(reste.slice(0, coupe), "utf8") > limite) coupe--;
+    // Ne pas couper une émoticône en deux : elle tient sur deux unités en JavaScript.
+    if (/[\uD800-\uDBFF]/.test(reste[coupe - 1])) coupe--;
     morceaux.push(reste.slice(0, coupe));
     reste = reste.slice(coupe);
     limite = 74; // l'espace de continuation compte

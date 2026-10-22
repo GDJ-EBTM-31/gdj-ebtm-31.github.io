@@ -1,0 +1,28 @@
+{
+  "id": "2026-10-reseaux-sociaux",
+  "date": "2026-10-25",
+  "jusquAu": "2026-10-25",
+  "titre": "Questions autour des réseaux sociaux",
+  "questions": [
+    {
+      "id": "q1",
+      "texte": "De quelle manière les Réseaux Sociaux peuvent modifier mon comportement dans la vraie vie ?"
+    },
+    {
+      "id": "q2",
+      "texte": "Penses-tu que les RS t’aident à développer des relations sociales dans la vraie vie ? (Si oui pourquoi ? Si non pourquoi ?)"
+    },
+    {
+      "id": "q3",
+      "texte": "Qu’est ce que je vais pouvoir mettre en place pour ne pas devenir dépendant des RS (ou pour sortir de cette addiction) ?"
+    },
+    {
+      "id": "q4",
+      "texte": "Est-ce possible selon toi d’utiliser les RS comme des outils à la gloire de Dieu ? As-tu des idées ?"
+    },
+    {
+      "id": "q5",
+      "texte": "Pourquoi d’après toi l’être humain est fasciné par la mise en scène de sa propre vie sur les RS ? Que cherche-t-il alors ?"
+    }
+  ]
+}

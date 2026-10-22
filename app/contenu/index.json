@@ -1,6 +1,27 @@
 {
   "sujets": [
     {
+      "id": "2026-10-reseaux-sociaux",
+      "date": "2026-10-25",
+      "titre": "Questions autour des réseaux sociaux",
+      "sousTitre": "",
+      "resume": "",
+      "questions": 5,
+      "jusquAu": "2026-10-25",
+      "fichier": "sujets/2026-10-reseaux-sociaux.json"
+    },
+    {
+      "id": "2026-10-qqoqcp-du-projet",
+      "date": "2026-10-22",
+      "titre": "QQOQCP du projet",
+      "sousTitre": "",
+      "resume": "",
+      "questions": 6,
+      "onglet": "defis",
+      "ordre": 1,
+      "fichier": "sujets/2026-10-qqoqcp-du-projet.json"
+    },
+    {
       "id": "2026-09-tous-migrants",
       "date": "2026-09-25",
       "titre": "Projet #TousMigrants",
@@ -8,8 +29,7 @@
       "resume": "Le projet #TousMigrants portera sur des interventions dans les centres de demandeurs d’asile toulousains.",
       "questions": 5,
       "onglet": "defis",
-      "ordre": 1,
-      "jusquAu": "2026-09-26",
+      "ordre": 2,
       "fichier": "sujets/2026-09-tous-migrants.json"
     },
     {

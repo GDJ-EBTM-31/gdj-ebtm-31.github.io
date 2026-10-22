@@ -7,6 +7,17 @@ BEGIN:VEVENT
 UID:2026-10-25-pique-nique@gdj-ebtm
 DTSTAMP:20260101T000000Z
 DTSTART;VALUE=DATE:20261025
-SUMMARY:Pique-nique
+SUMMARY:Les réseaux sociaux ?
+DESCRIPTION:📱 Les réseaux sociaux : peut-on vraiment croire tout ce qu
+ ’on voit ?\n\nAs-tu déjà été perturbé ou choqué par une publicatio
+ n sur les réseaux sociaux ? Est-ce que ça t’a fait réfléchir\, remet
+ tre en question certaines choses ou même douter de ce qui est vrai ?\n\n
+ 📅 Ce dimanche\, après le culte\, on se retrouve pour le groupe de jeun
+ es !\n\nAu programme :\n🍽️ Repas pris ensemble : chacun apporte quelq
+ ue chose à partager !\n🤝 Des temps de partage pour mieux se connaître
+ .\n💬 Des discussions autour des réseaux sociaux et de leur influence s
+ ur notre regard sur nous-mêmes\, sur les autres et sur le monde qui nous 
+ entoure.\n\nL’occasion de prendre le temps\, mais aussi de prendre du re
+ cul\, de partager nos expériences et de réfléchir ensemble !
 END:VEVENT
 END:VCALENDAR
