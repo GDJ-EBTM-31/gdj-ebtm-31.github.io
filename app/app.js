@@ -936,6 +936,24 @@
     return cartes.join("");
   }
 
+  // Une information des responsables (infos.json, « informations ») : pas un rendez-vous,
+  // donc pas dans « À venir ». Une carte blanche sans titre, après la nouvelle étude, chaque
+  // ligne faite comme une annonce et effacée le lendemain de son « jusquAu ». Placée là par
+  // Sébastien le 22 octobre 2026, pour la playlist du groupe.
+  function blocInformations() {
+    const aujourdhui = aujourdhuiISO();
+    const enCours = (infos.informations || []).filter((info) => {
+      const fin = dernierJour(info);
+      return !fin || fin >= aujourdhui;
+    });
+    if (!enCours.length) return "";
+    return html`
+      <section class="a-venir a-venir--information" aria-label="${echapper(ui.accueil.information)}">
+        <ul class="a-venir__liste">${enCours.map((info) => ligneAnnonce(info, aujourdhui)).join("")}</ul>
+      </section>
+    `;
+  }
+
   // Une étude que le jeune n'a pas encore ouverte : sa carte, avec un bouton pour y entrer.
   // Un sujet qui porte « jusquAu » garde sa carte jusqu'à ce jour inclus, ouvert ou non, et
   // la perd le lendemain à minuit : le projet #TousMigrants reste annoncé jusqu'au jour de la
@@ -1017,6 +1035,7 @@
       ${blocAnnonces()}
       ${blocFormations()}
       ${blocNouvelleEtude()}
+      ${blocInformations()}
       ${blocRappel()}
       ${blocRaccourcis()}
       ${boutonMesNotes()}

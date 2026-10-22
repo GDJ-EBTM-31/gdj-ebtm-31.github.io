@@ -41,7 +41,7 @@ if (infos.playlist) {
   if (!infos.playlist.titre) signaler("infos.json : la playlist n'a pas de titre.");
   if (!/^https:\/\//.test(infos.playlist.url || "")) signaler("infos.json : adresse de la playlist manquante ou invalide.");
 }
-for (const annonce of infos.annonces || []) {
+for (const annonce of [...(infos.annonces || []), ...(infos.informations || [])]) {
   if (!annonce.titre) signaler("infos.json : annonce sans titre.");
   if (annonce.url && !/^https?:\/\//.test(annonce.url)) signaler(`infos.json : adresse invalide dans l'annonce « ${annonce.titre} ».`);
   if (annonce.aller && !/^[a-z0-9/-]+$/.test(annonce.aller)) signaler(`infos.json : destination invalide dans l'annonce « ${annonce.titre} » (ex. agenda, pratique, sujet/<id>).`);
@@ -241,7 +241,7 @@ if (pdfAbsent) console.log("PDF absent (dépôt public) : la fidélité au PDF a
 const maintenant = new Date();
 const deux = (n) => String(n).padStart(2, "0");
 const aujourdhui = `${maintenant.getFullYear()}-${deux(maintenant.getMonth() + 1)}-${deux(maintenant.getDate())}`;
-for (const annonce of infos.annonces || []) {
+for (const annonce of [...(infos.annonces || []), ...(infos.informations || [])]) {
   const dernier = annonce.jusquAu || [...(Array.isArray(annonce.dates) ? annonce.dates : [])].sort().pop();
   if (dernier && dernier < aujourdhui) {
     console.log(`À noter : l'annonce « ${annonce.titre} » a passé son dernier jour (${dernier}) et ne s'affiche plus ; elle peut être retirée d'infos.json.`);
