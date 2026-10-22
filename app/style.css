@@ -1905,8 +1905,13 @@ body[data-ecran="accueil"] {
   display: none;
 }
 
+/* 2.6rem et non 0.9rem : sur iPhone (iOS 26 et suivants), le système floute le haut de
+   l'écran bien au-delà de l'heure. Mesuré sur le simulateur (iOS 27) le 22 octobre 2026 :
+   zone de l'heure jusqu'à 62 points, texte flou jusque vers 105, net dès 110. À 0.9rem,
+   « Bonsoir » et le titre des onglets commençaient vers 87 points et paraissaient flous
+   (vu par Sébastien sur son iPhone). Une bande fixée en haut n'y change rien (essayé). */
 body[data-entete="non"] main {
-  padding-top: calc(0.9rem + env(safe-area-inset-top));
+  padding-top: calc(2.6rem + env(safe-area-inset-top));
 }
 
 /* Sans barre du haut, ce qui défile ne doit pas passer sous l'heure et l'encoche : une bande
