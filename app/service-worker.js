@@ -15,7 +15,7 @@
  * l'avance, jamais la main.
  */
 
-const VERSION = "1.4.2";
+const VERSION = "2.0.0";
 const CACHE = `gdj-${VERSION}`;
 
 const FICHIERS = [
@@ -30,6 +30,8 @@ const FICHIERS = [
   "./contenu/agenda.json",
   "./contenu/pratique.json",
   "./qr-gdj.png",
+  "./polices/bricolage-grotesque-latin.woff2",
+  "./polices/bricolage-grotesque-latin-ext.woff2",
   "./icones/icone.svg",
   "./icones/icone-180.png",
   "./icones/icone-192.png",

@@ -1,11 +1,23 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Fiche GDJ">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="GDJ">
+  <!-- L'icône de l'application : « GDJ » en grosses lettres blanches, droites, sur l'aplat de
+       l'affiche. Demandée ainsi par Sébastien le 12 novembre 2026, après un essai sur un
+       coup de pinceau blanc. Les lettres sont des tracés (Bricolage Grotesque, graisse 800),
+       épaissies par un contour, pour que ce fichier se lise sans la police. Les images PNG
+       en sont tirées par scripts/generer-icones.mjs, qui retire les coins arrondis du fond
+       (le téléphone arrondit lui-même). -->
   <defs>
-    <linearGradient id="fond" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#982898"/>
+    <linearGradient id="fond" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0" stop-color="#5a1560"/>
+      <stop offset="0.55" stop-color="#982898"/>
       <stop offset="1" stop-color="#d40775"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="112" fill="url(#fond)"/>
-  <text x="256" y="300" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="176" font-weight="bold" fill="#ffffff" letter-spacing="4">GDJ</text>
-  <rect x="146" y="342" width="220" height="14" rx="7" fill="#ffffff" fill-opacity="0.55"/>
+  <rect id="fond-icone" width="512" height="512" rx="112" fill="url(#fond)"/>
+  <g id="dessin">
+    <g fill="#ffffff" stroke="#ffffff" stroke-width="9.71" stroke-linejoin="miter" stroke-miterlimit="3">
+      <path transform="translate(50.0 337.6) scale(1.2357)" d="M60.2 2.8Q43.0 2.8 30.7 -5.8Q18.4 -14.4 11.9 -29.7Q5.4 -45.0 5.4 -65.0Q5.4 -79.8 9.1 -92.5Q12.8 -105.2 20.6 -114.7Q28.4 -124.2 40.4 -129.5Q52.4 -134.8 69.0 -134.8Q83.0 -134.8 93.1 -131.0Q103.2 -127.2 109.6 -120.4Q116.0 -113.6 118.6 -104.7Q121.2 -95.8 120.2 -85.6L90.0 -82.0Q90.4 -91.0 87.8 -96.7Q85.2 -102.4 80.1 -105.2Q75.0 -108.0 67.8 -108.0Q59.2 -108.0 52.8 -103.4Q46.4 -98.8 42.9 -89.6Q39.4 -80.4 39.4 -66.6Q39.4 -56.4 41.4 -48.3Q43.4 -40.2 47.4 -34.7Q51.4 -29.2 57.3 -26.3Q63.2 -23.4 70.8 -23.4Q78.4 -23.4 83.8 -26.1Q89.2 -28.8 92.1 -33.5Q95.0 -38.2 95.0 -44.4L74.2 -44.4L74.2 -67.2L123.8 -67.2L123.8 -42.4L123.8 -0.0L101.6 -0.0L101.6 -35.6L99.8 -35.6Q98.8 -23.2 93.9 -14.6Q89.0 -6.0 80.5 -1.6Q72.0 2.8 60.2 2.8Z"/>
+      <path transform="translate(222.4 337.6) scale(1.2357)" d="M22.8 -0.0L22.8 -27.0L57.0 -27.0Q64.6 -27.0 71.1 -30.2Q77.6 -33.4 81.6 -41.7Q85.6 -50.0 85.6 -65.6Q85.6 -76.8 83.4 -84.4Q81.2 -92.0 77.1 -96.5Q73.0 -101.0 67.1 -103.0Q61.2 -105.0 53.6 -105.0L22.8 -105.0L22.8 -132.0L52.2 -132.0Q75.6 -132.0 90.4 -124.2Q105.2 -116.4 112.2 -101.9Q119.2 -87.4 119.2 -67.2Q119.2 -51.6 115.7 -40.2Q112.2 -28.8 106.0 -21.0Q99.8 -13.2 92.0 -8.6Q84.2 -4.0 75.4 -2.0Q66.6 -0.0 58.0 -0.0ZM8.0 -0.0L8.0 -132.0L40.4 -132.0L40.4 -0.0Z"/>
+      <path transform="translate(382.2 337.6) scale(1.2357)" d="M5.2 1.2L1.6 -28.2Q4.0 -27.6 6.3 -27.4Q8.6 -27.2 9.0 -27.2Q15.0 -27.2 18.5 -29.4Q22.0 -31.6 23.4 -36.4Q24.8 -41.2 24.8 -48.8L24.8 -132.0L57.2 -132.0L57.2 -48.6Q57.2 -31.8 52.4 -20.6Q47.6 -9.4 38.0 -3.8Q28.4 1.8 14.0 1.8Q11.0 1.8 9.2 1.6Q7.4 1.4 5.2 1.2Z"/>
+    </g>
+  </g>
 </svg>

@@ -30,8 +30,9 @@
     "texte": "Tu l’affiches dans la fenêtre interne d’une application. Ce que tu écris ici ne s’y retrouvera pas si tu reviens par Safari ou Chrome. Touche ••• puis « Ouvrir dans le navigateur »."
   },
   "accueil": {
-    "bonjour": "Bonjour {prenom}",
-    "bonsoir": "Bonsoir {prenom}",
+    "salut": "Salut {prenom},",
+    "bonjour": "Bonjour {prenom},",
+    "bonsoir": "Bonsoir {prenom},",
     "aLaUne": "À la une",
     "aVenir": "À venir",
     "information": "Information",
@@ -52,6 +53,10 @@
     "nouveau": "Nouvelle",
     "archives": "Études archivées",
     "nouveauSujet": "Nouvelle étude",
+    "aPreparer": "Étude à préparer",
+    "etude": "Étude",
+    "uneQuestion": "1 question",
+    "desQuestions": "{nombre} questions",
     "decouvrir": "Découvrir",
     "uneQuestionADecouvrir": "1 question à découvrir",
     "questionsADecouvrir": "{nombre} questions à découvrir",
@@ -77,9 +82,9 @@
     },
     "partage": {
       "titre": "Partager",
-      "texte": "Si tu le souhaites, tu peux partager tes réponses : avec d’autres jeunes du groupe, avec le responsable, avec qui tu veux.",
-      "comment": "Le bouton rassemble tout ce que tu as écrit sur cette étude en un seul message, prêt à envoyer : chaque question suivie de ta réponse, et tes réflexions. Il te reste à choisir où l’envoyer — WhatsApp, SMS, mail… Rien ne part sans toi.",
-      "commentDefi": "Le bouton rassemble tout ce que tu as écrit sur ce défi en un seul message, prêt à envoyer : chaque question suivie de ta réponse. Il te reste à choisir où l’envoyer — WhatsApp, SMS, mail… Rien ne part sans toi.",
+      "texte": "Si tu le souhaites, partage tes réponses avec qui tu veux.",
+      "comment": "Le bouton en fait un seul message, à envoyer par WhatsApp, SMS ou mail. Rien ne part sans toi.",
+      "commentDefi": "Le bouton en fait un seul message, à envoyer par WhatsApp, SMS ou mail. Rien ne part sans toi.",
       "prenom": "Ton prénom",
       "prenomAide": "Pour qu’on sache de qui elles viennent",
       "bouton": "Partager mes réponses",
@@ -117,6 +122,8 @@
     "passe": "Déjà passé",
     "rien": "Aucune rencontre prévue pour le moment. Les dates arriveront au cours de l’année.",
     "ajouterCalendrier": "Ajouter à mon calendrier",
+    "ajouter": "Ajouter",
+    "suivantes": "Rencontres suivantes",
     "aujourdhui": "Aujourd’hui",
     "demain": "Demain",
     "de": "de {debut} à {fin}",
@@ -202,14 +209,10 @@
   },
   "bienvenue": {
     "etiquette": "Bienvenue",
-    "titre": "Bienvenue dans le groupe de jeunes",
-    "texte": "Cette application est celle du groupe de jeunes de l’Église Baptiste Toulouse Métropole. Voici ce que tu y trouveras :",
-    "points": [
-      "Les études bibliques et leurs questions.",
-      "Les lectures et défis : des étapes à cocher, à ton rythme.",
-      "L’agenda : toutes les rencontres de l’année, à ajouter à ton calendrier.",
-      "Ce que tu écris reste sur ton téléphone. Pense à faire une sauvegarde de temps en temps."
-    ],
+    "titre": "Bienvenue dans l’appli du GDJ",
+    "texte": "Ici, tu trouveras les études à préparer, les rencontres à venir, des lectures et des défis pour avancer dans ta foi. Reviens-y souvent : Nicolas et Claire l’alimentent au fil de l’année.",
+    "points": [],
+    "fin": "Ce que tu écris reste sur ton téléphone.",
     "bouton": "C’est parti"
   },
   "onglets": {
@@ -226,9 +229,13 @@
     "reglages": "Réglages"
   },
   "sujets": {
-    "titre": "Études"
+    "titre": "Études",
+    "aFaire": "À préparer",
+    "precedentes": "Études précédentes"
   },
   "defis": {
-    "titre": "Lectures et défis"
+    "titre": "Défis",
+    "enCours": "En cours",
+    "precedents": "Défis précédents"
   }
 }

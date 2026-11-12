@@ -13,12 +13,19 @@
     <meta name="theme-color" content="#982898" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <!-- « black-translucent » : dans l'application installée sur iPhone, la page s'étend sous
+         l'heure et la batterie, et le violet monte jusqu'en haut (demandé par Sébastien le
+         12 novembre 2026). Il va avec le fond violet de la page (style.css, « html ») : c'est
+         sur ce fond qu'iOS écrit l'heure en blanc, sans voile clair. Avec « default », la zone
+         de l'heure reste blanche, quoi qu'on mette dessous (essayé sur le simulateur, iOS 27).
+         iOS ne relit ce réglage qu'à l'installation : un téléphone déjà équipé garde l'ancien
+         tant que l'application n'est pas réinstallée. -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="GDJ" />
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="icon" href="icones/icone.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" sizes="180x180" href="icones/icone-180.png" />
-    <link rel="stylesheet" href="style.css?v=1.4.2" />
+    <link rel="stylesheet" href="style.css?v=2.0.0" />
   </head>
   <body data-entete="non">
     <a class="saut" href="#principal">Aller au contenu</a>
@@ -49,6 +56,6 @@
       </p>
     </noscript>
 
-    <script src="app.js?v=1.4.2"></script>
+    <script src="app.js?v=2.0.0"></script>
   </body>
 </html>

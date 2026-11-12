@@ -30,7 +30,9 @@ for (const cle of ["application", "installation", "ordinateur", "accueil", "suje
 }
 
 const infos = lireJson("infos.json");
-if (!infos.aLaUne || !infos.aLaUne.titre) signaler("infos.json : « aLaUne.titre » manque.");
+// « À la une » peut rester vide : le bloc n'apparaît alors pas sur l'accueil. S'il a un texte,
+// il lui faut un titre.
+if (infos.aLaUne && infos.aLaUne.texte && !infos.aLaUne.titre) signaler("infos.json : « aLaUne.titre » manque.");
 if (infos.verset && (!infos.verset.reference || !infos.verset.texte)) signaler("infos.json : verset incomplet.");
 for (const raccourci of infos.raccourcis || []) {
   if (!raccourci.titre) signaler("infos.json : raccourci sans titre.");

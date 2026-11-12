@@ -16,9 +16,10 @@ for (const [, nom, valeur] of css.match(/^:root \{([\s\S]*?)\n\}/m)[1].matchAll(
 // Le blanc des textes posés sur un aplat de couleur n'est pas un jeton : il est écrit en clair
 // dans la feuille de style, il faut donc le nommer ici pour pouvoir le mesurer.
 jetons["blanc"] = "#ffffff";
-// Sur le bandeau « À la une », tout le texte est en blanc pur : un blanc translucide sur le
-// magenta vif passait sous le seuil (4,18). La hiérarchie s'y fait par la taille et la
-// graisse, pas par la transparence. Ne pas y remettre de blanc à moins de 100 %.
+// Sur l'aplat des affiches (accueil, en-tête d'une étude ou d'un défi), tout le texte est en
+// blanc pur : un blanc translucide sur le magenta vif passait sous le seuil (4,18). La
+// hiérarchie s'y fait par la taille et la graisse, pas par la transparence. Ne pas y remettre
+// de blanc à moins de 100 %.
 
 function hexVersRvb(hex) {
   const n = hex.replace("#", "");
@@ -54,10 +55,20 @@ const PAIRES = [
   ["référence d’un verset", "violet", "teinte", 4.5],
   ["sous-titre magenta sur fond", "magenta", "fond", 4.5],
   ["sous-titre magenta sur carte", "magenta", "carte", 4.5],
-  ["texte du bouton principal", "blanc", "violet", 4.5],
-  ["texte du bouton principal, côté magenta", "blanc", "magenta", 4.5],
-  ["à la une, côté sombre", "blanc", "violet-fonce", 4.5],
-  ["à la une, côté clair", "blanc", "magenta-vif", 4.5],
+  ["texte du bouton principal", "blanc", "nuit", 4.5],
+  ["texte du bouton secondaire", "violet-fonce", "teinte", 4.5],
+  ["texte adouci sur teinte (zone d’écriture)", "texte-doux", "teinte", 4.5],
+  ["grand chiffre violet d’une date, d’une question", "violet", "fond", 4.5],
+  ["haut de l’écran et sommet de l’affiche", "blanc", "haut", 4.5],
+  ["affiche, côté sombre", "blanc", "violet-fonce", 4.5],
+  ["affiche, milieu", "blanc", "violet", 4.5],
+  ["affiche, côté clair", "blanc", "magenta-vif", 4.5],
+  ["mot en blanc sur un coup de pinceau magenta", "blanc", "magenta", 4.5],
+  ["pastille blanche sur l’affiche", "violet-fonce", "carte", 4.5],
+  ["titre de bloc sur son coup de pinceau clair", "violet-fonce", "pinceau-clair", 4.5],
+  ["jour d’une annonce sur une bande rose", "violet", "teinte", 4.5],
+  ["flèche grise d’une ligne sur une bande rose", "bord-actif", "teinte", 3],
+  ["flèche grise d’une ligne", "bord-actif", "fond", 3],
   ["avertissement", "attention", "attention-fond", 4.5],
   ["bandeau du navigateur intégré", "attention", "attention-fond", 4.5],
   ["mention « Enregistré »", "ok", "carte", 4.5],

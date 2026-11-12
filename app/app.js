@@ -244,9 +244,15 @@
 
   // Ce qu'on met en avant sous la date de la prochaine rencontre : rien pour aujourd'hui et demain (la date le dit
   // déjà), « Dans n jours » jusqu'à un mois, rien au-delà.
+  // Ce qu'écrit le coup de pinceau de l'affiche : « Aujourd'hui » le jour de la rencontre,
+  // « Demain » la veille, « Dans 3 jours » avant, rien au-delà d'un mois. La veille et le
+  // jour même, l'affiche ne disait rien : c'est pourtant là que le mot compte le plus
+  // (vu le 12 novembre 2026 en faisant défiler les dates avec Sébastien).
   function delaiAvant(iso) {
     const jours = joursAvant(iso);
-    if (jours < 2 || jours > 31) return "";
+    if (jours === 0) return ui.agenda.aujourdhui;
+    if (jours === 1) return ui.agenda.demain;
+    if (jours < 0 || jours > 31) return "";
     return remplir(ui.agenda.dansJours, { n: jours });
   }
 
@@ -534,6 +540,22 @@
       focusable="false"><path d="M6 21 V4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /><path
       d="M6 4.5 H17.5 L15 8.5 L17.5 12.5 H6" fill="none" stroke="currentColor" stroke-width="2"
       stroke-linejoin="round" /></svg>`;
+  // L'autocollant d'une nouveauté de « À la une » : une étoile à douze pointes, posée droite,
+  // l'icône de l'onglet en blanc dedans (essai du 12 novembre 2026, voir docs/suivi.md).
+  const ETOILE = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><polygon
+      points="12.00,0.00 14.38,3.11 18.00,1.61 18.51,5.49 22.39,6.00 20.89,9.62 24.00,12.00 20.89,14.38 22.39,18.00 18.51,18.51 18.00,22.39 14.38,20.89 12.00,24.00 9.62,20.89 6.00,22.39 5.49,18.51 1.61,18.00 3.11,14.38 0.00,12.00 3.11,9.62 1.61,6.00 5.49,5.49 6.00,1.61 9.62,3.11"
+      fill="currentColor" /></svg>`;
+  // Mes réflexions : une ampoule qui rayonne, celle de l'idée qui vient. Elle remplace
+  // l'émoticône 🤔 reprise de la fiche Varak, seul élément en couleur d'une liste d'icônes au
+  // trait. Dessin choisi par Sébastien sur captures le 12 novembre 2026, parmi trois ampoules
+  // (à culot, à filament, qui rayonne), pendant la refonte « Affiche ». Le verre a été grossi
+  // et le culot dessiné en deux traits le même jour : sans eux, « on ne comprend pas vraiment
+  // que c'est une ampoule » (Sébastien).
+  const AMPOULE = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"
+      focusable="false"><path d="M9.9 15.4 C8.4 14.5 7.4 12.9 7.4 11.2 A4.6 4.6 0 0 1 16.6 11.2 C16.6 12.9 15.6 14.5 14.1 15.4 V17 H9.9 Z"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /><path
+      d="M10 19.3 H14 M10.9 21.6 H13.1 M12 2.4 V4 M3.4 11.2 H5 M19 11.2 H20.6 M5.9 5.1 L7 6.2 M18.1 5.1 L17 6.2"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>`;
   // Mes notes : un crayon.
   const CRAYON = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"
       focusable="false"><path d="M4 20 L4.8 16.2 L15.6 5.4 A2 2 0 0 1 18.4 5.4 L18.6 5.6 A2 2 0 0 1 18.6 8.4 L7.8 19.2 Z"
@@ -567,14 +589,13 @@
   const ENGRENAGE = `<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"
       focusable="false"><path fill="currentColor" fill-rule="evenodd"
       d="M9.26 1.76 L14.74 1.76 L14.12 4.08 L16.1 4.9 L17.3 2.82 L21.18 6.7 L19.1 7.9 L19.92 9.88 L22.24 9.26 L22.24 14.74 L19.92 14.12 L19.1 16.1 L21.18 17.3 L17.3 21.18 L16.1 19.1 L14.12 19.92 L14.74 22.24 L9.26 22.24 L9.88 19.92 L7.9 19.1 L6.7 21.18 L2.82 17.3 L4.9 16.1 L4.08 14.12 L1.76 14.74 L1.76 9.26 L4.08 9.88 L4.9 7.9 L2.82 6.7 L6.7 2.82 L7.9 4.9 L9.88 4.08 Z M8.5 12 A3.5 3.5 0 1 0 15.5 12 A3.5 3.5 0 1 0 8.5 12 Z" /></svg>`;
-  // Le logo du groupe en petit, pour l'onglet Accueil : « GDJ » en blanc sur le dégradé de
-  // l'icône. Demandé par Sébastien le 11 septembre 2026, à la place d'une maison. Il garde ses
-  // couleurs sur tous les écrans ; la pastille et le libellé disent où l'on est.
-  const LOGO_GDJ = `<svg viewBox="0 0 28 28" width="28" height="28" aria-hidden="true"
-      focusable="false"><defs><linearGradient id="degrade-onglet-gdj" x1="0" y1="0" x2="1" y2="1"><stop
-      offset="0" stop-color="#982898" /><stop offset="1" stop-color="#d40775" /></linearGradient></defs><circle
-      cx="14" cy="14" r="14" fill="url(#degrade-onglet-gdj)" /><text x="14" y="17.6" text-anchor="middle"
-      font-size="10" font-weight="800" letter-spacing="0.2" fill="#ffffff">GDJ</text></svg>`;
+  // L'onglet Accueil : une maison, comme dans toute application. Elle remplace le logo GDJ en
+  // petit rond (posé là le 11 septembre 2026) à la demande de Sébastien, le 12 novembre 2026,
+  // pendant la refonte « Affiche ».
+  const MAISON = `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"
+      focusable="false"><path d="M4 10.5 L12 4 L20 10.5 V19 A1.5 1.5 0 0 1 18.5 20.5 H5.5 A1.5 1.5 0 0 1 4 19 Z"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /><path d="M9.5 20.5 V14.5 H14.5 V20.5"
+      fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>`;
   // Trois points dans un cercle : « plus ».
   const PLUS = `<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"
       focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor"
@@ -627,16 +648,17 @@
     location.hash = cible;
   }
 
-  // Les transitions ne sont qu'un confort : là où le navigateur ne les connaît pas, ou là où
-  // la personne a demandé moins d'animations, on change d'écran sans façon.
+  // Le changement d'écran n'est qu'un confort : le nouvel écran apparaît en fondu (classe
+  // « entre », animée dans la feuille de style, et seulement si la personne n'a pas demandé
+  // moins d'animations). Jusqu'en novembre 2026, c'était une transition du navigateur
+  // (startViewTransition) sur toute la fenêtre : elle emportait la barre d'onglets avec la
+  // page, ce qui dédoublait la bulle pendant qu'elle glisse d'un onglet à l'autre. Ici la
+  // barre reste en place, et son verre continue de flouter ce qui passe dessous.
   function transition(changer) {
-    const sobre = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (!document.startViewTransition || sobre) return changer();
-    // Deux affichages qui se suivent de près : le second interrompt le premier, et le
-    // navigateur le signale par une promesse rejetée. Le contenu, lui, est bien mis à jour ;
-    // on ne laisse pas ce signal remonter en erreur.
-    const t = document.startViewTransition(changer);
-    for (const promesse of [t.ready, t.finished, t.updateCallbackDone]) promesse.catch(() => {});
+    changer();
+    principal.classList.remove("entre");
+    void principal.offsetWidth; // relance l'animation à chaque écran
+    principal.classList.add("entre");
   }
 
   // ---------------------------------------------------------------------------
@@ -673,16 +695,16 @@
   // Morceaux d'écran réutilisés
   // ---------------------------------------------------------------------------
 
-  function carte({ aller, classe = "", pastille, titre, sous = "", etiquette = "" }) {
+  function carte({ aller, classe = "", pastille, titre, sous = "", etiquette = "", autocollant = "" }) {
     return html`
       <li>
         <button type="button" class="fiche ${classe}" data-aller="${echapper(aller)}">
           ${pastille}
           <span class="fiche__texte">
-            <span class="fiche__titre">${echapper(titre)}</span>
+            ${etiquette ? html`<span class="fiche__marque">${echapper(etiquette)}</span>` : ""}
+            <span class="fiche__titre">${echapper(titre)}${autocollant}</span>
             ${sous ? html`<span class="fiche__sous">${echapper(sous)}</span>` : ""}
           </span>
-          ${etiquette ? html`<span class="etiquette etiquette--vive">${echapper(etiquette)}</span>` : ""}
           ${CHEVRON_DROIT}
         </button>
       </li>
@@ -712,27 +734,58 @@
 
   function badgeDate(iso) {
     const date = dateLocale(iso);
-    const mois = date.toLocaleDateString("fr-FR", { month: "short" }).replace(".", "");
+    const mois = date.toLocaleDateString("fr-FR", { month: "short" });
     return html`<span class="date" aria-hidden="true">
       <span class="date__jour">${date.getDate()}</span>
       <span class="date__mois">${echapper(mois)}</span>
     </span>`;
   }
 
-  function ligneEvenement(evenement, { detail = false, calendrier = false } = {}) {
+  // Une rencontre dans l'agenda. La date n'est dite qu'une fois à l'œil : le pavé, puis le
+  // jour de la semaine en gris ; la date entière reste écrite pour les lecteurs d'écran, qui
+  // ne lisent pas le pavé. Deux présentations, choisies par Sébastien sur captures le
+  // 12 novembre 2026 (« La suite en lignes ») :
+  // - « vedette » : la prochaine rencontre, en grand, l'autocollant au pinceau à côté de son
+  //   nom (« Dans 3 jours », « Demain », « Aujourd'hui »), son message entier et le lien
+  //   « Ajouter à mon calendrier » ;
+  // - sinon, une ligne resserrée : « Ajouter » en pastille à droite (pour une rencontre à
+  //   venir), le mot des responsables dessous, sur toute la largeur.
+  function ligneEvenement(evenement, { vedette = false, calendrier = false } = {}) {
+    const a = ui.agenda;
     const horaire = formaterHoraire(evenement);
+    const jour = majuscule(dateLocale(evenement.date).toLocaleDateString("fr-FR", { weekday: "long" }));
+    const quand = html`<p class="evenement__quand"><span aria-hidden="true">${echapper(jour)}</span><span class="lu">${echapper(
+      formaterDate(evenement.date)
+    )}</span>${horaire ? " · " + echapper(horaire) : ""}</p>`;
+    const lieu = evenement.lieu ? html`<p class="evenement__lieu">${LIEU} ${echapper(evenement.lieu)}</p>` : "";
+    const detail = evenement.detail ? html`<p class="evenement__detail">${echapper(evenement.detail)}</p>` : "";
+    if (vedette) {
+      const delai = delaiAvant(evenement.date);
+      return html`
+        <li class="evenement evenement--vedette">
+          ${badgeDate(evenement.date)}
+          <div class="evenement__texte">
+            <p class="evenement__titre">${echapper(evenement.titre)}${delai
+              ? `<span class="autocollant">${coupDePinceau(0)}${echapper(delai)}</span>`
+              : ""}</p>
+            ${quand}${lieu}${detail}
+            <a class="evenement__calendrier" href="agenda/${echapper(evenement.id)}.ics">${CALENDRIER} ${echapper(a.ajouterCalendrier)}</a>
+          </div>
+        </li>
+      `;
+    }
     return html`
       <li class="evenement">
         ${badgeDate(evenement.date)}
         <div class="evenement__texte">
           <p class="evenement__titre">${echapper(evenement.titre)}</p>
-          <p class="evenement__quand">${echapper(formaterDate(evenement.date))}${horaire ? " · " + echapper(horaire) : ""}</p>
-          ${evenement.lieu ? html`<p class="evenement__lieu">${LIEU} ${echapper(evenement.lieu)}</p>` : ""}
-          ${detail && evenement.detail ? html`<p class="evenement__detail">${echapper(evenement.detail)}</p>` : ""}
-          ${calendrier
-            ? html`<a class="evenement__calendrier" href="agenda/${echapper(evenement.id)}.ics">${CALENDRIER} ${echapper(ui.agenda.ajouterCalendrier)}</a>`
-            : ""}
+          ${quand}${lieu}
         </div>
+        ${calendrier
+          ? html`<a class="evenement__ajouter" href="agenda/${echapper(evenement.id)}.ics"
+              aria-label="${echapper(a.ajouterCalendrier + " : " + evenement.titre + ", " + formaterDate(evenement.date))}">${CALENDRIER} ${echapper(a.ajouter)}</a>`
+          : ""}
+        ${calendrier ? detail : ""}
       </li>
     `;
   }
@@ -759,16 +812,65 @@
     const prochaine = evenementsAVenir()[0];
     if (!prochaine) return html`<p class="vide">${echapper(a.aucuneRencontre)}</p>`;
     const delai = delaiAvant(prochaine.date);
+    // La date est écrite d'un trait, « Dimanche 15 novembre », comme on la dit. Elle a
+    // d'abord eu un très grand chiffre : avec « dimanche » et « novembre » à sa droite,
+    // Sébastien lisait « 15 dimanche novembre » ; « dimanche » au-dessus, puis le chiffre
+    // décalé en escalier, ont été essayés le 12 novembre 2026, et l'affiche est devenue
+    // « brouillon » (six éléments, cinq tailles, trois bords gauches). Quatre lignes au même
+    // bord, à la place : le salut, « Prochaine rencontre dans 3 jours », la date, le thème.
+    const jour = dateLocale(prochaine.date);
+    const dateEcrite = majuscule(
+      jour.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" }).replace(/(^|\s)1(\s)/, "$11er$2")
+    );
+    const precisions = [prochaine.heure ? formaterHeure(prochaine.heure) : "", prochaine.lieu || ""].filter(Boolean).join(" · ");
     return html`<button type="button" class="rencontre" data-aller="agenda">
-      ${badgeDate(prochaine.date)}
-      <span class="rencontre__texte">
+      <span class="rencontre__tete">
         <span class="rencontre__etiquette">${echapper(a.prochaineRencontre)}</span>
-        <span class="rencontre__titre">${echapper(prochaine.titre)}</span>
-        <span class="rencontre__quand"><span>${echapper(formaterDate(prochaine.date))}${prochaine.heure ? " · " + echapper(formaterHeure(prochaine.heure)) : ""}</span>${delai ? html`<span class="rencontre__delai">${echapper(delai)}</span>` : ""}</span>
-        ${prochaine.lieu ? html`<span class="rencontre__lieu">${echapper(prochaine.lieu)}</span>` : ""}
+        ${delai ? html`<span class="rencontre__delai">${coupDePinceau(0)}${echapper(delai.charAt(0).toLowerCase() + delai.slice(1))}</span>` : ""}
       </span>
-      ${CHEVRON_DROIT}
+      <span class="rencontre__date">${echapper(dateEcrite)}</span>
+      <span class="rencontre__pied">
+        <span class="rencontre__titre">${echapper(prochaine.titre)}</span>
+        <span class="rencontre__fleche">${CHEVRON_DROIT}</span>
+      </span>
+      ${precisions ? html`<span class="rencontre__lieu">${echapper(precisions)}</span>` : ""}
     </button>`;
+  }
+
+  // Un coup de pinceau derrière un mot : « Dans 3 jours » sur l'affiche, « À la une » dessous,
+  // puis, en rose pâle, les titres des autres blocs de l'accueil (les deux tracés alternent).
+  // Un pinceau brossé : des bandes de longueurs inégales, comme les poils, aux deux bouts,
+  // qu'un filtre fait onduler. Deux tracés, pour qu'on voie deux gestes et non deux fois le
+  // même. La couleur vient de la feuille de style (« currentColor »). Choisi par Sébastien
+  // sur captures le 12 novembre 2026, à la place d'un aplat découpé façon marqueur. Le bout
+  // droit a d'abord fini en fines traînées (« pinceau sec ») ; il les a trouvées étranges et
+  // a demandé le même style qu'à gauche : ne pas les remettre. Là où le filtre n'existe pas,
+  // il reste un rectangle aux bouts en escalier.
+  const POILS = [
+    [[14, 4, 166], [6, 11, 184], [1, 18, 196], [0, 25, 200], [2, 32, 195], [7, 39, 186], [16, 46, 164]],
+    [[9, 4, 182], [3, 11, 193], [0, 18, 200], [4, 25, 190], [1, 32, 198], [11, 39, 174], [21, 46, 157]],
+  ];
+  let pinceaux = 0;
+
+  function coupDePinceau(trace) {
+    const id = "poils-" + ++pinceaux;
+    const bandes = POILS[trace].map(([x, y, largeur]) => `<rect x="${x}" y="${y}" width="${largeur}" height="8.5" />`).join("");
+    return `<svg class="pinceau" viewBox="0 0 200 58" preserveAspectRatio="none" aria-hidden="true" focusable="false"><defs><filter
+      id="${id}" x="-6%" y="-25%" width="112%" height="150%"><feTurbulence type="fractalNoise" baseFrequency="0.03 0.22"
+      numOctaves="2" seed="${7 + trace * 14}" result="bruit" /><feDisplacementMap in="SourceGraphic" in2="bruit" scale="10"
+      xChannelSelector="R" yChannelSelector="G" /></filter></defs><g fill="currentColor" filter="url(#${id})">${bandes}</g></svg>`;
+  }
+
+  // L'étude qui prépare une rencontre est celle qui porte sa date (champ « date » du sujet).
+  // Elle ouvre « À la une », en « Étude à préparer », tant que cette rencontre est la
+  // prochaine, que l'étude ait été ouverte ou non. Historique du 12 novembre 2026 : elle
+  // figurait d'abord plus bas en « Nouvelle étude », sans lien avec la rencontre ; puis dans
+  // l'affiche, en bouton blanc sous le titre, ce qui y mettait deux flèches l'une sous
+  // l'autre (une vers l'agenda, une vers l'étude). Sébastien a préféré : l'affiche dit quand
+  // on se retrouve, « À la une » dit ce qu'il y a à ouvrir. Ne pas la remettre dans l'affiche.
+  function etudeDeLaRencontre(rencontre) {
+    if (!rencontre) return null;
+    return index.sujets.find((s) => !estProjet(s) && !sujetArchive(s.id) && s.date === rencontre.date) || null;
   }
 
   // Les raccourcis : ce qu'on vient chercher vite, écrit par les responsables dans
@@ -776,47 +878,80 @@
   function blocRaccourcis() {
     const liste = infos.raccourcis || [];
     if (!liste.length) return "";
-    const cartes = liste
+    // Des pastilles, le nom seul : la description du raccourci (infos.json) n'est plus
+    // affichée, elle est lue par les lecteurs d'écran.
+    const pastilles = liste
       .map((r) => {
-        if (r.url) return lienExterne(r);
-        return carte({ aller: r.aller, classe: "fiche--raccourci", pastille: pastille(CHEVRON_DROIT), titre: r.titre, sous: r.description || "" });
+        const precision = r.description ? ` aria-label="${echapper(r.titre + " : " + r.description)}"` : "";
+        if (r.url) {
+          return html`<li><a class="raccourci" href="${echapper(r.url)}" target="_blank" rel="noopener"${precision}>${echapper(r.titre)} ${EXTERIEUR}</a></li>`;
+        }
+        return html`<li><button type="button" class="raccourci" data-aller="${echapper(r.aller)}"${precision}>${echapper(r.titre)} ${CHEVRON_DROIT}</button></li>`;
       })
       .join("");
-    return html`<h2 class="section-titre">${echapper(ui.accueil.raccourcis)}</h2><ul class="fiches">${cartes}</ul>`;
+    return html`<h2 class="titre-pinceau">${coupDePinceau(1)}${echapper(ui.accueil.raccourcis)}</h2>
+      <ul class="raccourcis">${pastilles}</ul>`;
   }
 
-  function blocALaUne() {
-    const a = ui.accueil;
-    if (bienvenueAMontrer()) {
-      const b = ui.bienvenue;
-      return html`
-        <section class="une" aria-label="${echapper(b.etiquette)}">
-          <p class="une__etiquette">${echapper(b.etiquette)}</p>
-          <h1 class="une__titre">${echapper(b.titre)}</h1>
-          <p class="une__texte">${echapper(b.texte)}</p>
-          <ul class="une__liste">${(b.points || []).map((point) => html`<li>${echapper(point)}</li>`).join("")}</ul>
-          <button type="button" class="une__action" data-bienvenue>${echapper(b.bouton)} ${COCHE}</button>
-        </section>
-      `;
-    }
-    const u = infos.aLaUne || {};
-    if (!u.titre && !u.texte) return "";
+  // La bienvenue : elle explique l'application à qui vient de l'installer, et s'efface au
+  // bouton « C'est parti » ou d'elle-même à la quatrième ouverture.
+  function blocBienvenue() {
+    if (!bienvenueAMontrer()) return "";
+    const b = ui.bienvenue;
+    // Deux phrases et rien d'autre : Sébastien trouvait la carte « brouillon », avec
+    // « Bienvenue » en étiquette puis en titre et une liste de quatre points (12 novembre
+    // 2026). L'étiquette ne s'affiche plus, elle nomme le bloc pour les lecteurs d'écran ;
+    // « points » reste accepté, en liste vide : le code en ligne le parcourt encore.
+    const points = b.points || [];
     return html`
-      <section class="une" aria-label="${echapper(a.aLaUne)}">
-        <p class="une__etiquette">${echapper(a.aLaUne)}</p>
-        ${u.titre ? html`<h1 class="une__titre">${echapper(u.titre)}</h1>` : ""}
-        ${u.texte ? html`<p class="une__texte">${echapper(u.texte)}</p>` : ""}
+      <section class="une" aria-label="${echapper(b.etiquette)}">
+        <h1 class="une__titre">${echapper(b.titre)}</h1>
+        <p class="une__texte">${echapper(b.texte)}</p>
+        ${points.length ? html`<ul class="une__liste">${points.map((point) => html`<li>${echapper(point)}</li>`).join("")}</ul>` : ""}
+        ${b.fin ? html`<p class="une__texte une__texte--fin">${echapper(b.fin)}</p>` : ""}
+        <button type="button" class="une__action" data-bienvenue>${echapper(b.bouton)} ${COCHE}</button>
       </section>
     `;
   }
 
-  // « Bonjour Léa » en haut de l'accueil, quand le jeune a donné son prénom (dans les
-  // réglages ou au moment de partager). « Bonsoir » à partir de 18 h. Sans prénom, rien.
+  // « À la une » : la rubrique de ce qui vient de sortir. Le mot des responsables quand ils
+  // en écrivent un (infos.json, « aLaUne »), puis les nouveautés (voir « estALaUne ») : les
+  // études et les défis sortis depuis la dernière rencontre. Une nouveauté quitte la rubrique
+  // le lendemain de la rencontre qui suit sa sortie ; la rubrique disparaît quand elle est
+  // vide. Demandé par Sébastien le 12 novembre 2026 : « à la une, c'est quand ça vient de
+  // sortir, et après ça disparaît ». Avant, « À la une » était un texte fixe.
+  function blocALaUne() {
+    const a = ui.accueil;
+    const u = infos.aLaUne || {};
+    const mot = u.titre || u.texte
+      ? html`<div class="a-la-une__mot">
+          ${u.titre ? html`<h3 class="une__titre">${echapper(u.titre)}</h3>` : ""}
+          ${u.texte ? html`<p class="une__texte">${echapper(u.texte)}</p>` : ""}
+        </div>`
+      : "";
+    const lignes = nouveautes().map(ligneNouveaute).join("");
+    if (!mot && !lignes) return "";
+    return html`
+      <section class="a-la-une" aria-labelledby="titre-a-la-une">
+        <h2 class="a-la-une__titre" id="titre-a-la-une">${coupDePinceau(1)}${echapper(a.aLaUne)}</h2>
+        ${mot}${lignes}
+      </section>
+    `;
+  }
+
+  // « Salut Léa, » en haut de l'accueil, quand le jeune a donné son prénom (dans les
+  // réglages ou au moment de partager). Sans prénom, rien. « Salut », qui va avec le
+  // tutoiement, a remplacé « Bonjour » et « Bonsoir » à partir de 18 h (Sébastien,
+  // 12 novembre 2026) : le même mot à toute heure. Les textes « bonjour » et « bonsoir »
+  // restent dans interface.json tant que le code en ligne, qui les lit, n'est pas remplacé.
   function blocBonjour() {
     const prenom = (lire("prenom") || "").trim();
     if (!prenom) return "";
-    const modele = new Date().getHours() >= 18 ? ui.accueil.bonsoir : ui.accueil.bonjour;
-    return html`<p class="bonjour">${echapper(remplir(modele, { prenom }))}</p>`;
+    const modele = ui.accueil.salut;
+    // Un prénom de plus de douze lettres ne tient plus sur une ligne en grand titre : il est
+    // écrit un cran plus petit, pour que le salut ne prenne pas toute l'affiche.
+    const classe = prenom.length > 12 ? "bonjour bonjour--long" : "bonjour";
+    return html`<p class="${classe}">${echapper(remplir(modele, { prenom }))}</p>`;
   }
 
   function blocRappel() {
@@ -872,64 +1007,63 @@
     return html`<li><div class="a-venir__ligne">${tete}${texte}</div></li>`;
   }
 
-  // « Formations à venir » : celles de l'église ouvertes aux jeunes, qui vont commencer. Elles
-  // demandent une inscription : un jeune ne doit pas croire qu'il suffit de venir le jour
-  // même. D'où une carte à part, « Inscription obligatoire » en tête — une simple mention,
-  // sans panneau d'avertissement, à la demande de Sébastien — et un vrai bouton par
-  // formation. Une formation disparaît le lendemain de sa première séance (ou de
-  // « jusquAu », s'il est donné) : sur l'accueil, il n'y a que ce qui va arriver.
+  // Les formations de l'église ouvertes aux jeunes, qui vont commencer. Elles demandent une
+  // inscription : un jeune ne doit pas croire qu'il suffit de venir le jour même. Chacune est
+  // une ligne d'« À venir », rangée par date avec les annonces, avec un vrai bouton
+  // « M'inscrire » et la mention « Inscription obligatoire » — une simple mention, sans
+  // panneau d'avertissement, à la demande de Sébastien. Elle disparaît le lendemain de sa
+  // première séance (ou de « jusquAu », s'il est donné) : sur l'accueil, il n'y a que ce qui
+  // va arriver. Jusqu'au 12 novembre 2026, elle avait son bloc à elle (« Formation à
+  // venir »), avec son texte de présentation et un bouton pleine largeur : presque un écran
+  // à lui seul, que Sébastien a trouvé « très surchargé ». Le texte de présentation
+  // (« texte ») ne s'affiche plus que si les jours (« quand ») ne sont pas donnés.
 
   function finInscription(formation) {
     return formation.jusquAu || [...(formation.dates || [])].sort()[0] || "";
   }
 
-  function blocFormations() {
+  function ligneFormation(formation, date) {
     const a = ui.accueil;
-    const aujourdhui = aujourdhuiISO();
-    const ouvertes = (infos.formations || []).filter((formation) => {
-      const fin = finInscription(formation);
-      return !fin || fin >= aujourdhui;
-    });
-    if (!ouvertes.length) return "";
-    const lignes = ouvertes
-      .map(
-        (f) => html`
-          <li class="formation">
-            <h3 class="formation__titre">${echapper(f.titre)}</h3>
-            ${f.quand ? html`<p class="formation__quand">${echapper(f.quand)}</p>` : ""}
-            ${f.texte ? html`<p class="formation__texte">${echapper(f.texte)}</p>` : ""}
-            <a class="bouton-principal formation__inscrire" href="${echapper(f.url)}" target="_blank" rel="noopener"
-              aria-label="${echapper(remplir(a.inscrireA, { titre: f.titre }))}">${echapper(a.inscrire)} ${EXTERIEUR}</a>
-          </li>
-        `
-      )
-      .join("");
-    return html`
-      <section class="formations" aria-labelledby="titre-formations">
-        <h2 class="formations__titre" id="titre-formations">${echapper(a.formations)}</h2>
-        <p class="formations__mention">${echapper(a.inscriptionObligatoire)}</p>
-        <ul class="formations__liste">${lignes}</ul>
-      </section>
-    `;
+    const detail = formation.quand || formation.texte || "";
+    return html`<li><div class="a-venir__ligne a-venir__ligne--formation">
+      ${date ? badgeDate(date) : pastille(INFO)}
+      <span class="a-venir__texte">
+        <span class="a-venir__titre">${echapper(formation.titre)}</span>
+        ${detail ? html`<span class="a-venir__detail">${echapper(detail)}</span>` : ""}
+        <span class="inscription">
+          <a class="inscription__bouton" href="${echapper(formation.url)}" target="_blank" rel="noopener"
+            aria-label="${echapper(remplir(a.inscrireA, { titre: formation.titre }))}">${echapper(a.inscrire)} ${EXTERIEUR}</a>
+          <span class="inscription__mention">${echapper(a.inscriptionObligatoire)}</span>
+        </span>
+      </span>
+    </div></li>`;
   }
 
+  // « À venir » : les annonces et les formations en cours, dans une seule liste rangée par
+  // date, la plus proche en premier. Ce qui n'a pas de date vient à la fin, dans l'ordre du
+  // fichier.
   function blocAnnonces() {
     const a = ui.accueil;
     const aujourdhui = aujourdhuiISO();
-    const cartes = [];
-    const enCours = (infos.annonces || []).filter((annonce) => {
+    const prochaine = (element) => [...(element.dates || [])].sort().find((d) => d >= aujourdhui) || "";
+    const lignes = [];
+    for (const annonce of infos.annonces || []) {
       const fin = dernierJour(annonce);
-      return !fin || fin >= aujourdhui;
-    });
-    if (enCours.length) {
-      cartes.push(html`
-        <section class="a-venir" aria-labelledby="titre-a-venir">
-          <h2 class="a-venir__entete" id="titre-a-venir">${echapper(a.aVenir)}</h2>
-          <ul class="a-venir__liste">${enCours.map((annonce) => ligneAnnonce(annonce, aujourdhui)).join("")}</ul>
-        </section>
-      `);
+      if (!fin || fin >= aujourdhui) lignes.push({ date: prochaine(annonce), ligne: ligneAnnonce(annonce, aujourdhui) });
     }
-    return cartes.join("");
+    for (const formation of infos.formations || []) {
+      const fin = finInscription(formation);
+      if (!fin || fin >= aujourdhui) lignes.push({ date: prochaine(formation), ligne: ligneFormation(formation, prochaine(formation)) });
+    }
+    if (!lignes.length) return "";
+    // Le tri est stable : à date égale, et pour ce qui n'a pas de date, l'ordre d'arrivée.
+    lignes.sort((x, y) => (x.date || "9999").localeCompare(y.date || "9999"));
+    return html`
+      <section class="a-venir" aria-labelledby="titre-a-venir">
+        <h2 class="titre-pinceau" id="titre-a-venir">${coupDePinceau(0)}${echapper(a.aVenir)}</h2>
+        <ul class="a-venir__liste">${lignes.map((l) => l.ligne).join("")}</ul>
+      </section>
+    `;
   }
 
   // Une information des responsables (infos.json, « informations ») : pas un rendez-vous,
@@ -950,60 +1084,121 @@
     `;
   }
 
-  // Une étude que le jeune n'a pas encore ouverte : sa carte, construite comme celle de la
-  // prochaine rencontre juste au-dessus (un pavé en dégradé, l'étiquette, le titre, une ligne
-  // magenta, la flèche), et toute entière à toucher. Choisie par Sébastien sur captures le
-  // 12 novembre 2026, à la place d'un bouton « Découvrir » sous le titre (« ça fait brouillon »).
+  // Une étude que le jeune n'a pas encore ouverte : un bloc blanc sous l'affiche (ce qu'elle
+  // est en magenta, son titre en lettres épaisses, « 3 questions à découvrir », la flèche),
+  // tout entier à toucher. Refonte « Affiche », novembre 2026 ; avant, une carte au pavé en
+  // dégradé, choisie le 12 novembre à la place d'un bouton « Découvrir » (« ça fait brouillon »).
   // Un sujet qui porte « jusquAu » garde sa carte jusqu'à ce jour inclus, ouvert ou non, et
   // la perd le lendemain à minuit : le projet #TousMigrants reste annoncé jusqu'au jour de la
   // rencontre (demandé par Sébastien le 25 septembre 2026).
-  function blocNouvelleEtude() {
+  // Jusqu'à quand une étude ou un défi compte comme une nouveauté : jusqu'à la rencontre qui
+  // suit sa sortie, ce jour-là compris. Une étude datée du jour d'une rencontre est donc
+  // nouvelle jusqu'à cette rencontre ; un défi sorti trois jours avant, jusqu'à elle aussi.
+  // Ensuite il n'est plus « à la une » ni marqué « Nouveau », ouvert ou non : il reste dans
+  // son onglet. Sébastien, le 12 novembre 2026 : se régler sur les dates de l'agenda, et ne
+  // pas charger l'accueil de défis « devenus obsolètes ». Un « jusquAu » écrit par les
+  // responsables l'emporte ; sans rencontre après la sortie, quatorze jours.
+  function finDeNouveaute(sujet) {
+    if (sujet.jusquAu) return sujet.jusquAu;
+    const suivante = (agenda.evenements || []).map((e) => e.date).sort().find((date) => date >= sujet.date);
+    if (suivante) return suivante;
+    const fin = dateLocale(sujet.date);
+    fin.setDate(fin.getDate() + 14);
+    return jourISO(fin);
+  }
+
+  // « À la une » aujourd'hui ? Tant que la rencontre qui suit sa sortie n'est pas passée, que
+  // le jeune l'ait ouvert ou non : un défi ne cesse pas d'être d'actualité parce qu'on l'a
+  // regardé une fois (Sébastien, le 12 novembre 2026, en ne retrouvant plus sur l'accueil le
+  // défi qu'il venait d'ouvrir).
+  function estALaUne(sujet) {
+    return finDeNouveaute(sujet) >= aujourdhuiISO();
+  }
+
+  // L'étiquette « Nouveau » d'une liste, elle, dit « pas encore ouvert » : elle part à la
+  // première ouverture, ou avec la fin de la nouveauté.
+  function estNouveau(sujet) {
+    return estALaUne(sujet) && !lire("vu:sujet:" + sujet.id);
+  }
+
+  // Les lignes d'« À la une » : l'étude à préparer pour la prochaine rencontre toujours en
+  // premier, puis les nouveautés, la plus proche dans le temps d'abord (celle dont la
+  // rencontre arrive le plus tôt, et à échéance égale la plus récemment sortie). Trois au
+  // plus, pour que l'accueil reste court.
+  function nouveautes() {
+    const aPreparer = etudeDeLaRencontre(evenementsAVenir()[0]);
+    const autres = index.sujets
+      .filter((s) => s !== aPreparer && !sujetArchive(s.id) && estALaUne(s))
+      .sort((a, b) => finDeNouveaute(a).localeCompare(finDeNouveaute(b)) || b.date.localeCompare(a.date));
+    return (aPreparer ? [aPreparer, ...autres] : autres).slice(0, 3);
+  }
+
+  // Une ligne d'« À la une » : ce que c'est (et le nombre de questions), son nom, et la flèche
+  // dans un rond presque noir, qui répond au rond blanc de l'affiche. Rien de plus :
+  // Sébastien trouvait la ligne « trop surchargée » avec « À découvrir » et un résumé
+  // (12 novembre 2026).
+  function ligneNouveaute(nouveau) {
     const a = ui.accueil;
-    const aujourdhui = aujourdhuiISO();
-    const nouveau = index.sujets.find(
-      (s) => !sujetArchive(s.id) && (s.jusquAu ? s.jusquAu >= aujourdhui : !lire("vu:sujet:" + s.id))
-    );
-    if (!nouveau) return "";
-    const projet = estProjet(nouveau);
-    const sous = nouveau.questions === 1
-      ? a.uneQuestionADecouvrir
-      : nouveau.questions > 1 ? remplir(a.questionsADecouvrir, { nombre: nouveau.questions }) : a.aDecouvrir;
-    return html`<button type="button" class="rencontre nouveau" data-aller="sujet/${echapper(nouveau.id)}">
-      <span class="nouveau__pave">${projet ? DRAPEAU : BULLE}</span>
-      <span class="rencontre__texte">
-        <span class="rencontre__etiquette">${echapper(projet ? ui.defi.nouveauDefi : a.nouveauSujet)}</span>
-        <span class="rencontre__titre">${echapper(nouveau.titre)}</span>
-        <span class="rencontre__quand">${echapper(sous)}</span>
-        ${nouveau.resume ? html`<span class="rencontre__lieu">${echapper(nouveau.resume)}</span>` : ""}
+    const combien = nouveau.questions === 1 ? a.uneQuestion : nouveau.questions > 1 ? remplir(a.desQuestions, { nombre: nouveau.questions }) : "";
+    // « Nouveau défi », « Nouvelle étude » tant que le jeune ne l'a pas ouvert ; ensuite
+    // « Défi », « Étude » : la ligne reste jusqu'à la rencontre, mais ne se dit plus nouvelle.
+    // « Défi » seul ne disait pas assez que c'était nouveau (Sébastien, 12 novembre 2026).
+    // L'étude de la prochaine rencontre, elle, se dit « Étude à préparer » jusqu'au bout.
+    const pasOuvert = !lire("vu:sujet:" + nouveau.id);
+    const aPreparer = nouveau === etudeDeLaRencontre(evenementsAVenir()[0]);
+    const nom = estProjet(nouveau)
+      ? (pasOuvert ? ui.defi.nouveauDefi : ui.defi.defi)
+      : aPreparer ? a.aPreparer : pasOuvert ? a.nouveauSujet : a.etude;
+    // Espaces insécables : sur un petit écran, la ligne se coupe après le point médian, jamais
+    // entre « 3 » et « questions ».
+    const genre = [nom, combien].filter(Boolean).join("\u00a0· ");
+    // Une étoile devant le mot, posée droite pour ne pas s'ajouter aux deux coups de pinceau
+    // penchés, avec l'icône de l'onglet dedans (le livre, le drapeau). Elle reste tant que la
+    // ligne est « à la une », ouverte ou non : c'est le mot qui dit « Nouveau ». Elle partait
+    // d'abord à l'ouverture, et Sébastien a vu l'étude perdre son étoile à côté d'un défi qui
+    // gardait la sienne : « ça gardait la cohérence » (12 novembre 2026). Décor seulement.
+    const etoile = `<span class="nouveau__etoile" aria-hidden="true">${ETOILE}${estProjet(nouveau) ? DRAPEAU : LIVRE}</span>`;
+    return html`<button type="button" class="nouveau" data-aller="sujet/${echapper(nouveau.id)}">
+      <span class="nouveau__texte">
+        <span class="nouveau__etiquette nouveau__etiquette--etoile">${etoile}${echapper(genre)}</span>
+        <span class="nouveau__titre">${echapper(nouveau.titre)}</span>
       </span>
-      ${CHEVRON_DROIT}
+      <span class="nouveau__fleche">${CHEVRON_DROIT}</span>
     </button>`;
   }
 
   // Les cartes des sujets et des défis servent à l'accueil (un aperçu) et à leur onglet
   // (la liste entière).
-  function carteSujet(s, archive) {
-    const a = ui.accueil;
+  // Une étude dans la liste de l'onglet. « aFaire » : celle dont la rencontre n'a pas encore
+  // eu lieu porte, à côté de son nom, un petit autocollant au pinceau (« À préparer », le mot
+  // de l'accueil ; « À faire » sonnait comme un devoir, Sébastien, 12 novembre 2026), jusqu'au
+  // jour de la rencontre, qu'elle ait été ouverte ou non. C'est le seul signe de la liste :
+  // l'étiquette « Nouvelle », une étoile, un pavé de date, des fonds et une carte ont été
+  // essayés et écartés par Sébastien le 12 novembre 2026 (« trop surchargé », « too much »).
+  function carteSujet(s, archive, aFaire = false) {
     return carte({
       aller: "sujet/" + s.id,
       classe: archive ? "fiche--sujet fiche--archive" : "fiche--sujet",
       pastille: pastille(BULLE, archive ? "" : "fiche__pastille--vive"),
       titre: s.titre,
       sous: [s.sousTitre, s.questions ? s.questions + " questions" : ""].filter(Boolean).join(" · "),
-      etiquette: archive || lire("vu:sujet:" + s.id) ? "" : a.nouveau,
+      autocollant: aFaire ? `<span class="autocollant">${coupDePinceau(0)}${echapper(ui.sujets.aFaire)}</span>` : "",
     });
   }
 
-  // Un projet n'a rien à cocher : pas d'anneau, mais le drapeau de l'onglet, et « Nouveau »
-  // tant qu'il n'a pas été ouvert, comme une étude.
-  function carteProjet(s) {
+  // Un projet des responsables dans la liste de l'onglet Défis : rien à cocher, donc pas
+  // d'anneau. « enCours » : tant que la rencontre qui suit sa sortie n'est pas passée, il
+  // porte à côté de son nom le même autocollant au pinceau que l'étude à préparer, ouvert ou
+  // non. Même liste, même signe, même rangement que les Études (demandé par Sébastien le
+  // 12 novembre 2026) ; l'étiquette « Nouveau » ne s'affiche plus ici.
+  function carteProjet(s, enCours = false) {
     return carte({
       aller: "sujet/" + s.id,
       classe: "fiche--sujet",
       pastille: pastille(DRAPEAU, "fiche__pastille--vive"),
       titre: s.titre,
       sous: s.questions ? s.questions + " questions" : s.resume,
-      etiquette: lire("vu:sujet:" + s.id) ? "" : ui.defi.nouveau,
+      autocollant: enCours ? `<span class="autocollant">${coupDePinceau(0)}${echapper(ui.defis.enCours)}</span>` : "",
     });
   }
 
@@ -1029,22 +1224,43 @@
   // Le bandeau, puis un extrait de chaque onglet : le sujet le plus récent, le défi en
   // cours, les trois prochaines rencontres. Chaque bloc mène à son onglet.
 
-  // Dans cet ordre, voulu par Sébastien : le bandeau tout en haut, la prochaine rencontre,
-  // les raccourcis en dernier. Aucun titre au-dessus d'une carte qui dit déjà ce qu'elle
-  // est, et pas de logo : l'icône sur l'écran d'accueil du téléphone suffit.
+  // Refonte « Affiche » (choisie par Sébastien sur maquettes le 12 novembre 2026) : tout en
+  // haut, l'affiche — « Bonjour » et la prochaine rencontre en très grand, sur l'aplat de
+  // couleur. Le mot des responsables (« À la une ») vient juste dessous, en bloc blanc : la
+  // prochaine rencontre passe donc avant lui et prend la couleur, à l'inverse de l'ordre de
+  // septembre. Ensuite : la bienvenue des premières ouvertures, la rubrique « À la une » (le
+  // mot des responsables et les nouveautés), « À venir », la formation, l'information, le
+  // rappel de sauvegarde, les raccourcis. Pas de logo : l'icône sur
+  // l'écran d'accueil du téléphone suffit.
   function ecranAccueil() {
     return html`
-      ${blocBonjour()}
+      <section class="affiche">
+        ${blocBonjour()}
+        ${blocRencontre()}
+      </section>
+      ${blocBienvenue()}
       ${blocALaUne()}
-      ${blocRencontre()}
-      ${blocAnnonces()}
-      ${blocFormations()}
-      ${blocNouvelleEtude()}
-      ${blocInformations()}
-      ${blocRappel()}
-      ${blocRaccourcis()}
+      ${enBandes([
+        [blocAnnonces()],
+        [blocInformations(), "bande--mince"],
+        [blocRappel()],
+        [blocRaccourcis()],
+      ])}
       ${boutonMesNotes()}
     `;
+  }
+
+  // Sous « À la une », chaque bloc présent a sa bande, d'un bord à l'autre de l'écran : la
+  // première rose très pâle, la suivante blanche, et ainsi de suite. Quand tous les blocs
+  // étaient là, seuls des filets gris les séparaient et « on s'y perdait » (Sébastien,
+  // 12 novembre 2026, qui a choisi « Bandes roses » sur captures, face à des cartes).
+  // L'alternance se fait sur les blocs réellement affichés : deux voisins n'ont jamais le
+  // même fond, quels que soient ceux que les responsables ont remplis.
+  function enBandes(blocs) {
+    return blocs
+      .filter(([contenu]) => contenu.trim())
+      .map(([contenu, classe], rang) => `<div class="bande${rang % 2 ? "" : " bande--rose"}${classe ? " " + classe : ""}">${contenu}</div>`)
+      .join("");
   }
 
   // Le bouton flottant de l'accueil, au-dessus de la barre d'onglets : il mène à Mes notes.
@@ -1061,14 +1277,37 @@
   // Les onglets Sujets, Défis et Plus
   // ---------------------------------------------------------------------------
 
+  // « Études précédentes », « Défis précédents » : une liste qu'on replie ou qu'on rouvre en
+  // touchant son titre, pour ne pas l'avoir sous les yeux si l'on n'en veut pas (demandé par
+  // Sébastien le 12 novembre 2026). Repliée tant qu'on n'y a pas touché, pour un écran court
+  // dès la première ouverture (son choix) ; le téléphone retient ensuite le dernier état
+  // (clé « deplie:<nom> », écrite par l'écouteur « toggle »).
+  function blocRepliable(nom, titre, cartes) {
+    return html`<details class="precedentes" data-deplie="${nom}"${lire("deplie:" + nom) ? " open" : ""}>
+      <summary class="liste-titre precedentes__titre">${echapper(titre)}</summary>
+      <ul class="fiches">${cartes}</ul>
+    </details>`;
+  }
+
   function ecranSujets() {
     const a = ui.accueil;
     const etudes = index.sujets.filter((s) => !estProjet(s));
     const actifs = etudes.filter((s) => !sujetArchive(s.id));
     const archives = etudes.filter((s) => sujetArchive(s.id));
+    // Deux parties : les études à faire (leur rencontre n'a pas encore eu lieu, la plus
+    // proche en premier), puis les précédentes sous un petit titre, dans l'ordre de la
+    // liste. Une étude passe de l'une à l'autre le lendemain de sa rencontre. Sans étude à
+    // faire, ou sans étude précédente, il n'y a qu'une liste, sans titre.
+    const aujourdhui = aujourdhuiISO();
+    const aFaire = actifs.filter((s) => s.date >= aujourdhui).sort((x, y) => x.date.localeCompare(y.date));
+    const precedentes = actifs.filter((s) => !(s.date >= aujourdhui));
+    const separees = aFaire.length && precedentes.length;
     const sujets = actifs.length
-      ? actifs.map((s) => carteSujet(s, false)).join("")
+      ? aFaire.map((s) => carteSujet(s, false, true)).join("") + (separees ? "" : precedentes.map((s) => carteSujet(s, false)).join(""))
       : html`<li><p class="vide">${echapper(a.aucunSujet)}</p></li>`;
+    const blocPrecedentes = separees
+      ? blocRepliable("sujets", ui.sujets.precedentes, precedentes.map((s) => carteSujet(s, false)).join(""))
+      : "";
     const blocArchives = archives.length
       ? html`<details class="archives">
           <summary class="section-titre archives__titre">${echapper(a.archives)} (${archives.length})</summary>
@@ -1078,29 +1317,49 @@
     return html`
       <section class="page">
         <header class="page__entete"><h1 class="page__titre">${echapper(ui.sujets.titre)}</h1></header>
-        <ul class="fiches">${sujets}</ul>
+        <ul class="fiches${separees ? " fiches--a-faire" : ""}">${sujets}</ul>
+        ${blocPrecedentes}
         ${blocArchives}
       </section>
     `;
   }
 
   function ecranDefis() {
-    // Projets et défis à cocher mêlés, dans l'ordre voulu par les responsables (« ordre »).
-    const tous = [
-      ...index.sujets.filter(estProjet).map((s) => ({ ordre: s.ordre ?? 999, titre: s.titre, carte: () => carteProjet(s) })),
+    // Deux parties, comme les Études. D'abord ce qui est d'actualité : les projets en cours
+    // (voir « estALaUne » : jusqu'à la rencontre qui suit leur sortie), avec l'autocollant,
+    // et les défis à cocher, qui n'ont pas de date et gardent leur anneau. Puis, sous un
+    // petit titre, les projets précédents. Dans chaque partie, l'ordre voulu par les
+    // responsables (« ordre »). Sans l'une des deux parties, une seule liste, sans titre.
+    const parOrdre = (a, b) => a.ordre - b.ordre || a.titre.localeCompare(b.titre, "fr");
+    const projets = index.sujets.filter(estProjet);
+    const actuels = [
+      ...projets.filter(estALaUne).map((s) => ({ ordre: s.ordre ?? 999, titre: s.titre, carte: () => carteProjet(s, true) })),
       ...index.defis.map((d) => ({ ordre: d.ordre ?? 999, titre: d.titre, carte: () => carteDefi(d) })),
-    ].sort((a, b) => a.ordre - b.ordre || a.titre.localeCompare(b.titre, "fr"));
+    ].sort(parOrdre);
+    const precedents = projets
+      .filter((s) => !estALaUne(s))
+      .map((s) => ({ ordre: s.ordre ?? 999, titre: s.titre, carte: () => carteProjet(s) }))
+      .sort(parOrdre);
+    const separes = actuels.length && precedents.length;
+    const tous = separes ? actuels : [...actuels, ...precedents];
     const defis = tous.length
       ? tous.map((element) => element.carte()).join("")
       : html`<li><p class="vide">${echapper(ui.accueil.aucunDefi)}</p></li>`;
+    const blocPrecedents = separes
+      ? blocRepliable("defis", ui.defis.precedents, precedents.map((element) => element.carte()).join(""))
+      : "";
     return html`
       <section class="page">
         <header class="page__entete"><h1 class="page__titre">${echapper(ui.defis.titre)}</h1></header>
-        <ul class="fiches">${defis}</ul>
+        <ul class="fiches${separes ? " fiches--a-faire" : ""}">${defis}</ul>
+        ${blocPrecedents}
       </section>
     `;
   }
 
+  // Trois groupes, dans l'ordre d'avant : ce qui est à soi (Mes notes), ce qui vient du groupe
+  // (Pratique, la playlist, Partage l'appli), puis l'application elle-même (Sauvegarder, À
+  // propos, Réglages).
   // La playlist des responsables (infos.json) s'ouvre sur YouTube : ils la mettent à jour
   // de leur côté, sans republier l'application. Demandée par le responsable le 22 octobre 2026.
   function ecranPlus() {
@@ -1111,9 +1370,13 @@
         <header class="page__entete"><h1 class="page__titre">${echapper(ui.plus.titre)}</h1></header>
         <ul class="fiches">
           ${carte({ aller: "notes", classe: "fiche--notes-perso", pastille: pastille(CRAYON), titre: ui.notes.titre })}
+        </ul>
+        <ul class="fiches fiches--groupe">
           ${carte({ aller: "pratique", classe: "fiche--pratique", pastille: pastille(BOUSSOLE), titre: ui.pratique.titre })}
           ${playlist && playlist.url ? lienExterne(playlist, NOTE) : ""}
           ${carte({ aller: "decouvrir", classe: "fiche--ami", pastille: pastille(QR), titre: ui.plus.partager, sous: ui.plus.partagerSous })}
+        </ul>
+        <ul class="fiches fiches--groupe">
           ${carte({ aller: "sauvegarde", classe: "fiche--sauvegarde", pastille: pastille(SAUVEGARDE), titre: a.sauvegarde })}
           ${carte({ aller: "a-propos", classe: "fiche--a-propos", pastille: pastille(INFO), titre: a.aProposApp })}
           ${carte({ aller: "reglages", classe: "fiche--reglages", pastille: pastille(ENGRENAGE), titre: ui.plus.reglages })}
@@ -1131,8 +1394,8 @@
   // place — et sur l'écran d'installation, qui n'a rien à proposer d'autre.
 
   const ONGLETS = [
-    { nom: "accueil", aller: "", icone: () => LOGO_GDJ },
-    { nom: "sujets", aller: "sujets", icone: () => BULLE },
+    { nom: "accueil", aller: "", icone: () => MAISON },
+    { nom: "sujets", aller: "sujets", icone: () => LIVRE },
     { nom: "defis", aller: "defis", icone: () => DRAPEAU },
     { nom: "agenda", aller: "agenda", icone: () => CALENDRIER },
     { nom: "plus", aller: "plus", icone: () => PLUS },
@@ -1144,6 +1407,7 @@
     const nav = document.getElementById("onglets");
     if (!nav) return;
     nav.innerHTML = html`<div class="onglets__contenu">
+      <span class="onglets__bulle" aria-hidden="true"></span>
       ${ONGLETS.map(
         (o) => html`<button type="button" class="onglet" data-onglet="${o.nom}" data-aller="${o.aller}">
           <span class="onglet__icone">${o.icone()}</span>
@@ -1175,6 +1439,18 @@
       if (bouton.dataset.onglet === actif) bouton.setAttribute("aria-current", "page");
       else bouton.removeAttribute("aria-current");
     });
+    // La bulle glisse jusqu'à l'onglet allumé (« --onglet » : son rang, de 0 à 4) et s'étire
+    // un instant en chemin, comme une goutte. Demandé par Sébastien le 12 novembre 2026,
+    // « comme sur Musique d'Apple ». À l'ouverture, elle se pose sans bouger.
+    const rang = String(ONGLETS.findIndex((o) => o.nom === actif));
+    const avant = nav.style.getPropertyValue("--onglet");
+    if (avant === rang) return;
+    nav.style.setProperty("--onglet", rang);
+    const bulle = nav.querySelector(".onglets__bulle");
+    if (!bulle || avant === "") return;
+    bulle.classList.remove("onglets__bulle--bouge");
+    void bulle.offsetWidth; // relance l'étirement à chaque déplacement
+    bulle.classList.add("onglets__bulle--bouge");
   }
 
   // ---------------------------------------------------------------------------
@@ -1219,10 +1495,13 @@
     const aDesQuestions = sujet.questions.length > 0;
     const liens = (sujet.liens || []).filter((l) => l && l.url);
     const etiquette = projet ? ui.defi.defi : archive ? s.archive : "";
+    // « À propos de cette étude » ne s'affiche que si le responsable a écrit une présentation
+    // ou une mise en garde : sans elles, la ligne menait à un écran presque vide.
+    const aLire = Boolean((sujet.intro && sujet.intro.length) || sujet.avertissement);
 
     return html`
       <section class="page">
-        <header class="page__entete">
+        <header class="page__entete page__entete--affiche">
           ${etiquette ? html`<span class="etiquette">${echapper(etiquette)}</span>` : ""}
           <h1 class="page__titre">${echapper(sujet.titre)}</h1>
           ${sujet.sousTitre ? html`<p class="page__soustitre">${echapper(sujet.sousTitre)}</p>` : ""}
@@ -1230,9 +1509,11 @@
 
         ${projet
           ? sujet.description ? html`<div class="page__contenu"><p>${echapper(sujet.description)}</p></div>` : ""
-          : html`<ul class="fiches">
-              ${carte({ aller: base + "a-propos", classe: "fiche--a-propos", pastille: pastille(INFO), titre: s.aPropos })}
-            </ul>`}
+          : aLire
+            ? html`<ul class="fiches">
+                ${carte({ aller: base + "a-propos", classe: "fiche--a-propos", pastille: pastille(INFO), titre: s.aPropos })}
+              </ul>`
+            : ""}
 
         ${liens.length ? html`<ul class="fiches">${liens.map((l) => lienExterne(l)).join("")}</ul>` : ""}
 
@@ -1240,27 +1521,21 @@
           ? html`<h2 class="section-titre">${echapper(s.questions)}</h2>
             <ul class="fiches">${questions}</ul>`
           : ""}
-        <ul class="fiches">${versets}</ul>
-
-        ${sujet.reflexions === false
-          ? ""
-          : html`<h2 class="section-titre">${echapper(s.reflexions)}</h2>
-            <ul class="fiches">
-              <li>
+        <ul class="fiches fiches--suite">
+          ${versets}
+          ${sujet.reflexions === false
+            ? ""
+            : html`<li>
                 <button type="button" class="fiche fiche--notes" data-aller="${base}notes">
-                  <span class="fiche__pastille fiche__pastille--emoji" aria-hidden="true">🤔</span>
+                  ${pastille(AMPOULE)}
                   <span class="fiche__texte"><span class="fiche__titre">${echapper(s.reflexions)}</span></span>
                   ${CHEVRON_DROIT}
                 </button>
-              </li>
-            </ul>`}
-
-        ${aDesQuestions
-          ? html`<h2 class="section-titre">${echapper(s.partager)}</h2>
-            <ul class="fiches">
-              ${carte({ aller: base + "partager", classe: "fiche--partager", pastille: pastille(PARTAGE, "fiche__pastille--vive"), titre: s.partagerReponses })}
-            </ul>`
-          : ""}
+              </li>`}
+          ${aDesQuestions
+            ? carte({ aller: base + "partager", classe: "fiche--partager", pastille: pastille(PARTAGE, "fiche__pastille--vive"), titre: s.partagerReponses })
+            : ""}
+        </ul>
 
         ${projet
           ? ""
@@ -1320,11 +1595,14 @@
 
   // Le même écran pour une question et pour les réflexions libres : un intitulé, la place
   // d'écrire, et la mention « Enregistré » qui passe à chaque frappe.
-  function ecranEcriture(cle, intitule, placeholder, pied = "") {
+  // « intituleCache » : quand l'intitulé ne fait que redire le nom de l'écran, déjà écrit
+  // dans la barre du haut (« Mes réflexions »), il n'est plus affiché ; il reste dans la
+  // page pour nommer la zone d'écriture aux lecteurs d'écran.
+  function ecranEcriture(cle, intitule, placeholder, pied = "", intituleCache = false) {
     const texte = lire(cle) || "";
     return html`
       <section class="question" aria-labelledby="intitule">
-        <h1 class="question__intitule" id="intitule">${echapper(intitule)}</h1>
+        <h1 class="${intituleCache ? "lu" : "question__intitule"}" id="intitule">${echapper(intitule)}</h1>
         <textarea
           class="question__reponse"
           id="zone-${echapper(cle).replace(/[^a-zA-Z0-9-]/g, "-")}"
@@ -1351,7 +1629,7 @@
 
   function ecranNotes(sujet) {
     const n = ui.sujet.notes;
-    return ecranEcriture("sujet:" + sujet.id + ":notes", n.titre, n.placeholder);
+    return ecranEcriture("sujet:" + sujet.id + ":notes", n.titre, n.placeholder, "", true);
   }
 
   function ecranPartager(sujet) {
@@ -1373,6 +1651,7 @@
               id="prenom"
               value="${echapper(prenom)}"
               autocomplete="given-name"
+              maxlength="40"
               placeholder="${echapper(s.prenomAide)}"
             />
           </label>
@@ -1511,7 +1790,7 @@
 
     return html`
       <section class="page">
-        <header class="page__entete">
+        <header class="page__entete page__entete--affiche">
           <span class="etiquette">${echapper(defi.type === "lecture" ? d.lecture : d.defi)}</span>
           <h1 class="page__titre">${echapper(defi.titre)}</h1>
           <p class="page__soustitre" id="progression-${echapper(defi.id)}">${echapper(texteProgression(faites, total))}</p>
@@ -1554,14 +1833,17 @@
     return html`
       <section class="page">
         <header class="page__entete"><h1 class="page__titre">${echapper(a.titre)}</h1></header>
-        <h2 class="section-titre">${echapper(a.aVenir)}</h2>
         ${aVenir.length
-          ? html`<ul class="evenements">${aVenir.map((e) => ligneEvenement(e, { detail: true, calendrier: true })).join("")}</ul>`
+          ? html`<ul class="evenements">${ligneEvenement(aVenir[0], { vedette: true })}</ul>`
           : html`<p class="vide">${echapper(a.rien)}</p>`}
+        ${aVenir.length > 1
+          ? html`<h2 class="liste-titre">${echapper(a.suivantes)}</h2>
+              <ul class="evenements evenements--suite">${aVenir.slice(1).map((e) => ligneEvenement(e, { calendrier: true })).join("")}</ul>`
+          : ""}
         ${passes.length
           ? html`<details class="passes">
               <summary class="section-titre passes__titre">${echapper(a.passe)}</summary>
-              <ul class="evenements evenements--passes">${passes.map((e) => ligneEvenement(e)).join("")}</ul>
+              <ul class="evenements evenements--suite evenements--passes">${passes.map((e) => ligneEvenement(e)).join("")}</ul>
             </details>`
           : ""}
       </section>
@@ -1596,7 +1878,7 @@
         (section) => html`
           <h2 class="section-titre">${echapper(section.titre)}</h2>
           ${section.texte ? html`<div class="page__contenu page__contenu--serre"><p>${echapper(section.texte)}</p></div>` : ""}
-          <ul class="fiches">${(section.liens || []).map(lienExterne).join("")}</ul>
+          <ul class="fiches">${(section.liens || []).map((lien) => lienExterne(lien)).join("")}</ul>
         `
       )
       .join("");
@@ -1987,6 +2269,19 @@
   // ---------------------------------------------------------------------------
   // Boutons : un seul écouteur pour tous
   // ---------------------------------------------------------------------------
+
+  // Une liste repliable retient son état : « toggle » ne remonte pas dans la page, d'où
+  // l'écoute en capture. Repliée, on ne garde rien ; ouverte, on le note.
+  document.addEventListener(
+    "toggle",
+    (evenement) => {
+      const bloc = evenement.target;
+      if (!bloc.dataset || !bloc.dataset.deplie) return;
+      if (bloc.open) ecrire("deplie:" + bloc.dataset.deplie, "1");
+      else effacer("deplie:" + bloc.dataset.deplie);
+    },
+    true
+  );
 
   document.addEventListener("click", async (evenement) => {
     const destination = evenement.target.closest("[data-aller]");
