@@ -41,10 +41,13 @@ node "$racine/scripts/verifier-contrastes.mjs" > /dev/null
 # que personne s'en aperçoive. Il est donc avancé ici, jamais à la main.
 # Numérotation à trois chiffres depuis le 11 septembre 2026, à la demande de Sébastien ; la
 # précédente, par date (2026-09-11-5), est convertie une fois en 1.0.0.
-python3 - "$racine/app/service-worker.js" "$niveau" <<'PYTHON'
+# Le même numéro suit app.js et style.css dans index.html (« app.js?v=1.4.2 ») : sans lui,
+# Safari resservait l’ancien code gardé en mémoire au rechargement qui suit une mise à jour
+# (vu sur le simulateur iOS le 12 novembre 2026).
+python3 - "$racine/app/service-worker.js" "$niveau" "$racine/app/index.html" <<'PYTHON'
 import re, sys
 
-chemin, niveau = sys.argv[1], sys.argv[2]
+chemin, niveau, page = sys.argv[1], sys.argv[2], sys.argv[3]
 source = open(chemin, encoding="utf-8").read()
 motif = re.compile(r'const VERSION = "([^"]+)";')
 trouve = motif.search(source)
@@ -63,7 +66,12 @@ else:
         nouvelle = f"{majeure}.{mineure + 1}.0"
     else:
         nouvelle = f"{majeure}.{mineure}.{correctif + 1}"
+html = open(page, encoding="utf-8").read()
+adresses = re.compile(r'((?:app\.js|style\.css)\?v=)[^"]+"')
+if len(adresses.findall(html)) != 2:
+    sys.exit("index.html : app.js?v= et style.css?v= introuvables.")
 open(chemin, "w", encoding="utf-8").write(motif.sub(f'const VERSION = "{nouvelle}";', source, count=1))
+open(page, "w", encoding="utf-8").write(adresses.sub(lambda m: f'{m.group(1)}{nouvelle}"', html))
 print(f"  version : {ancienne} → {nouvelle}")
 PYTHON
 

@@ -181,6 +181,18 @@ for (const [, chemin] of listes[1].matchAll(/"\.\/([^"]*)"/g)) {
   }
 }
 
+// app.js et style.css portent le numéro de version dans index.html (« app.js?v=1.4.2 ») :
+// une adresse neuve à chaque version empêche Safari de resservir l'ancien code gardé en
+// mémoire. publier.sh avance les deux numéros ensemble ; un écart veut dire une main passée
+// par là.
+const versionSw = (sw.match(/const VERSION = "([^"]+)";/) || [])[1];
+const page = readFileSync(join(racine, "app", "index.html"), "utf8");
+for (const fichier of ["app.js", "style.css"]) {
+  const trouve = page.match(new RegExp(`"${fichier.replace(".", "\\.")}\\?v=([^"]+)"`));
+  if (!trouve) signaler(`index.html : « ${fichier} » doit être appelé avec « ?v=<version> ».`);
+  else if (trouve[1] !== versionSw) signaler(`index.html : « ${fichier}?v=${trouve[1]} » ne suit pas la version du service worker (${versionSw}).`);
+}
+
 // --- 4. Fidélité au PDF du responsable ---------------------------------------------------
 
 // Le PDF sort de Google Docs : ses puces traînent des caractères invisibles, et ses

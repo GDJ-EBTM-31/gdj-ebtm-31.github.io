@@ -752,10 +752,6 @@
   // sauvegarde s'il y a lieu, la carte « À venir » où tiennent leurs annonces, et un nouveau
   // sujet s'il y en a un.
 
-  function boutonUne(aller, libelle) {
-    return html`<button type="button" class="une__action" data-aller="${echapper(aller)}">${echapper(libelle)} ${CHEVRON_DROIT}</button>`;
-  }
-
   // La prochaine rencontre, en premier et en grand : c'est ce qu'on vient chercher le plus
   // souvent. Un toucher ouvre l'agenda.
   function blocRencontre() {
@@ -954,7 +950,10 @@
     `;
   }
 
-  // Une étude que le jeune n'a pas encore ouverte : sa carte, avec un bouton pour y entrer.
+  // Une étude que le jeune n'a pas encore ouverte : sa carte, construite comme celle de la
+  // prochaine rencontre juste au-dessus (un pavé en dégradé, l'étiquette, le titre, une ligne
+  // magenta, la flèche), et toute entière à toucher. Choisie par Sébastien sur captures le
+  // 12 novembre 2026, à la place d'un bouton « Découvrir » sous le titre (« ça fait brouillon »).
   // Un sujet qui porte « jusquAu » garde sa carte jusqu'à ce jour inclus, ouvert ou non, et
   // la perd le lendemain à minuit : le projet #TousMigrants reste annoncé jusqu'au jour de la
   // rencontre (demandé par Sébastien le 25 septembre 2026).
@@ -965,14 +964,20 @@
       (s) => !sujetArchive(s.id) && (s.jusquAu ? s.jusquAu >= aujourdhui : !lire("vu:sujet:" + s.id))
     );
     if (!nouveau) return "";
-    return html`
-      <article class="annonce annonce--nouveau">
-        <p class="annonce__etiquette">${echapper(estProjet(nouveau) ? ui.defi.nouveauDefi : a.nouveauSujet)}</p>
-        <h2 class="annonce__titre">${echapper(nouveau.titre)}</h2>
-        ${nouveau.resume ? html`<p class="annonce__texte">${echapper(nouveau.resume)}</p>` : ""}
-        ${boutonUne("sujet/" + nouveau.id, a.decouvrir)}
-      </article>
-    `;
+    const projet = estProjet(nouveau);
+    const sous = nouveau.questions === 1
+      ? a.uneQuestionADecouvrir
+      : nouveau.questions > 1 ? remplir(a.questionsADecouvrir, { nombre: nouveau.questions }) : a.aDecouvrir;
+    return html`<button type="button" class="rencontre nouveau" data-aller="sujet/${echapper(nouveau.id)}">
+      <span class="nouveau__pave">${projet ? DRAPEAU : BULLE}</span>
+      <span class="rencontre__texte">
+        <span class="rencontre__etiquette">${echapper(projet ? ui.defi.nouveauDefi : a.nouveauSujet)}</span>
+        <span class="rencontre__titre">${echapper(nouveau.titre)}</span>
+        <span class="rencontre__quand">${echapper(sous)}</span>
+        ${nouveau.resume ? html`<span class="rencontre__lieu">${echapper(nouveau.resume)}</span>` : ""}
+      </span>
+      ${CHEVRON_DROIT}
+    </button>`;
   }
 
   // Les cartes des sujets et des défis servent à l'accueil (un aperçu) et à leur onglet
@@ -2185,6 +2190,16 @@
   // La version se lit dans le nom du cache du service worker (« gdj-<VERSION> ») : c'est
   // celle que le téléphone a vraiment, sans fichier de plus à tenir à jour.
   function lireVersionInstallee() {
+    // Le numéro du code réellement à l'écran, porté par son adresse (app.js?v=1.4.2, depuis
+    // novembre 2026). Le nom du cache, lu ensuite en secours, retarde d'une ouverture : la
+    // nouvelle copie s'installe une seconde après le chargement de la page.
+    const script = document.querySelector('script[src*="app.js?v="]');
+    const duScript = script && new URL(script.src).searchParams.get("v");
+    if (duScript) {
+      versionInstallee = duScript;
+      remplirVersion();
+      return;
+    }
     if (!("caches" in window)) return;
     caches
       .keys()

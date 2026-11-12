@@ -811,52 +811,28 @@ main {
   min-height: 48px;
 }
 
-/* Une étude jamais ouverte : une carte claire, avec son bouton. */
+/* Une étude jamais ouverte : la même carte que la prochaine rencontre (voir .rencontre),
+   l'icône de l'étude ou du défi à la place du pavé de date. */
 
-.annonce {
-  margin-bottom: 0.65rem;
-  padding: 1rem 1rem 1.05rem;
-  background: var(--carte);
-  border-radius: 20px;
-  box-shadow: var(--ombre);
+.rencontre.nouveau {
+  margin-top: 0;
 }
 
-.annonce__etiquette {
-  display: inline-block;
-  margin: 0 0 0.45rem;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  background: var(--teinte);
-  color: var(--violet-fonce);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.annonce--nouveau .annonce__etiquette {
+.nouveau__pave {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 3.9rem;
+  height: 3.9rem;
+  border-radius: 16px;
   background: var(--degrade);
   color: #ffffff;
 }
 
-.annonce__titre {
-  margin: 0 0 0.3rem;
-  font-size: 1.15rem;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  color: var(--encre);
-}
-
-.annonce__texte {
-  margin: 0;
-  line-height: 1.5;
-  color: var(--texte-doux);
-}
-
-.annonce .une__action {
-  margin-top: 0.75rem;
-  background: var(--teinte);
-  color: var(--violet-fonce);
+.nouveau__pave svg {
+  width: 28px;
+  height: 28px;
 }
 
 /* ------------------------------------------------------ Les listes de fiches
