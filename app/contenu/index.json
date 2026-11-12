@@ -11,6 +11,17 @@
       "fichier": "sujets/2026-11-mariage.json"
     },
     {
+      "id": "2026-11-gospel-street-moment",
+      "date": "2026-11-12",
+      "titre": "Proposition Gospel Street Moment",
+      "sousTitre": "",
+      "resume": "",
+      "questions": 0,
+      "onglet": "defis",
+      "ordre": 1,
+      "fichier": "sujets/2026-11-gospel-street-moment.json"
+    },
+    {
       "id": "2026-10-reseaux-sociaux",
       "date": "2026-10-25",
       "titre": "Questions autour des réseaux sociaux",
