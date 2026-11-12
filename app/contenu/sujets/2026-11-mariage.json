@@ -1,0 +1,20 @@
+{
+  "id": "2026-11-mariage",
+  "date": "2026-11-15",
+  "jusquAu": "2026-11-15",
+  "titre": "Le mariage ?",
+  "questions": [
+    {
+      "id": "q1",
+      "texte": "En Éphésiens 5.21-33, pourquoi cette feuille de route semble perdue d’avance ? Comment peut-on donc quand même envisager le mariage d’après vous ?"
+    },
+    {
+      "id": "q2",
+      "texte": "En m’aidant de la Bible, quelles sont les qualités que je veux absolument voir chez mon futur mari / ma future épouse ?"
+    },
+    {
+      "id": "q3",
+      "texte": "En m’inspirant de la Bible, quelles sont les qualités que mon futur conjoint devrait pouvoir voir chez moi ? Quels aspects de mon caractère dois-je particulièrement travailler pour être davantage conforme à Christ ?"
+    }
+  ]
+}

@@ -7,6 +7,9 @@ BEGIN:VEVENT
 UID:2026-11-29-rencontre@gdj-ebtm
 DTSTAMP:20260101T000000Z
 DTSTART;VALUE=DATE:20261129
-SUMMARY:Rencontre du groupe de jeunes
+SUMMARY:Pique-nique / balade…
+DESCRIPTION:Pas de groupe de jeunes ce dimanche : les responsables ne pour
+ ront pas être là. Organise-toi avec les autres pour vous voir et partage
+ r un repas ensemble !
 END:VEVENT
 END:VCALENDAR

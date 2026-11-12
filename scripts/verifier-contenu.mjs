@@ -90,7 +90,14 @@ for (const fichier of readdirSync(join(contenu, "sujets")).filter((f) => f.endsW
   if (sujet.id !== fichier.replace(/\.json$/, "")) signaler(`sujets/${fichier} : l'identifiant « ${sujet.id} » doit être le nom du fichier.`);
   if (!sujet.titre) signaler(`sujets/${fichier} : titre manquant.`);
   if (!DATE.test(sujet.date || "")) signaler(`sujets/${fichier} : date mal écrite (attendu AAAA-MM-JJ).`);
-  if (!Array.isArray(sujet.questions) || !sujet.questions.length) signaler(`sujets/${fichier} : aucune question.`);
+  // « questions » reste un tableau, même vide : le code déjà installé sur les téléphones le parcourt.
+  // Seul un projet peut n'en avoir aucune, à condition de garder « Mes réflexions » à remplir.
+  if (!Array.isArray(sujet.questions)) signaler(`sujets/${fichier} : « questions » doit être une liste (même vide, []).`);
+  else if (!sujet.questions.length && (sujet.onglet !== "defis" || sujet.reflexions === false)) signaler(`sujets/${fichier} : aucune question.`);
+  if (sujet.liens !== undefined && !Array.isArray(sujet.liens)) signaler(`sujets/${fichier} : « liens » doit être une liste.`);
+  for (const lien of sujet.liens || []) {
+    if (!lien.titre || !/^https:\/\//.test(lien.url || "")) signaler(`sujets/${fichier} : lien incomplet ou adresse invalide (${lien.titre || "?"}).`);
+  }
   const ids = new Set();
   for (const q of sujet.questions || []) {
     if (!q.id) signaler(`sujets/${fichier} : question sans identifiant.`);

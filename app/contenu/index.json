@@ -1,13 +1,22 @@
 {
   "sujets": [
     {
+      "id": "2026-11-mariage",
+      "date": "2026-11-15",
+      "titre": "Le mariage ?",
+      "sousTitre": "",
+      "resume": "",
+      "questions": 3,
+      "jusquAu": "2026-11-15",
+      "fichier": "sujets/2026-11-mariage.json"
+    },
+    {
       "id": "2026-10-reseaux-sociaux",
       "date": "2026-10-25",
       "titre": "Questions autour des réseaux sociaux",
       "sousTitre": "",
       "resume": "",
       "questions": 5,
-      "jusquAu": "2026-10-25",
       "fichier": "sujets/2026-10-reseaux-sociaux.json"
     },
     {
@@ -18,7 +27,7 @@
       "resume": "",
       "questions": 6,
       "onglet": "defis",
-      "ordre": 1,
+      "ordre": 2,
       "fichier": "sujets/2026-10-qqoqcp-du-projet.json"
     },
     {
@@ -29,7 +38,7 @@
       "resume": "Le projet #TousMigrants portera sur des interventions dans les centres de demandeurs d’asile toulousains.",
       "questions": 5,
       "onglet": "defis",
-      "ordre": 2,
+      "ordre": 3,
       "fichier": "sujets/2026-09-tous-migrants.json"
     },
     {

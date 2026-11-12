@@ -997,7 +997,7 @@
       classe: "fiche--sujet",
       pastille: pastille(DRAPEAU, "fiche__pastille--vive"),
       titre: s.titre,
-      sous: s.questions ? s.questions + " questions" : "",
+      sous: s.questions ? s.questions + " questions" : s.resume,
       etiquette: lire("vu:sujet:" + s.id) ? "" : ui.defi.nouveau,
     });
   }
@@ -1208,6 +1208,11 @@
     // fiche « À propos » à ouvrir. Il ne s'archive pas : l'onglet Défis n'a pas d'archives.
     const projet = estProjet(sujet);
     const archive = !projet && sujetArchive(sujet.id);
+    // Un sujet peut porter des liens (un document à lire, Gospel Street Moment, novembre 2026),
+    // et un projet peut n'avoir aucune question : il ne reste alors que le document et « Mes
+    // réflexions ». Sans question, pas de partage : ces notes sont personnelles.
+    const aDesQuestions = sujet.questions.length > 0;
+    const liens = (sujet.liens || []).filter((l) => l && l.url);
     const etiquette = projet ? ui.defi.defi : archive ? s.archive : "";
 
     return html`
@@ -1224,8 +1229,12 @@
               ${carte({ aller: base + "a-propos", classe: "fiche--a-propos", pastille: pastille(INFO), titre: s.aPropos })}
             </ul>`}
 
-        <h2 class="section-titre">${echapper(s.questions)}</h2>
-        <ul class="fiches">${questions}</ul>
+        ${liens.length ? html`<ul class="fiches">${liens.map((l) => lienExterne(l)).join("")}</ul>` : ""}
+
+        ${aDesQuestions
+          ? html`<h2 class="section-titre">${echapper(s.questions)}</h2>
+            <ul class="fiches">${questions}</ul>`
+          : ""}
         <ul class="fiches">${versets}</ul>
 
         ${sujet.reflexions === false
@@ -1241,10 +1250,12 @@
               </li>
             </ul>`}
 
-        <h2 class="section-titre">${echapper(s.partager)}</h2>
-        <ul class="fiches">
-          ${carte({ aller: base + "partager", classe: "fiche--partager", pastille: pastille(PARTAGE, "fiche__pastille--vive"), titre: s.partagerReponses })}
-        </ul>
+        ${aDesQuestions
+          ? html`<h2 class="section-titre">${echapper(s.partager)}</h2>
+            <ul class="fiches">
+              ${carte({ aller: base + "partager", classe: "fiche--partager", pastille: pastille(PARTAGE, "fiche__pastille--vive"), titre: s.partagerReponses })}
+            </ul>`
+          : ""}
 
         ${projet
           ? ""
