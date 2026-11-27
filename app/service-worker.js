@@ -15,7 +15,7 @@
  * l'avance, jamais la main.
  */
 
-const VERSION = "2.1.0";
+const VERSION = "2.1.1";
 const CACHE = `gdj-${VERSION}`;
 
 const FICHIERS = [
