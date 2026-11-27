@@ -1066,6 +1066,37 @@
     `;
   }
 
+  // Une affiche de l'église (infos.json, « affiches »), juste après « À venir » : l'image
+  // entourée d'un bord blanc ; si elle a un « fond », cette photo en carte postale derrière
+  // elle (le concert Kumbaya sur une photo du Capitole prise par Sébastien, choisi le
+  // 27 novembre 2026 après des essais au scotch, aux punaises et en panorama). Le texte de
+  // l'affiche n'est pas lu par les lecteurs d'écran : sa « description » le dit à sa place.
+  // La photo du fond est un décor : texte de remplacement vide, les lecteurs d'écran la sautent.
+  // Elle s'efface le lendemain de son « jusquAu ». Toucher l'affiche ne fait rien : ouvrir
+  // l'image seule, dans l'application installée sur iPhone, en sortirait sans retour
+  // possible. Demandé par Sébastien le 27 novembre 2026, pour le concert Kumbaya.
+  function blocAffiches() {
+    const aujourdhui = aujourdhuiISO();
+    const enCours = (infos.affiches || []).filter((affiche) => affiche.image && affiche.jusquAu >= aujourdhui);
+    if (!enCours.length) return "";
+    return html`
+      <section class="affiches" aria-label="${echapper(ui.accueil.affiche || "Affiche")}">
+        ${enCours
+          .map((affiche) => {
+            const figure = html`<figure class="affiche-collee">
+              <img src="${echapper(affiche.image)}" alt="${echapper(affiche.description || "")}" decoding="async" />
+            </figure>`;
+            if (!affiche.fond) return figure;
+            return html`<div class="affiche-mur">
+              <img class="affiche-mur__fond" src="${echapper(affiche.fond)}" alt="" decoding="async" />
+              ${figure}
+            </div>`;
+          })
+          .join("")}
+      </section>
+    `;
+  }
+
   // Une information des responsables (infos.json, « informations ») : pas un rendez-vous,
   // donc pas dans « À venir ». Une carte blanche sans titre, après la nouvelle étude, chaque
   // ligne faite comme une annonce et effacée le lendemain de son « jusquAu ». Placée là par
@@ -1242,6 +1273,7 @@
       ${blocALaUne()}
       ${enBandes([
         [blocAnnonces()],
+        [blocAffiches()],
         [blocInformations(), "bande--mince"],
         [blocRappel()],
         [blocRaccourcis()],
@@ -1386,6 +1418,384 @@
   }
 
   // ---------------------------------------------------------------------------
+  // La neige des fêtes
+  // ---------------------------------------------------------------------------
+  //
+  // Demandée par Sébastien le 27 novembre 2026 : pendant les fêtes, des flocons tombent sur
+  // l'application et la neige s'amasse sur le haut de la barre d'onglets et du bouton des
+  // notes. La période est dans infos.json (« neige » : « du », « au ») : la neige part
+  // d'elle-même, sans republier.
+  //
+  // Tout est dessiné sur une toile posée par-dessus l'écran, qui laisse passer les touchers
+  // et que les lecteurs d'écran ignorent. Les flocons tombent sur les écrans qui ont la barre
+  // d'onglets, pas sur ceux où l'on écrit.
+  //
+  // La neige s'amasse vraiment (idée reprise de l'option « collection » du module jQuery
+  // Snowfall) : le haut de la barre et du bouton est découpé en colonnes de quelques points ;
+  // un flocon qui s'y pose ajoute un peu de neige à l'endroit exact où il tombe. Quand une
+  // colonne dépasse trop sa voisine, la neige glisse vers elle, comme du sable : c'est ce qui
+  // fait les vagues, et ce qui fait couler la neige le long des arrondis. Aux deux bouts, elle
+  // dépasse un peu en corniche ; au-delà, une motte se détache et tombe. Toucher un onglet ou
+  // le bouton fait tomber la neige qui est dessus ; elle se reforme si l'on reste.
+  //
+  // Avec « réduire les animations », rien ne tombe ni ne bouge : les tas dessinés en CSS
+  // (classe « neige » sans « neige-vivante ») restent, immobiles. La toile commence sous la
+  // zone de l'heure : sur iPhone, un bloc fixé qui touche le haut de l'écran change la couleur
+  // de cette zone (voir docs/suivi.md, « Pièges rencontrés »). Batterie : une quarantaine de
+  // flocons, trente images par seconde, et tout s'arrête quand l'application passe en
+  // arrière-plan.
+
+  const NEIGE = {
+    nombre: 40, // flocons pour 390 points de large
+    vitesse: 42, // points par seconde, pour un flocon moyen
+    colonne: 3, // largeur d'une colonne de neige, en points
+    pente: 0.75, // écart de hauteur toléré entre deux colonnes voisines, en points
+    depot: 15, // neige qu'apporte un flocon qui se pose (colonnes × points)
+  };
+  const mouvementReduit = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const debutNeige = Date.now();
+  const neige = {
+    toile: null,
+    dessin: null,
+    flocon: null,
+    flocons: [],
+    mottes: [],
+    surfaces: new Map(),
+    voulue: false,
+    boucle: 0,
+    image: 0,
+    mesure: 0,
+  };
+
+  function neigeDeSaison() {
+    const periode = infos && infos.neige;
+    if (!periode || !periode.du || !periode.au) return false;
+    const jour = aujourdhuiISO();
+    return jour >= periode.du && jour <= periode.au;
+  }
+
+  function reglerNeige(ecran, sansOnglets) {
+    const saison = neigeDeSaison() && ecran !== "installation";
+    const vivante = saison && !mouvementReduit.matches && preparerToile();
+    document.body.classList.toggle("neige", saison);
+    document.body.classList.toggle("neige-vivante", vivante);
+    // L'âge de la neige, en négatif : le tas de l'affiche (dessiné en CSS) reprend sa
+    // croissance là où elle en était quand l'écran est refait, au lieu de repartir de rien.
+    document.body.style.setProperty("--neige-age", -Math.round((Date.now() - debutNeige) / 1000) + "s");
+    neige.voulue = vivante && !sansOnglets;
+    neige.mesure = 0; // l'écran change : on remesure la barre et le bouton à l'image suivante
+    if (neige.voulue && !document.hidden) demarrerNeige();
+    else arreterNeige();
+  }
+
+  // Un flocon dessiné une fois pour toutes, puis recopié à chaque image (bien moins coûteux
+  // que de le redessiner) : un cœur blanc et un halo lavande qui s'efface. Le halo le rend
+  // visible sur le fond blanc de l'application ; un contour net faisait des bulles.
+  function dessinerFlocon() {
+    const modele = document.createElement("canvas");
+    modele.width = modele.height = 32;
+    const d = modele.getContext("2d");
+    const degrade = d.createRadialGradient(16, 16, 0, 16, 16, 16);
+    degrade.addColorStop(0, "rgba(255, 255, 255, 1)");
+    degrade.addColorStop(0.38, "rgba(255, 255, 255, 0.98)");
+    degrade.addColorStop(0.55, "rgba(214, 190, 226, 0.55)");
+    degrade.addColorStop(1, "rgba(152, 40, 152, 0)");
+    d.fillStyle = degrade;
+    d.fillRect(0, 0, 32, 32);
+    return modele;
+  }
+
+  // La toile n'est créée qu'une fois ; si le navigateur ne sait pas dessiner, on reste aux
+  // tas immobiles du CSS.
+  function preparerToile() {
+    if (neige.dessin) return true;
+    if (neige.toile) return false;
+    const toile = document.createElement("canvas");
+    toile.className = "neige-toile";
+    toile.setAttribute("aria-hidden", "true");
+    toile.hidden = true;
+    document.body.appendChild(toile);
+    neige.toile = toile;
+    neige.dessin = toile.getContext("2d");
+    if (!neige.dessin) return false;
+    neige.flocon = dessinerFlocon();
+    window.addEventListener("resize", () => {
+      if (neige.voulue) dimensionnerNeige();
+    });
+    return true;
+  }
+
+  function nouveauFlocon(largeur, hauteur, auHasard) {
+    const rayon = 1.2 + Math.random() * 2.2;
+    return {
+      x: Math.random() * largeur,
+      y: auHasard ? Math.random() * hauteur : -rayon * 2,
+      rayon,
+      // Les gros flocons, plus proches, tombent un peu plus vite.
+      vitesse: NEIGE.vitesse * (0.55 + (rayon / 3.4) * 0.6),
+      phase: Math.random() * Math.PI * 2,
+      ampleur: 6 + Math.random() * 14,
+    };
+  }
+
+  function dimensionnerNeige() {
+    const toile = neige.toile;
+    const echelle = Math.min(window.devicePixelRatio || 1, 2);
+    toile.width = Math.round(toile.clientWidth * echelle);
+    toile.height = Math.round(toile.clientHeight * echelle);
+    neige.dessin.setTransform(echelle, 0, 0, echelle, 0, 0);
+    const voulu = Math.round(NEIGE.nombre * (toile.clientWidth / 390));
+    while (neige.flocons.length < voulu) neige.flocons.push(nouveauFlocon(toile.clientWidth, toile.clientHeight, true));
+    neige.flocons.length = voulu;
+    neige.mesure = 0;
+  }
+
+  // Les surfaces où la neige se pose, dans le repère de la toile. « base[i] » est le haut de
+  // l'objet sous la colonne i (il suit l'arrondi des bouts de la barre et du rond), « h[i] »
+  // l'épaisseur de neige posée dessus.
+  function mesurerSurfaces() {
+    const decalage = neige.toile.getBoundingClientRect().top;
+    const vues = new Set();
+    const barre = document.getElementById("onglets");
+    if (barre && !barre.hidden) {
+      const r = barre.getBoundingClientRect();
+      const rayon = Math.min(36, r.height / 2);
+      ajusterSurface("barre", r.left + 6, r.right - 6, 13, (x) => {
+        const bord = Math.min(x - r.left, r.right - x);
+        const creux = bord < rayon ? rayon - Math.sqrt(Math.max(0, rayon * rayon - (rayon - bord) ** 2)) : 0;
+        return r.top - decalage + creux;
+      });
+      vues.add("barre");
+    }
+    const bouton = document.querySelector(".bouton-flottant");
+    if (bouton) {
+      const r = bouton.getBoundingClientRect();
+      const cx = (r.left + r.right) / 2;
+      const cy = (r.top + r.bottom) / 2 - decalage;
+      const rayon = r.width / 2;
+      ajusterSurface("rond", cx - rayon * 0.86, cx + rayon * 0.86, 10, (x) => cy - Math.sqrt(Math.max(0, rayon * rayon - (x - cx) ** 2)));
+      vues.add("rond");
+    }
+    for (const [cle, surface] of neige.surfaces) surface.visible = vues.has(cle);
+  }
+
+  function ajusterSurface(cle, gauche, droite, hauteurMax, sol) {
+    const n = Math.max(2, Math.round((droite - gauche) / NEIGE.colonne));
+    const pas = (droite - gauche) / n;
+    const base = Float32Array.from({ length: n }, (_, i) => sol(gauche + (i + 0.5) * pas));
+    let s = neige.surfaces.get(cle);
+    if (!s || s.n !== n) {
+      const avant = s;
+      const h = new Float32Array(n);
+      for (let i = 0; i < n; i++) {
+        if (avant) h[i] = avant.h[Math.floor((i * avant.n) / n)];
+        // La première fois, une fine couche sur le plat, pour que rien ne soit jamais nu.
+        else if (Math.abs((base[Math.min(i + 1, n - 1)] || 0) - base[i]) < 0.5) h[i] = 1.2 + Math.random() * 1.2;
+      }
+      s = { cle, n, h, surplus: [0, 0] };
+      neige.surfaces.set(cle, s);
+    }
+    Object.assign(s, { gauche, droite, pas, base, hauteurMax, visible: true });
+  }
+
+  // Un flocon qui se pose : un petit tas en cloche autour de l'endroit où il est tombé.
+  function deposer(s, x, quantite) {
+    const centre = Math.round((x - s.gauche) / s.pas - 0.5);
+    for (let k = -5; k <= 5; k++) {
+      const i = centre + k;
+      if (i < 0 || i >= s.n) continue;
+      s.h[i] = Math.min(s.hauteurMax, s.h[i] + (quantite * Math.exp(-(k * k) / 8)) / 4.99);
+    }
+  }
+
+  // La neige glisse d'une colonne vers sa voisine plus basse tant que l'écart dépasse la
+  // pente tolérée. Aux bouts, au-delà de la corniche, le surplus s'accumule puis tombe en
+  // motte.
+  function tasser(s) {
+    const { h, base, n } = s;
+    for (let passe = 0; passe < 2; passe++) {
+      for (let i = 0; i < n - 1; i++) {
+        const ecart = base[i + 1] - h[i + 1] - (base[i] - h[i]); // positif : i est plus haut
+        if (ecart > NEIGE.pente && h[i] > 0) {
+          const q = Math.min(h[i], (ecart - NEIGE.pente) / 2);
+          h[i] -= q;
+          h[i + 1] += q;
+        } else if (-ecart > NEIGE.pente && h[i + 1] > 0) {
+          const q = Math.min(h[i + 1], (-ecart - NEIGE.pente) / 2);
+          h[i + 1] -= q;
+          h[i] += q;
+        }
+      }
+    }
+    const corniche = s.hauteurMax * 0.5;
+    [0, n - 1].forEach((i, cote) => {
+      if (h[i] > corniche) {
+        s.surplus[cote] += h[i] - corniche;
+        h[i] = corniche;
+      }
+      if (s.surplus[cote] > 3) {
+        const x = cote ? s.droite + 2 : s.gauche - 2;
+        lacherMotte(x, base[i] - corniche * 0.5, 1.4 + Math.random(), (cote ? 1 : -1) * (15 + Math.random() * 25), 10);
+        s.surplus[cote] = 0;
+      }
+    });
+    for (let i = 0; i < n; i++) if (h[i] > s.hauteurMax) h[i] = s.hauteurMax;
+  }
+
+  function lacherMotte(x, y, taille, vx, vy) {
+    if (neige.mottes.length < 60) neige.mottes.push({ x, y, taille, vx, vy });
+  }
+
+  // Le tas : le dessus lissé en courbes ; à chaque bout, la neige dépasse un peu de l'objet
+  // en bourrelet arrondi (la corniche) avant de rejoindre son pied, qui suit l'objet. Une
+  // ombre lavande dessous le détache du verre blanc.
+  function dessinerTas(d, s) {
+    const { n, pas, base, h } = s;
+    const bordG = Math.min(4, h[0] * 0.8);
+    const bordD = Math.min(4, h[n - 1] * 0.8);
+    const points = [];
+    let haut = Infinity;
+    let bas = -Infinity;
+    for (let i = 0; i < n; i++) {
+      const y = base[i] - h[i];
+      points.push([s.gauche + (i + 0.5) * pas, y]);
+      haut = Math.min(haut, y);
+      bas = Math.max(bas, base[i]);
+    }
+    const [x0, y0] = points[0];
+    const [xn, yn] = points[n - 1];
+    d.beginPath();
+    d.moveTo(x0, base[0] + 0.8);
+    d.bezierCurveTo(x0 - bordG * 1.6, base[0] + 0.8 + bordG * 0.4, x0 - bordG * 1.4, y0, x0, y0);
+    for (let k = 1; k < n - 1; k++) {
+      const [x, y] = points[k];
+      const [x2, y2] = points[k + 1];
+      d.quadraticCurveTo(x, y, (x + x2) / 2, (y + y2) / 2);
+    }
+    d.lineTo(xn, yn);
+    d.bezierCurveTo(xn + bordD * 1.4, yn, xn + bordD * 1.6, base[n - 1] + 0.8 + bordD * 0.4, xn, base[n - 1] + 0.8);
+    for (let i = n - 2; i >= 0; i--) d.lineTo(s.gauche + (i + 0.5) * pas, base[i] + 0.8);
+    d.closePath();
+    d.save();
+    d.translate(0, 1.4);
+    d.fillStyle = "rgba(110, 28, 112, 0.3)";
+    d.fill();
+    d.restore();
+    const degrade = d.createLinearGradient(0, haut, 0, bas + 1);
+    degrade.addColorStop(0, "#ffffff");
+    degrade.addColorStop(0.45, "#faf7fc");
+    degrade.addColorStop(1, "#dccfe9");
+    d.fillStyle = degrade;
+    d.fill();
+    d.strokeStyle = "rgba(152, 40, 152, 0.1)";
+    d.lineWidth = 0.7;
+    d.stroke();
+  }
+
+  // Toucher un onglet ou le bouton fait tomber la neige qui est juste dessus, en mottes qui
+  // sautent un peu avant de tomber. Le reste de la barre garde la sienne. Faire défiler la
+  // page ne fait rien (Sébastien, 27 novembre 2026).
+  function secouerNeige(evenement) {
+    if (!neige.voulue || !evenement.target.closest) return;
+    const cible = evenement.target.closest(".onglet, .bouton-flottant");
+    if (!cible) return;
+    const s = neige.surfaces.get(cible.classList.contains("bouton-flottant") ? "rond" : "barre");
+    if (!s || !s.visible) return;
+    const r = cible.getBoundingClientRect();
+    for (let i = 0; i < s.n; i++) {
+      const x = s.gauche + (i + 0.5) * s.pas;
+      if (x < r.left - 4 || x > r.right + 4 || s.h[i] < 0.8) continue;
+      if (i % 2 === 0) lacherMotte(x, s.base[i] - s.h[i], 1 + s.h[i] * 0.22, (Math.random() - 0.5) * 90, -60 - Math.random() * 90);
+      s.h[i] = 0.3 + Math.random() * 0.4;
+    }
+  }
+
+  function demarrerNeige() {
+    neige.toile.hidden = false;
+    dimensionnerNeige();
+    if (!neige.boucle) {
+      neige.image = 0;
+      neige.boucle = requestAnimationFrame(animerNeige);
+    }
+  }
+
+  function arreterNeige() {
+    if (neige.boucle) cancelAnimationFrame(neige.boucle);
+    neige.boucle = 0;
+    neige.mottes.length = 0;
+    if (neige.toile) neige.toile.hidden = true;
+  }
+
+  function animerNeige(instant) {
+    neige.boucle = requestAnimationFrame(animerNeige);
+    if (neige.image && instant - neige.image < 32) return; // trente images par seconde suffisent
+    const duree = neige.image ? Math.min((instant - neige.image) / 1000, 0.1) : 0;
+    neige.image = instant;
+    if (instant - neige.mesure > 1000) {
+      mesurerSurfaces();
+      neige.mesure = instant;
+    }
+    const { dessin, toile, flocons, mottes } = neige;
+    const largeur = toile.clientWidth;
+    const hauteur = toile.clientHeight;
+    const surfaces = [];
+    neige.surfaces.forEach((s) => s.visible && surfaces.push(s));
+    dessin.clearRect(0, 0, largeur, hauteur);
+
+    for (let i = 0; i < flocons.length; i++) {
+      const f = flocons[i];
+      f.y += f.vitesse * duree;
+      f.phase += duree * 0.9;
+      const x = f.x + Math.sin(f.phase) * f.ampleur;
+      let pose = false;
+      for (const s of surfaces) {
+        if (x < s.gauche || x >= s.droite) continue;
+        const c = Math.min(s.n - 1, Math.floor((x - s.gauche) / s.pas));
+        if (f.y >= s.base[c] - s.h[c] - 1 && f.y <= s.base[c] + 12) {
+          // Le bouton, petit, reçoit peu de flocons : chacun y compte double.
+          deposer(s, x, NEIGE.depot * (f.rayon / 2.3) * (s.cle === "rond" ? 2 : 1));
+          pose = true;
+          break;
+        }
+      }
+      if (pose || f.y > hauteur + 6) {
+        flocons[i] = nouveauFlocon(largeur, hauteur, false);
+        continue;
+      }
+      const taille = f.rayon * 3.6;
+      dessin.drawImage(neige.flocon, x - taille / 2, f.y - taille / 2, taille, taille);
+    }
+
+    for (const s of surfaces) {
+      tasser(s);
+      dessinerTas(dessin, s);
+    }
+
+    for (let i = mottes.length - 1; i >= 0; i--) {
+      const m = mottes[i];
+      m.vy += 900 * duree;
+      m.x += m.vx * duree;
+      m.y += m.vy * duree;
+      if (m.y > hauteur + 20) {
+        mottes.splice(i, 1);
+        continue;
+      }
+      const taille = m.taille * 3.6;
+      dessin.drawImage(neige.flocon, m.x - taille / 2, m.y - taille / 2, taille, taille);
+    }
+  }
+
+  // Un vrai toucher seulement (« click ») : le téléphone ne l'envoie pas quand le doigt glisse
+  // pour faire défiler. Écouté avant l'application (« true ») : le bouton des notes existe
+  // encore quand on mesure ce qu'il porte, juste avant que l'écran change.
+  document.addEventListener("click", secouerNeige, true);
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) arreterNeige();
+    else if (neige.voulue) demarrerNeige();
+  });
+  if (mouvementReduit.addEventListener) mouvementReduit.addEventListener("change", () => afficher());
+
+  // ---------------------------------------------------------------------------
   // La barre des sections, en bas
   // ---------------------------------------------------------------------------
   //
@@ -1434,6 +1844,7 @@
     const nav = document.getElementById("onglets");
     if (!nav) return;
     nav.hidden = ecran === "installation" || ecran === "question" || ecran === "sujet-notes" || ecran === "note";
+    reglerNeige(ecran, nav.hidden);
     const actif = ongletDe(ecran, id);
     nav.querySelectorAll(".onglet").forEach((bouton) => {
       if (bouton.dataset.onglet === actif) bouton.setAttribute("aria-current", "page");

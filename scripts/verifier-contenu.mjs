@@ -52,6 +52,22 @@ for (const annonce of [...(infos.annonces || []), ...(infos.informations || [])]
     signaler(`infos.json : « dates » mal écrites dans l'annonce « ${annonce.titre} » (une liste de jours AAAA-MM-JJ).`);
   }
 }
+for (const affiche of infos.affiches || []) {
+  const nom = affiche.image || "(sans image)";
+  if (!/^affiches\/[a-z0-9-]+\.(jpg|png|webp)$/.test(affiche.image || "")) signaler(`infos.json : l'affiche « ${nom} » doit être un fichier de app/affiches/ (minuscules, chiffres, tirets ; .jpg, .png ou .webp).`);
+  else if (!existsSync(join(racine, "app", affiche.image))) signaler(`infos.json : l'image de l'affiche « ${nom} » n'existe pas dans app/.`);
+  if (affiche.fond !== undefined) {
+    if (!/^affiches\/[a-z0-9-]+\.(jpg|png|webp)$/.test(affiche.fond || "")) signaler(`infos.json : le fond de l'affiche « ${nom} » doit être un fichier de app/affiches/ (minuscules, chiffres, tirets ; .jpg, .png ou .webp).`);
+    else if (!existsSync(join(racine, "app", affiche.fond))) signaler(`infos.json : le fond de l'affiche « ${nom} » (${affiche.fond}) n'existe pas dans app/.`);
+  }
+  if (!affiche.description || !affiche.description.trim()) signaler(`infos.json : l'affiche « ${nom} » n'a pas de « description » (lue par les lecteurs d'écran).`);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(affiche.jusquAu || "")) signaler(`infos.json : « jusquAu » manquant ou mal écrit dans l'affiche « ${nom} » (attendu AAAA-MM-JJ).`);
+}
+if (infos.neige !== undefined) {
+  const { du, au } = infos.neige || {};
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(du || "") || !/^\d{4}-\d{2}-\d{2}$/.test(au || "")) signaler("infos.json : « neige » attend « du » et « au » (AAAA-MM-JJ).");
+  else if (au < du) signaler(`infos.json : la neige finit (${au}) avant de commencer (${du}).`);
+}
 for (const formation of infos.formations || []) {
   if (!formation.titre) signaler("infos.json : formation sans titre.");
   if (!formation.url || !/^https?:\/\//.test(formation.url)) signaler(`infos.json : la formation « ${formation.titre} » n'a pas d'adresse d'inscription valide.`);
@@ -277,5 +293,21 @@ for (const formation of infos.formations || []) {
   const fin = formation.jusquAu || [...(Array.isArray(formation.dates) ? formation.dates : [])].sort()[0];
   if (fin && fin < aujourdhui) {
     console.log(`À noter : la formation « ${formation.titre} » a commencé (${fin}) et ne s'affiche plus ; elle peut être retirée d'infos.json.`);
+  }
+}
+// Une affiche passée ne s'affiche plus, mais son image reste servie : on rappelle de retirer
+// les deux, et on signale une image de app/affiches/ qu'aucune affiche n'utilise.
+for (const affiche of infos.affiches || []) {
+  if (affiche.jusquAu && affiche.jusquAu < aujourdhui) {
+    console.log(`À noter : l'affiche « ${affiche.image} » a passé son dernier jour (${affiche.jusquAu}) ; retirer son entrée d'infos.json et ses images (affiche et fond) de app/affiches/.`);
+  }
+}
+const dossierAffiches = join(racine, "app", "affiches");
+if (existsSync(dossierAffiches)) {
+  const utilisees = new Set((infos.affiches || []).flatMap((a) => [a.image, a.fond]));
+  for (const fichier of readdirSync(dossierAffiches)) {
+    if (!fichier.startsWith(".") && !utilisees.has(`affiches/${fichier}`)) {
+      console.log(`À noter : app/affiches/${fichier} n'est utilisée par aucune affiche ; elle peut être supprimée.`);
+    }
   }
 }
