@@ -2735,9 +2735,9 @@ body[data-ecran="accueil"] main > :first-child:not(.affiche) {
    fixé qui touche le haut de l'écran change la couleur de cette zone sur iPhone), passe
    au-dessus de la barre d'onglets et du bouton des notes pour y dessiner la neige, et laisse
    passer les touchers. Les tas dessinés ici en CSS servent quand la neige ne bouge pas
-   (« réduire les animations ») ; celui de l'affiche sert toujours : il grossit pendant la
-   première minute (« --neige-age » reprend la croissance là où elle en était quand l'écran
-   est refait). */
+   (« réduire les animations ») ; celui de l'affiche sert toujours, opaque dès l'ouverture
+   (il apparaissait en fondu pendant une minute : Sébastien l'a vu transparent sur son
+   iPhone, 27 novembre 2026). */
 .neige-toile {
   position: fixed;
   top: env(safe-area-inset-top);
@@ -2830,31 +2830,12 @@ body[data-ecran="accueil"] main > :first-child:not(.affiche) {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 20' preserveAspectRatio='none'%3E%3ClinearGradient id='n' gradientUnits='userSpaceOnUse' x1='0' y1='5' x2='0' y2='13'%3E%3Cstop offset='0' stop-color='white'/%3E%3Cstop offset='1' stop-color='%23e4daef'/%3E%3C/linearGradient%3E%3Cpath fill='url(%23n)' d='M0.0 17.6L4.0 16.6L8.0 14.6L12.0 12.9L16.0 12.6L20.0 12.6L24.0 12.6L28.0 12.6L32.0 12.6L36.0 12.6L40.0 12.6L44.0 12.6L48.0 12.6L52.0 12.6L56.0 12.6L60.0 12.6L64.0 12.6L68.0 12.6L72.0 12.6L76.0 12.6L80.0 12.6L84.0 12.6L88.0 12.6L92.0 12.6L96.0 12.6L100.0 12.6L104.0 12.6L108.0 12.6L112.0 12.6L116.0 12.6L120.0 12.6L124.0 12.6L128.0 12.6L132.0 12.6L136.0 12.6L140.0 12.6L144.0 12.6L148.0 12.6L152.0 12.6L156.0 12.6L160.0 12.6L164.0 12.6L168.0 12.6L172.0 12.6L176.0 12.6L180.0 12.6L184.0 12.6L188.0 12.6L192.0 12.6L196.0 12.6L200.0 12.6L204.0 12.6L208.0 12.6L212.0 12.6L216.0 12.6L220.0 12.6L224.0 12.6L228.0 12.6L232.0 12.6L236.0 12.6L240.0 12.6L244.0 12.6L248.0 12.6L252.0 12.6L256.0 12.6L260.0 12.6L264.0 12.6L268.0 12.6L272.0 12.6L276.0 12.6L280.0 12.6L284.0 12.6L288.0 12.6L292.0 12.6L296.0 12.6L300.0 12.6L304.0 12.6L308.0 12.6L312.0 12.6L316.0 12.6L320.0 12.6L324.0 12.6L328.0 12.6L332.0 12.6L336.0 12.6L340.0 12.6L344.0 12.6L348.0 12.6L352.0 12.6L356.0 12.6L360.0 12.6L364.0 12.6L368.0 12.6L372.0 12.6L376.0 12.6L380.0 12.6L384.0 12.6L388.0 12.9L392.0 14.6L396.0 16.6L400.0 17.6L400.0 12.0L396.0 11.7L392.0 11.2L388.0 10.5L384.0 9.7L380.0 8.9L376.0 8.1L372.0 7.1L368.0 6.1L364.0 5.1L360.0 4.1L356.0 3.2L352.0 2.7L348.0 2.5L344.0 2.6L340.0 3.1L336.0 3.6L332.0 4.0L328.0 4.2L324.0 4.2L320.0 4.0L316.0 3.7L312.0 3.4L308.0 3.2L304.0 3.2L300.0 3.3L296.0 3.4L292.0 3.5L288.0 3.5L284.0 3.3L280.0 3.0L276.0 2.6L272.0 2.1L268.0 1.7L264.0 1.5L260.0 1.6L256.0 1.8L252.0 2.2L248.0 2.7L244.0 3.2L240.0 3.5L236.0 3.6L232.0 3.6L228.0 3.5L224.0 3.3L220.0 3.2L216.0 3.3L212.0 3.5L208.0 3.7L204.0 4.0L200.0 4.1L196.0 4.1L192.0 3.8L188.0 3.4L184.0 2.9L180.0 2.3L176.0 1.9L172.0 1.7L168.0 1.7L164.0 1.9L160.0 2.2L156.0 2.6L152.0 2.8L148.0 3.0L144.0 3.0L140.0 2.9L136.0 2.7L132.0 2.7L128.0 2.8L124.0 3.1L120.0 3.5L116.0 3.9L112.0 4.2L108.0 4.4L104.0 4.4L100.0 4.2L96.0 3.7L92.0 3.2L88.0 2.7L84.0 2.4L80.0 2.2L76.0 2.2L72.0 2.3L68.0 2.5L64.0 2.7L60.0 2.7L56.0 2.7L52.0 2.8L48.0 3.0L44.0 3.5L40.0 4.2L36.0 5.2L32.0 6.3L28.0 7.3L24.0 8.4L20.0 9.2L16.0 10.0L12.0 10.7L8.0 11.3L4.0 11.7L0.0 12.0Z'/%3E%3C/svg%3E");
 }
 
-/* La neige s'amasse : une fine couche d'abord, puis la couche épaisse se forme par-dessus
-   pendant la première minute. Étirer le tas l'aurait décollé des arrondis. */
-@media (prefers-reduced-motion: no-preference) {
-  .neige .onglets::after,
-  .neige .bouton-flottant::after,
-  .neige .affiche-collee::after {
-    animation: neige-amas 60s ease-out var(--neige-age, 0s) both;
-  }
-}
-
 /* La neige vivante dessine elle-même les tas de la barre et du bouton. */
 .neige-vivante .onglets::before,
 .neige-vivante .onglets::after,
 .neige-vivante .bouton-flottant::before,
 .neige-vivante .bouton-flottant::after {
   content: none;
-}
-
-@keyframes neige-amas {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
 }
 
 .notes__recherche {

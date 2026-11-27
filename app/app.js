@@ -1453,7 +1453,6 @@
     depot: 15, // neige qu'apporte un flocon qui se pose (colonnes × points)
   };
   const mouvementReduit = window.matchMedia("(prefers-reduced-motion: reduce)");
-  const debutNeige = Date.now();
   const neige = {
     toile: null,
     dessin: null,
@@ -1479,9 +1478,6 @@
     const vivante = saison && !mouvementReduit.matches && preparerToile();
     document.body.classList.toggle("neige", saison);
     document.body.classList.toggle("neige-vivante", vivante);
-    // L'âge de la neige, en négatif : le tas de l'affiche (dessiné en CSS) reprend sa
-    // croissance là où elle en était quand l'écran est refait, au lieu de repartir de rien.
-    document.body.style.setProperty("--neige-age", -Math.round((Date.now() - debutNeige) / 1000) + "s");
     neige.voulue = vivante && !sansOnglets;
     neige.mesure = 0; // l'écran change : on remesure la barre et le bouton à l'image suivante
     if (neige.voulue && !document.hidden) demarrerNeige();
@@ -1519,6 +1515,17 @@
     neige.dessin = toile.getContext("2d");
     if (!neige.dessin) return false;
     neige.flocon = dessinerFlocon();
+    // La toile se redimensionne dès que sa taille change, quelle qu'en soit la raison. Dans
+    // l'application installée sur iPhone, l'écran finit de se mettre en place juste après
+    // l'ouverture (zone de l'heure, hauteur disponible) sans que la fenêtre annonce de
+    // changement de taille : la toile gardait sa première mesure, et les tas de neige se
+    // dessinaient une cinquantaine de points trop haut jusqu'au premier toucher (vu par
+    // Sébastien sur son iPhone, 27 novembre 2026, version 2.1.1).
+    if ("ResizeObserver" in window) {
+      new ResizeObserver(() => {
+        if (neige.voulue && !toile.hidden) dimensionnerNeige();
+      }).observe(toile);
+    }
     window.addEventListener("resize", () => {
       if (neige.voulue) dimensionnerNeige();
     });
@@ -1732,6 +1739,12 @@
     const duree = neige.image ? Math.min((instant - neige.image) / 1000, 0.1) : 0;
     neige.image = instant;
     if (instant - neige.mesure > 1000) {
+      // Filet de sécurité, là où la surveillance de taille n'existe pas : une toile dont la
+      // taille a changé est redimensionnée avant d'être mesurée.
+      const echelle = Math.min(window.devicePixelRatio || 1, 2);
+      if (Math.round(neige.toile.clientHeight * echelle) !== neige.toile.height || Math.round(neige.toile.clientWidth * echelle) !== neige.toile.width) {
+        dimensionnerNeige();
+      }
       mesurerSurfaces();
       neige.mesure = instant;
     }
